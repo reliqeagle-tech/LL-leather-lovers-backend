@@ -1,0 +1,3 @@
+name,description,price,category,subCategory,sizes,color,bestseller,image
+Leather Jacket,Cool jacket,149.99,Men,Jackets,"S,M,L","Black,Brown",true,"jacket1.jpg,jacket1_2.jpg"
+Leather Belt,Premium belt,29.99,Accessories,Belts,"M,L","Black",false,"belt.png"

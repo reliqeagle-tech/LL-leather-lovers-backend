@@ -1,0 +1,38 @@
+[33mdb88337[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: filter-branch: rewrite
+[33m58b260f[m HEAD@{1}: commit: almost ready
+[33mfa453a4[m HEAD@{2}: commit: almost ready
+[33md165632[m HEAD@{3}: commit: almost ready
+[33mae18020[m HEAD@{4}: commit: almost ready
+[33m09626e9[m HEAD@{5}: commit: added feather to add sale banner
+[33meab4efe[m HEAD@{6}: commit: added feather to add sale banner
+[33m4ca3a0e[m HEAD@{7}: commit: miror ui changes home page
+[33m3c5e4cb[m HEAD@{8}: commit: admin panel
+[33m185d619[m HEAD@{9}: commit: admin panel
+[33md9cb0e1[m HEAD@{10}: commit: admin-panel
+[33m0ee51a7[m HEAD@{11}: commit: reviews and description
+[33mbde6b09[m HEAD@{12}: commit: reviews and description
+[33mcf6eb7e[m HEAD@{13}: commit: fixed some typos in automation
+[33m32de1af[m HEAD@{14}: commit: fixed some typos in automation
+[33mad3abd3[m HEAD@{15}: commit: fixed some typos in automation
+[33md6d285d[m HEAD@{16}: commit: fixed a typo
+[33m2fe45ae[m HEAD@{17}: commit: added reviews section
+[33m4b893be[m HEAD@{18}: commit: added reviews section
+[33mcacf352[m HEAD@{19}: commit: fixed typo in xml
+[33m7bcf388[m HEAD@{20}: commit: fixed typo in xml
+[33m5f773bc[m HEAD@{21}: commit: fixed typo in xml
+[33m2ff03a3[m HEAD@{22}: commit: fixed typo in xml
+[33mb574333[m HEAD@{23}: commit: fixed typo in xml
+[33m4905831[m HEAD@{24}: commit: fixed typo in xml
+[33mfe9e05d[m HEAD@{25}: commit: fixed typo in xml
+[33me6f6030[m HEAD@{26}: commit: automation testing
+[33m1fbd124[m HEAD@{27}: commit: checking automation
+[33maa03633[m HEAD@{28}: commit: updated server
+[33mf2cf3e2[m HEAD@{29}: commit: automation
+[33md48d0be[m HEAD@{30}: commit: automation
+[33md457cad[m HEAD@{31}: commit: production
+[33mf7bc96c[m HEAD@{32}: commit: production
+[33me71f0ec[m HEAD@{33}: commit: deployment
+[33mde1232c[m HEAD@{34}: commit: version 1.2
+[33md6188dc[m HEAD@{35}: commit: Backend version 0.0.2
+[33m688e679[m HEAD@{36}: Branch: renamed refs/heads/master to refs/heads/main
+[33m688e679[m HEAD@{38}: commit (initial): backend of a clothing store
