@@ -94,6 +94,7 @@ connectCloudinary()
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
+  "http://localhost:5175",
   "https://llleatherlovers.com",
   "https://www.llleatherlovers.com",
   "https://admin.llleatherlovers.com",

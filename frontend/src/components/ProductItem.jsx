@@ -55,7 +55,7 @@ const ProductItem = ({ id, image, name, price, discountPrice }) => {
   return (
     <Link
       onClick={() => window.scrollTo(0, 0)}
-      className="cursor-pointer block group border-black border-2 py-5"
+      className="cursor-pointer block group shadow-md rounded-md py-5"
       to={`/product/${id}`}
     >
       {/* Image */}
@@ -63,7 +63,7 @@ const ProductItem = ({ id, image, name, price, discountPrice }) => {
         <img
           src={image[0]}
           alt={name}
-          className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-auto object-contain transition-t ransform duration-300 group-hover:scale-105"
         />
       </div>
 

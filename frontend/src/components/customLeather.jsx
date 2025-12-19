@@ -16,7 +16,8 @@ const CustomLeather = () => {
     // },[products])
 
   return (
-   <div className="my-10 px-4 sm:px-6 md:px-10 flex flex-col md:flex-row gap-8 md:h-[60vh]">
+    <div className='flex items-center justify-center'>
+   <div className="my-10 px-4 sm:px-6 md:px-10 flex flex-col md:flex-row gap-8 md:h-[60vh] container">
 
   {/* Left Text Section */}
   <div className="md:w-1/3 p-2 sm:p-5 flex flex-col justify-center">
@@ -39,7 +40,7 @@ const CustomLeather = () => {
     <div className="pt-6 sm:pt-8">
       <Link
         to="/collection"
-        className="bg-black text-white px-6 py-3 sm:px-8 sm:py-4 rounded-sm text-sm sm:text-base inline-block"
+        className="bg-black text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-sm sm:text-base inline-block"
       >
         Shop Now
       </Link>
@@ -50,7 +51,7 @@ const CustomLeather = () => {
   <div className="md:w-2/3 p-2 sm:p-5 flex items-center justify-center"> <img className="rounded-md w-full h-[260px] sm:h-[350px] md:h-full object-cover" src={assets.customLeatherImage} alt="" /> </div>
 
 </div>
-
+</div>
 
   )
 }

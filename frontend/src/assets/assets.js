@@ -102,7 +102,12 @@ import Lisa from './lisa.jfif'
 import Micheal from './micheal.jfif'
 import LeatherLoverLogo from './leatherlovers_Logo.png'
 import Accessories from './accessories.jpg'
-
+import women from './women.jpg'
+import women1 from './women-1.png'
+import men from './men.jpg'
+import men1 from './men-1.png'
+import pillow from './pillow.jpg'
+import navImg from './navImg.png'
 
 export const assets = {
     logo,
@@ -151,8 +156,13 @@ export const assets = {
     Lisa,
     Micheal,
     LeatherLoverLogo,
-    Accessories
-    
+    Accessories,
+    women,
+    women1,
+    men,
+    men1,
+    pillow,
+    navImg
 }
 
 export const products = [

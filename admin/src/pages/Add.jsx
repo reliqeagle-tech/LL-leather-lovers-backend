@@ -218,7 +218,7 @@ const Add = ({ token }) => {
           <select onChange={(e) => setCategory(e.target.value)} className='w-full px-3 py-2'>
             <option value="Men">Men</option>
             <option value="Women">Women</option>
-            <option value="Kids">Kids</option>
+            {/* <option value="Kids">Kids</option> */}
             <option value="Others">Others</option>
           </select>
         </div>
@@ -242,11 +242,11 @@ const Add = ({ token }) => {
 
             {category === "Others" ? (
               <>
-                <option value="Belts">Belts</option>
-                <option value="Wallets">Wallets</option>
-                <option value="Bags">Bags</option>
-                <option value="Card Holders">Card Holders</option>
-                <option value="Keychains">Keychains</option>
+                <option value="Recliner Chair Headrest Cover">Recliner Chair Headrest Cover</option>
+                <option value="Cushion Cover">Cushion Cover</option>
+                <option value="Aprons">Aprons</option>
+                <option value="Desk Mat">Desk Mat</option>
+                {/* <option value="Keychains">Keychains</option> */}
                 <option value="Pillow">Pillow</option>
               </>
             ) : (

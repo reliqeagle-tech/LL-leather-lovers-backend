@@ -18,16 +18,18 @@ const CustomCollection = () => {
         {/* LEFT LARGE IMAGE */}
         <Link
           to={"/collection?category=Women"}
-          className="relative w-full md:w-1/2 h-64 sm:h-80 md:h-[500px] group overflow-hidden rounded-lg"
+          className="relative w-full md:w-1/2 h-64 sm:h-80 md:h-[500px] group overflow-hidden rounded-lg shadow-lg"
         >
-          <img
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            src={assets.Emma}
+          <div className="flex items-center justify-center shadow">
+            <img
+            className="w-[60%] h-full flex justify-center items-center transition-all duration-300 group-hover:scale-105"
+            src={assets.women}
             alt=""
           />
+          </div>
           <h1 className="absolute inset-0 flex items-center justify-center 
             text-white text-3xl sm:text-4xl font-semibold drop-shadow-lg 
-            group-hover:opacity-80 transition">
+             transition">
             Women
           </h1>
         </Link>
@@ -38,16 +40,23 @@ const CustomCollection = () => {
           {/* MEN IMAGE */}
           <Link
             to={"/collection?category=Men"}
-            className="relative w-full h-52 sm:h-64 md:h-[240px] group overflow-hidden rounded-lg"
+            className="relative w-full h-52 sm:h-64 md:h-[240px] group overflow-hidden rounded-lg shadow-lg"
           >
-            <img
+            {/* <img
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               src={assets.James}
               alt=""
-            />
+            /> */}
+            <div className="flex items-center justify-center ">
+            <img
+            className="w-[60%] h-full flex justify-center items-center transition-all duration-300 group-hover:scale-105"
+            src={assets.men}
+            alt=""
+          />
+          </div>
             <h1 className="absolute inset-0 flex items-center justify-center 
               text-white text-2xl sm:text-3xl font-semibold drop-shadow-lg 
-              group-hover:opacity-80 transition">
+              transition">
               Men
             </h1>
           </Link>
@@ -55,17 +64,19 @@ const CustomCollection = () => {
           {/* ACCESSORIES IMAGE */}
           <Link
             to={"/collection?category=Accessories"}
-            className="relative w-full h-52 sm:h-64 md:h-[240px] group overflow-hidden rounded-lg"
+            className="relative w-full h-52 sm:h-64 md:h-[240px] group overflow-hidden rounded-lg shadow-lg"
           >
+            <div className="flex items-center justify-center ">
             <img
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              src={assets.Accessories}
-              alt=""
-            />
+            className="w-[60%] h-full flex justify-center items-center transition-all duration-300 group-hover:scale-105"
+            src={assets.pillow}
+            alt=""
+          />
+          </div>
             <h1 className="absolute inset-0 flex items-center justify-center 
               text-white text-2xl sm:text-3xl font-semibold drop-shadow-lg 
-              group-hover:opacity-80 transition">
-              Accessories
+              transition">
+              Others
             </h1>
           </Link>
 

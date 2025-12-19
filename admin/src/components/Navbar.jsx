@@ -3,7 +3,7 @@ import {assets} from '../assets/assets'
 
 const Navbar = ({setToken}) => {
   return (
-    <div className='flex items-center py-2 px-[4%] justify-between sticky top-0 bg-[#000000]'>
+    <div className='flex items-center py-2 px-[4%] justify-between sticky top-0 bg-[#000000] z-[99]'>
       <div><h1 className='font-semibold text-3xl text-white'>LL Leather <span className='text-indigo-500'>Lovers</span></h1>
       <p className='text-center text-sm text-gray-300 prata-regular'>ADMIN PANEL</p>
       </div>

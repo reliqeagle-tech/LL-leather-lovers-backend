@@ -208,13 +208,13 @@ const UpdateProduct = ({ token }) => {
       </div>
 
       {/* DETAILED DESCRIPTION */}
-      <div className="w-full">
+      <div className="w-full ">
         <p>Detailed Description</p>
         <ReactQuill
           theme="snow"
           value={detailedDescription}
           onChange={setDetailedDescription}
-          className="bg-white max-w-[700px]"
+          className="bg-white max-w-[700px] "
           style={{ height: "250px", marginBottom: "40px" }}
         />
       </div>
@@ -229,8 +229,8 @@ const UpdateProduct = ({ token }) => {
         >
           <option>Men</option>
           <option>Women</option>
-          <option>Kids</option>
-          <option>Accessories</option>
+          {/* <option>Kids</option> */}
+          <option>Others</option>
         </select>
       </div>
 
@@ -242,13 +242,13 @@ const UpdateProduct = ({ token }) => {
           onChange={(e) => setSubCategory(e.target.value)}
           className="px-3 py-2"
         >
-          {category === "Accessories" ? (
+          {category === "Others" ? (
             <>
-              <option>Belts</option>
-              <option>Wallets</option>
-              <option>Bags</option>
-              <option>Card Holders</option>
-              <option>Keychains</option>
+              <option>Recliner Chair Headrest Cover</option>
+              <option>Cushion Cover</option>
+              <option>Aprons</option>
+              <option>Desk Mat</option>
+              <option>Pillow</option>
             </>
           ) : (
             <>

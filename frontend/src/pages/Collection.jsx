@@ -39,8 +39,8 @@ const Collection = () => {
   const subCategoriesMap = {
     Men: ["Topwear", "Bottomwear", "Winterwear"],
     Women: ["Topwear", "Bottomwear", "Winterwear"],
-    Kids: ["Topwear", "Bottomwear", "Winterwear"],
-    Others: ["Belts", "Wallets", "Bags", "Card Holders", "Keychains","Pillow"]
+    // Kids: ["Topwear", "Bottomwear", "Winterwear"],
+    Others: ["Recliner Chair Headrest Cover", "Cushion Cover", "Aprons", "Desk Mat", "Pillow"]
   };
 
 
@@ -296,7 +296,7 @@ const Collection = () => {
 
 
           {/* Map Products - Updated to use paginatedProducts */}
-          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 sm:gap-y-6'>
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 sm:gap-y-6 mb-8'>
             {
               paginatedProducts.map((item, index) => (
                 <ProductItem key={index} name={item.name} id={item._id} price={item.price} image={item.image} discountPrice={item.discountPrice} />

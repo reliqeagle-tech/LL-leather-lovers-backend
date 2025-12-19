@@ -31,14 +31,13 @@ const App = () => {
     <div className='px-0 sm:px-0 md:px-0 lg:px-0'>
       {/* <ToastContainer position="top-center" /> */}
       <ToastContainer
-  position="top-center"
-  autoClose={3000}
-  className="!z-[99999999999]"
-  toastClassName="!z-[999999999999] relative flex p-6 min-h-[80px] w-[400px] 
-                  items-center rounded-xl shadow-lg bg-white text-black text-lg"
-  
-/>
-      <ScrollToTop/>
+        position="top-center"
+        autoClose={3000}
+        className="!z-[99999999999]"
+        toastClassName="!z-[999999999999] relative flex p-6 min-h-[80px] w-[400px] 
+        items-center rounded-xl shadow-lg bg-white text-black text-lg"
+      />
+      <ScrollToTop />
       <Toaster position="top-center" />
       <Navbar />
       <SearchBar />
@@ -54,12 +53,12 @@ const App = () => {
         <Route path='/orders' element={<Orders />} />
         <Route path='/verify' element={<Verify />} />
         <Route path='/profile' element={<ProfilePage />} />
-        <Route path='/cartdrawer' element={ <CartDrawer />} />
+        <Route path='/cartdrawer' element={<CartDrawer />} />
         {/* <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={toggleCartDrawer} /> */}
-        <Route path='/cartcontent' element={ <CartContents />} />
-        <Route path='/privacy&policy' element={<OurPolicy/>}/>
-        <Route path='/CmInchConverter' element={<CmInchConverter/>}/>
-        <Route path='/wishlist' element={<WishList/>}/>
+        <Route path='/cartcontent' element={<CartContents />} />
+        <Route path='/privacy&policy' element={<OurPolicy />} />
+        <Route path='/CmInchConverter' element={<CmInchConverter />} />
+        <Route path='/wishlist' element={<WishList />} />
 
 
       </Routes>
