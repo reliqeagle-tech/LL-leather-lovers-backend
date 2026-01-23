@@ -1,3 +1,7 @@
+# dist folder
+Frontend/dist/
+dist
+
 # Logs
 logs
 *.log
