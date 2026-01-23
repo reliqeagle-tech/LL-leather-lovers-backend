@@ -1,6 +1,7 @@
 # dist folder
-Frontend/dist/
 dist
+node_modules
+.env
 
 # Logs
 logs
@@ -20,7 +21,7 @@ node_modules/
 *.local
 
 # Local env files
-
+.env
 
 # Editor directories and files
 .idea/
