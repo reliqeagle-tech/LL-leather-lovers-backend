@@ -77,7 +77,7 @@ const List = ({ token }) => {
             {/* ➤ New Edit Button */}
             <button 
               onClick={() => navigate(`/update-product/${item._id}`)}
-              className="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-green-900"
+              className="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-700"
             >
               Edit
             </button>
@@ -85,7 +85,7 @@ const List = ({ token }) => {
             {/* Delete Button */}
             <p
               onClick={() => removeProduct(item._id)}
-              className='px-2 py-1 bg-red-700 text-white text-center rounded text-xs hover:bg-green-900'
+              className='px-2 py-1 bg-red-500 text-white text-center rounded text-xs hover:bg-red-800'
             >
               Delete
             </p>
