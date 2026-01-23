@@ -1,6 +1,8 @@
+# dist folder
+Frontend/dist/
+
 # Node modules
 node_modules/
-frontend/node_modules
 
 # Logs
 logs
@@ -16,9 +18,14 @@ pids
 *.pid.lock
 
 # dotenv environment files
-.git
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Build and cache
+
 .cache/
 .next/
 out/
@@ -53,4 +60,3 @@ Desktop.ini
 # Optional: Docker and PM2 files
 docker-compose.override.yml
 pm2.log
-
