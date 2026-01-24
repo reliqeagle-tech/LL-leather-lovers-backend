@@ -23,6 +23,7 @@ import ScrollToTop from './components/scrollToTop'
 import OurPolicy from './components/OurPolicy'
 import CmInchConverter from './pages/cmToInch'
 import WishList from './pages/WishList'
+import BestSeller from './components/BestSeller'
 
 
 
@@ -59,7 +60,7 @@ const App = () => {
         <Route path='/privacy&policy' element={<OurPolicy />} />
         <Route path='/CmInchConverter' element={<CmInchConverter />} />
         <Route path='/wishlist' element={<WishList />} />
-
+        <Route path='/bestseller' element={<BestSeller />}/>
 
       </Routes>
       <Footer />

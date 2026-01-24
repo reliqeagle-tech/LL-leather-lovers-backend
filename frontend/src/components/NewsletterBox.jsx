@@ -34,7 +34,7 @@ const NewsletterBox = () => {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center text-center bg-gray-50 py-16 px-6 rounded-2xl">
+    <section className="flex flex-col items-center justify-center text-center bg-[#f1f1f1] py-16 px-6 rounded-2xl">
       {/* Title */}
       <h2 className="text-2xl md:text-3xl font-bold text-gray-700 prata-regular">
         Subscribe now & get <span className="text-gray-700 prata-regular">20% off</span>

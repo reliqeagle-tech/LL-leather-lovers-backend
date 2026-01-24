@@ -228,16 +228,16 @@ const Collection = () => {
   return (
     <div>
       <PromoBanner />
-      <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t sm:px-10 px-2'>
+      <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 sm:px-10 px-2'>
 
         {/* Filter Options */}
         <div className='min-w-60 md:sticky md:top-4 self-start pt-20'>
-          <p onClick={() => setShowFilter(!showFilter)} className='my-2 text-xl flex items-center cursor-pointer gap-2'>FILTERS
+          <p onClick={() => setShowFilter(!showFilter)} className='my-2 text-xl text-gray-800 font-medium flex items-center cursor-pointer gap-2'>FILTERS
             <img className={`h-3 sm:hidden ${showFilter ? 'rotate-90' : ''}`} src={assets.dropdown_icon} alt="" />
           </p>
           {/* CATEGORY */}
-          <div className={`border border-gray-300 pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'} sm:block`}>
-            <p className='mb-3 text-sm font-medium'>CATEGORIES</p>
+          <div className={`border border-gray-400 rounded-md pl-5 py-3 mt-6 bg-[#f1f1f1] shadow-lg ${showFilter ? '' : 'hidden'} sm:block`}>
+            <p className='mb-3 text-sm text-gray-800 font-medium'>CATEGORIES</p>
 
             <div className='flex flex-col gap-2 text-sm text-gray-700'>
               {Object.keys(subCategoriesMap).map(cat => (
@@ -249,8 +249,8 @@ const Collection = () => {
             </div>
           </div>
           {/* SUBCATEGORY */}
-          <div className={`border border-gray-300 pl-5 py-3 my-5 ${showFilter ? '' : 'hidden'} sm:block`}>
-            <p className='mb-3 text-sm font-medium'>TYPE</p>
+          <div className={`border border-gray-400 rounded-md pl-5 py-3 my-5 bg-[#f1f1f1] shadow-lg ${showFilter ? '' : 'hidden'} sm:block`}>
+            <p className='mb-3 text-sm text-gray-800 font-medium'>TYPE</p>
 
             <div className='flex flex-col gap-2 text-sm text-gray-700'>
               {category.length === 0 && (

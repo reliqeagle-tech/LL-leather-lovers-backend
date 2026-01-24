@@ -3,6 +3,7 @@
 import React, { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
+import { assets } from "../assets/assets";
 
 const PromoBanner = () => {
   const { banners, backendUrl } = useContext(ShopContext);
@@ -17,9 +18,10 @@ const PromoBanner = () => {
       {/* Full Horizontal Banner Image */}
       <Link to={"/collection"} className="block">
         <img 
-          src={banner.image} 
+          // src={banner.image} 
+          src={assets.bannerL}
           alt={banner.title || "Promo Banner"} 
-          className="w-full h-64 md:h-80 lg:h-96 object-strech"  // Full width, fixed height, crop to fill horizontally
+          className="w-full h-64 md:h-80 lg:h-[400px] object-strech"  // Full width, fixed height, crop to fill horizontally
         />
       </Link>
     </section>

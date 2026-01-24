@@ -58,7 +58,7 @@ const Navbar = () => {
         {/* ------------------- TOP NAV ------------------- */}
         <div className="flex items-center justify-between py-5 font-medium max-w-7xl mx-auto px-4">
           <Link to="/">
-            <h1 className="text-2xl font-bold text-white py-2"><span className="text-indigo-500"> LL Leather</span> Lovers</h1>
+            <h1 className="lg:text-2xl font-bold text-white py-2"><span className="text-indigo-500"> LL Leather</span> Lovers</h1>
           </Link>
 
           {/* ------------------- DESKTOP LINKS ------------------- */}
@@ -67,7 +67,7 @@ const Navbar = () => {
               to="/"
               className="flex flex-col items-center gap-1 pt-[2px]"
             >
-              <p>HOME</p>
+              <p className="hover:text-indigo-400">HOME</p>
             </NavLink>
 
             {/* MEN MENU */}
@@ -77,7 +77,7 @@ const Navbar = () => {
               className="relative cursor-pointer"
             >
               <div className="flex items-center">
-                <p className="hover:text-gray-300">MEN</p>
+                <p className="hover:text-indigo-400">MEN</p>
                 <RiArrowDropDownLine
                   className={`text-2xl transition-transform duration-300 ${activeMenu === "men" ? "rotate-180" : "rotate-0"
                     }`}
@@ -150,7 +150,7 @@ const Navbar = () => {
                     title="OTHERS"
                     items={[
                       {
-                        label: "Pillow Covers",
+                        label: "Pillow",
                         category: "Others",
                         gender: "Men",
                       },
@@ -170,7 +170,7 @@ const Navbar = () => {
                         gender: "Men",
                       },
                       {
-                        label: "Recliner Chair Headrest Cover",
+                        label: "Chair Cover",
                         category: "Others",
                         gender: "Men",
                       },
@@ -195,7 +195,7 @@ const Navbar = () => {
               className="relative cursor-pointer"
             >
               <div className="flex items-center">
-                <p className="hover:text-gray-300">WOMEN</p>
+                <p className="hover:text-indigo-400">WOMEN</p>
                 <RiArrowDropDownLine
                   className={`text-2xl transition-transform duration-300 ${activeMenu === "women" ? "rotate-180" : "rotate-0"
                     }`}
@@ -234,11 +234,11 @@ const Navbar = () => {
                   <MegaColumn
                     title="OTHERS"
                     items={[
-                      { label: "Pillow Covers", category: "Others", gender: "Women" },
+                      { label: "Pillow", category: "Others", gender: "Women" },
                       { label: "Cushion Cover", category: "Others", gender: "Women" },
                       { label: "Aprons", category: "Others", gender: "Women" },
                       { label: "Desk Mat", category: "Others", gender: "Women" },
-                      { label: "Recliner Chair Headrest Cover", category: "Others", gender: "Women" },
+                      { label: "Chair Cover", category: "Others", gender: "Women" },
                       // { label: "Wallets", category: "Others", gender: "Women" },
                       // { label: "Hats", category: "Others", gender: "Women" },
                     ]}
@@ -257,9 +257,9 @@ const Navbar = () => {
 
             </li>
 
-            <NavLink to="/collection">COLLECTION</NavLink>
-            <NavLink to="/about">ABOUT</NavLink>
-            <NavLink to="/contact">CONTACT</NavLink>
+            <NavLink className='hover:text-indigo-400' to="/collection">COLLECTION</NavLink>
+            <NavLink className='hover:text-indigo-400' to="/about">ABOUT</NavLink>
+            <NavLink className='hover:text-indigo-400' to="/contact">CONTACT</NavLink>
           </ul>
 
           {/* ------------------- RIGHT ICONS ------------------- */}
@@ -402,7 +402,7 @@ const Navbar = () => {
                 //   { label: "Leather Chaps", category: "Bottomwear", gender: "Men" },
                 // ],
                 OTHERS: [
-                  { label: "Pillow Covers", category: "Others", gender: "Men" },
+                  { label: "Pillow", category: "Others", gender: "Men" },
                   { label: "Cushion Cover", category: "Others", gender: "Men" },
                   {
                     label: "Aprons",
@@ -410,7 +410,7 @@ const Navbar = () => {
                     gender: "men",
                   },
                   { label: "Desk Mat", category: "Others", gender: "Men" },
-                  { label: "Recliner Chair Headrest Cover", category: "Others", gender: "Men" },
+                  { label: "Chair Cover", category: "Others", gender: "Men" },
                 ],
               }}
 
@@ -456,9 +456,9 @@ const Navbar = () => {
 
                 OTHERS: [
                   {
-                    label: "Pillow Covers",
+                    label: "Pillow",
                     category: "Others",
-                    gender: "Women",
+                    gender: "other",
                   },
                   {
                     label: "Cushion Cover",
@@ -476,7 +476,7 @@ const Navbar = () => {
                     gender: "Women",
                   },
                   {
-                    label: "Recliner Chair Headrest Cover",
+                    label: "Chair Cover",
                     category: "Others",
                     gender: "Women",
                   },
@@ -522,15 +522,20 @@ const MegaMenu = ({ children, showMenu, hideMenu }) => (
 const MegaColumn = ({ title, items }) => {
   return (
     <div className="flex-1 min-w-[150px]">
-      <h3 className="font-semibold mb-3 text-white text-xl border-b-2 w-1/2 border-indigo-600">
+      <h3 className="font-semibold mb-3 text-white text-xl border-b-2 w-1/3 border-indigo-600">
         {title}
       </h3>
 
       <ul className="space-y-2 text-white">
-        {items.map((item, index) => {
-          const toURL = `/collection?category=${encodeURIComponent(
-            item.gender
-          )}&sub=${encodeURIComponent(item.category)}`;
+        {items.map((item, index) => { 
+          // const toURL = `/collection?category=${encodeURIComponent(
+          //   item.gender
+          // )}&sub=${encodeURIComponent(item.category)}`;
+
+          const toURL =
+  item.category === "Others"
+    ? `/collection?category=Others&sub=${encodeURIComponent(item.label)}`
+    : `/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.category)}`;
 
           console.log("Generated URL:", toURL); // Debug
 

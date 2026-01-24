@@ -521,7 +521,6 @@
 
 
 
-
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
@@ -533,6 +532,8 @@ import JacketLiningSelector from '../components/JacketLiningSelector';
 import { toast } from 'react-toastify'
 import CartDrawer from '../components/CartDrawer';
 import { IoHeartSharp } from "react-icons/io5";
+import { FaRegStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 // import { Helmet } from 'react-helmet-async';
 
 const colorMap = {
@@ -756,13 +757,17 @@ const Product = () => {
         <link rel="canonical" href={`https://llleatherlovers.com/product/${productId}`} />
       </Helmet> */}
 
-      <div className="flex gap-10 sm:gap-12 flex-col sm:flex-row">
-        <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row md:sticky md:top-28 self-start ">
-          <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] lg:w-[10%] lg:h-[10%] w-full lg:mr-12">
+      <div className="flex flex-col sm:flex-row">
+        <div className=" flex flex-col-reverse gap-3 sm:flex-row md:sticky md:top-28 self-start w-full lg:w-[40%] ">
+        {/* <div className="w-full lg:w-[40%] flex gap-4 md:sticky md:top-28 self-start"> */}
+
+          <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] lg:w-[10%] lg:h-[10%] w-full lg:mr-5 gap-1">
+          {/* <div className="flex lg:flex-col gap-2 w-full lg:w-[15%] overflow-x-auto lg:overflow-y-auto"> */}
+
             {productData.image.map((item, index) => (
               <div
                 key={index}
-                className={`flex-shrink-0 cursor-pointer transition-all duration-200 w-[70px] h-[90px] sm:w-full sm:h-auto rounded-md 
+                className={`flex-shrink-0 cursor-pointer transition-all duration-200 w-[70px] h-[50px] sm:w-full  rounded-md 
                 ${index === selectedIndex ? 'border-2 border-blue-500' : 'border-2 border-transparent'}`}
                 onClick={() => {
                   setImage(item);
@@ -774,19 +779,21 @@ const Product = () => {
             ))}
           </div>
 
-          <div className="w-full sm:w-[80%] lg:w-[60%] flex justify-center items-center">
-            <div className="w-full max-h-[600px] aspect-[3/4] overflow-hidden rounded-lg bg-white flex items-center justify-center shadow-sm">
-              <img className="w-full h-full object-contain" src={image} alt={productData.name} />
+          <div className="w-full sm:w-[80%] lg:w-[70%] flex justify-center items-center">
+          {/* <div className="w-full lg:w-[85%] flex justify-center items-center"> */}
+
+            <div className="w-full max-h-[400px] aspect-[3/4] overflow-hidden rounded-lg bg-white flex items-center justify-center shadow-sm">
+              <img className="w-full h-full object-contain rounded-lg" src={image} alt={productData.name} />
             </div>
           </div>
         </div>
 
-        <div className="flex-1">
-          <h1 className="font-medium text-2xl mt-2">{productData.name}</h1>
+        <div className="w-full lg:w-[60%]">
+          <h1 className="lg:font-[600]text-gray-900 lg:text-[22px] mt-4 lg:mt-0 lg:mr-12">{productData.name}</h1>
           <div className="flex items-center gap-1 mt-2">
             {[...Array(5)].map((_, index) => (
-              <span key={index} className="text-yellow-500 text-sm">
-                {index < roundedRating ? "★" : "☆"}
+              <span key={index} className="text-[#de7921] text-sm">
+                {index < roundedRating ? <FaStar /> : <FaRegStar />}
               </span>
             ))}
             <p className="pl-2 text-sm text-gray-600">({reviews.length})</p>
@@ -804,7 +811,7 @@ const Product = () => {
                 </p>
               </div>
             ) : (
-              <p className="mt-5 text-3xl font-semibold text-green-600">
+              <p className="mt-5 text-3xl font-semibold text-green-700">
                 {currency}
                 {(displayPrice - (displayPrice * productData.discountPrice / 100)).toFixed(2)}
               </p>
@@ -817,9 +824,9 @@ const Product = () => {
           )}
           
           {/* DEBUG: Show current state */}
-          <p className="text-xs text-gray-400 mt-2">Debug: displayPrice={displayPrice}, sizeMultiplier={sizeMultiplier}</p>
+          {/* <p className="text-xs text-gray-400 mt-2">Debug: displayPrice={displayPrice}, sizeMultiplier={sizeMultiplier}</p> */}
 
-          <p className="mt-5 text-gray-500 md:w-4/5">{productData.description}</p>
+          <p className="mt-5 text-gray-600 md:w-4/5">{productData.description}</p>
 
           <div className="flex flex-col gap-4 my-8">
             <div>
@@ -856,7 +863,7 @@ const Product = () => {
                           className={`w-10 h-10 rounded-md border-2 transition-all duration-200 ${
                             isSelected
                               ? 'ring- ring-black scale-110 border-black'
-                              : 'border-gray-300 hover:ring-1 hover:ring-gray-400'
+                              : 'border-gray-800 hover:ring-1 hover:ring-gray-400'
                           }`}
                           style={{
                             backgroundColor: colorHex,
@@ -907,7 +914,7 @@ const Product = () => {
                           handleSizeSelect(sizeObj);
                         }}
                         disabled={!isInStock}
-                        className={`border-2 py-2 px-4 rounded-md flex flex-col items-center gap-1 transition-all ${
+                        className={`border-2 border-gray-400 py-2 px-4 rounded-md flex flex-col items-center gap-1 transition-all ${
                           isSelected
                             ? 'border-orange-500 bg-orange-100 scale-105'
                             : 'border-gray-300 hover:border-orange-300 hover:bg-gray-50'

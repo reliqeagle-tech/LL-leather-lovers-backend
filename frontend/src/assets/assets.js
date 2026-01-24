@@ -60,6 +60,7 @@ import logo_1 from './logo1.png'
 import logo_2 from './logo2.png'
 import banner from './banner.png'
 import banner1 from './banner1.png'
+import bannerL from './bannerL.jpg'
 import hero_img from './hero_img.png'
 import hero_img_1 from './hero_img_1.png'
 import hero_img_2 from './hero_img_2.jpg'
@@ -75,7 +76,7 @@ import star_dull_icon from './star_dull_icon.png'
 import star_icon from './star_icon.png'
 import support_img from './support_img.png'
 import menu_icon from './menu_icon.png'
-import about_img from './about_img.png'
+// import about_img from './about_img.png'
 import contact_img from './contact_img.png'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
@@ -108,6 +109,7 @@ import men from './men.jpg'
 import men1 from './men-1.png'
 import pillow from './pillow.jpg'
 import navImg from './navImg.png'
+import about_img from './about-Img.jpg'
 
 export const assets = {
     logo,
@@ -162,7 +164,8 @@ export const assets = {
     men,
     men1,
     pillow,
-    navImg
+    navImg,
+    bannerL
 }
 
 export const products = [
