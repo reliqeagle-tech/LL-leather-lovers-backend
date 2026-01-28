@@ -2122,4 +2122,8 @@ export {
   allOrders, 
   userOrders, 
   updateStatus
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c92dfcb (local changes on server)
