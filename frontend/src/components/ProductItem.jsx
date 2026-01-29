@@ -46,9 +46,9 @@ const ProductItem = ({ id, image, name, price, discountPrice }) => {
     // 4. Update hasDiscount based on the percentage being valid
     const hasDiscount = isValidDiscount;
 
-    console.log(discountedPriceValue)
-    console.log(isValidDiscount)
-    console.log("discount price is: ",discountedPriceValue);
+    // console.log(discountedPriceValue)
+    // console.log(isValidDiscount)
+    // console.log("discount price is: ",discountedPriceValue);
     
     // --- ⭐ FIXED MATH LOGIC END ---
 
