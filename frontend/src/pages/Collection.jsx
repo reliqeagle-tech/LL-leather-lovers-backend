@@ -231,7 +231,7 @@ const Collection = () => {
       <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 sm:px-10 px-2'>
 
         {/* Filter Options */}
-        <div className='min-w-60 md:sticky md:top-4 self-start pt-20'>
+        <div className='min-w-60 md:sticky md:top-4 self-start pt-4 lg:pt-20'>
           <p onClick={() => setShowFilter(!showFilter)} className='my-2 text-xl text-gray-800 font-medium flex items-center cursor-pointer gap-2'>FILTERS
             <img className={`h-3 sm:hidden ${showFilter ? 'rotate-90' : ''}`} src={assets.dropdown_icon} alt="" />
           </p>
