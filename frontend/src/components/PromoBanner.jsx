@@ -14,14 +14,14 @@ const PromoBanner = () => {
   const banner = banners[0];
 
   return (
-    <section className="w-full mb-10 overflow-hidden  ">
+    <section className="w-full lg:mb-10 overflow-hidden  ">
       {/* Full Horizontal Banner Image */}
       <Link to={"/collection"} className="block">
         <img 
           // src={banner.image} 
           src={assets.bannerL}
           alt={banner.title || "Promo Banner"} 
-          className="w-full h-64 md:h-80 lg:h-[400px] object-strech"  // Full width, fixed height, crop to fill horizontally
+          className="w-full h-50 md:h-80 lg:h-[400px] object-strech"  // Full width, fixed height, crop to fill horizontally
         />
       </Link>
     </section>

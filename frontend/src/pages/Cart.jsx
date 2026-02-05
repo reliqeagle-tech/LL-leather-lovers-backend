@@ -518,7 +518,7 @@ const Cart = () => {
   const isCartEmpty = cartData.length === 0;
 
   return (
-    <div className='border-t pt-14 p-24'>
+    <div className='border-t pt-10 px-2 sm:px-10 lg:px-24'>
       <div className='text-2xl mb-3'>
         <Title text1={'YOUR'} text2={'CART'} />
       </div>
