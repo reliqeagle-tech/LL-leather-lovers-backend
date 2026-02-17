@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
+import AccountSidebar from "../components/AccountSidebar";
+import Title from "../components/Title";
 
 const Wishlist = () => {
   const {
@@ -35,8 +37,15 @@ const Wishlist = () => {
     .filter(Boolean);
 
   return (
+    <div className='container flex flex-col md:flex-row gap-5 m-auto '>
+      <div className='col1 md:w-[20%] py-10'>
+        <AccountSidebar />
+      </div>
     <div className="max-w-5xl px-5 sm:px-20  py-6">
-      <h2 className="text-2xl font-semibold mb-4">Your Wishlist</h2>
+      {/* <h2 className="text-2xl font-semibold mb-4">Your Wishlist</h2> */}
+      <div className="text-center text-2xl mb-2">
+              <Title text1={"MY"} text2={"WISHLIST"} />
+            </div>
 
       {wishlistProducts.length === 0 ? (
         <p className="text-gray-500 text-lg">Your wishlist is empty.</p>
@@ -45,7 +54,7 @@ const Wishlist = () => {
           {wishlistProducts.map((product) => (
             <div
               key={product._id}
-              className="cursor-pointer block group shadow-2xl py-5 rounded-md bg-white"
+              className="cursor-pointer block group shadow-lg pt-4 rounded-md bg-white"
             >
               {/* Product Link */}
               <Link
@@ -63,13 +72,13 @@ const Wishlist = () => {
                 </div>
 
                 {/* Product Name */}
-                <p className="mt-3 text-xs md:text-sm font-light text-gray-900 text-left px-5 line-clamp-2">
+                <p className="mt-3 text-xs md:text-sm font-light text-gray-900 text-left px-5 line-clamp-2 bg-[#f1f1f1]">
                   {product.name}
                 </p>
               </Link>
-
+              <div className="bg-[#f1f1f1]">
               {/* ⭐ Rating + Count */}
-              <div className="px-5 mt-1 text-sm text-yellow-500 flex items-center">
+              <div className="px-5  text-sm text-yellow-500 flex items-center">
                 {[...Array(5)].map((_, i) => (
                   <span key={i}>
                     {i < Math.round(product.avgRating || 0) ? "★" : "☆"}
@@ -94,7 +103,7 @@ const Wishlist = () => {
               </div>
 
               {/* Remove Button */}
-              <div className="px-5 mt-4">
+              <div className="px-5 pb-4 mt-4">
                 <button
                   onClick={() => toggleWishlistItem(product._id)}
                   className="w-full py-2 bg-red-600 text-white rounded-md hover:bg-indigo-500 transition"
@@ -102,10 +111,12 @@ const Wishlist = () => {
                   Remove
                 </button>
               </div>
+              </div>
             </div>
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 };

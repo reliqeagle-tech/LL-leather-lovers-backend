@@ -1721,8 +1721,8 @@ import axios from "axios";
 import { getPayPalAccessToken } from "../utils/paypal.js";
 
 // global variables
-const currency = 'usd'  // ✅ CHANGED TO USD
-const deliveryCharge = 10
+const currency = "INR"  // ✅ CHANGED TO USD
+const deliveryCharge = 0
 
 // gateway initialize
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -1830,22 +1830,50 @@ const placeOrderStripe = async (req,res) => {
     }
 }
 
+// const verifyStripe = async (req,res) => {
+//     const { orderId, success, userId } = req.body
+//     try {
+//         if (success === "true") {
+//             await orderModel.findByIdAndUpdate(orderId, {payment:true});
+//             await userModel.findByIdAndUpdate(userId, {cartData: {}})
+//             res.json({success: true});
+//         } else {
+//             await orderModel.findByIdAndDelete(orderId)
+//             res.json({success:false})
+//         }
+//     } catch (error) {
+//         console.log(error)
+//         res.json({success:false,message:error.message})
+//     }
+// }
+
+
 const verifyStripe = async (req,res) => {
-    const { orderId, success, userId } = req.body
+    const { orderId, success, userId, sessionId } = req.body
+
     try {
         if (success === "true") {
-            await orderModel.findByIdAndUpdate(orderId, {payment:true});
+
+            await orderModel.findByIdAndUpdate(orderId, {
+              payment: true,
+              paymentId: sessionId,
+              status: "Payment Received"
+            });
+
             await userModel.findByIdAndUpdate(userId, {cartData: {}})
             res.json({success: true});
+
         } else {
             await orderModel.findByIdAndDelete(orderId)
             res.json({success:false})
         }
     } catch (error) {
-        console.log(error)
         res.json({success:false,message:error.message})
     }
 }
+
+
+
 
 // ==========================================
 // RAZORPAY
@@ -1891,24 +1919,53 @@ const placeOrderRazorpay = async (req,res) => {
     }
 }
 
+// const verifyRazorpay = async (req,res) => {
+//     try {
+//         const { userId, razorpay_order_id  } = req.body
+
+//         const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
+//         if (orderInfo.status === 'paid') {
+//             await orderModel.findByIdAndUpdate(orderInfo.receipt,{payment:true});
+//             await userModel.findByIdAndUpdate(userId,{cartData:{}})
+//             res.json({ success: true, message: "Payment Successful" })
+//         } else {
+//              res.json({ success: false, message: 'Payment Failed' });
+//         }
+
+//     } catch (error) {
+//         console.log(error)
+//         res.json({success:false,message:error.message})
+//     }
+// }
+
 const verifyRazorpay = async (req,res) => {
     try {
-        const { userId, razorpay_order_id  } = req.body
+        const { userId, razorpay_order_id, razorpay_payment_id } = req.body
 
         const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
+
         if (orderInfo.status === 'paid') {
-            await orderModel.findByIdAndUpdate(orderInfo.receipt,{payment:true});
+
+            await orderModel.findByIdAndUpdate(orderInfo.receipt,{
+                payment:true,
+                paymentId: razorpay_payment_id,
+                status: "Payment Received"
+            });
+
             await userModel.findByIdAndUpdate(userId,{cartData:{}})
-            res.json({ success: true, message: "Payment Successful" })
+            res.json({ success: true })
+
         } else {
-             res.json({ success: false, message: 'Payment Failed' });
+             res.json({ success: false })
         }
 
     } catch (error) {
-        console.log(error)
         res.json({success:false,message:error.message})
     }
 }
+
+
+
 
 // ==========================================
 // PAYPAL - PLACE ORDER (USD ONLY - NO CONVERSION)
@@ -2043,6 +2100,7 @@ const verifyPaypal = async (req, res) => {
         referenceId,
         { 
           payment: true,
+          paymentId: orderID,
           status: "Payment Received"
         },
         { new: true }

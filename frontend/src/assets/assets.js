@@ -110,6 +110,7 @@ import men1 from './men-1.png'
 import pillow from './pillow.jpg'
 import navImg from './navImg.png'
 import about_img from './about-Img.jpg'
+import profileImg from './profileImg.jpg'
 
 export const assets = {
     logo,
@@ -165,7 +166,8 @@ export const assets = {
     men1,
     pillow,
     navImg,
-    bannerL
+    bannerL,
+    profileImg
 }
 
 export const products = [
