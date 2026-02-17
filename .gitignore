@@ -3,6 +3,9 @@ frontend/dist/
 frontend/dist
 dist
 
+# Uploads
+uploads/
+
 # Node modules
 node_modules/
 
