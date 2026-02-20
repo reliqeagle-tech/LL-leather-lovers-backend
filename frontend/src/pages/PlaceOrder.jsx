@@ -1589,7 +1589,7 @@ const PlaceOrder = () => {
                 setMethod("stripe");
                 setIsPayPalReady(false);
               }}
-              className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
+              className="flex items-center gap-3 border border-indigo-500 rounded p-2 px-3 cursor-pointer"
             >
               <p
                 className={`min-w-3.5 h-3.5 border rounded-full ${
@@ -1604,7 +1604,7 @@ const PlaceOrder = () => {
                 setMethod("razorpay");
                 setIsPayPalReady(false);
               }}
-              className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
+              className="flex items-center gap-3 border border-indigo-500 rounded p-2 px-3 cursor-pointer"
             >
               <p
                 className={`min-w-3.5 h-3.5 border rounded-full ${
@@ -1620,7 +1620,7 @@ const PlaceOrder = () => {
                 setMethod("paypal");
                 setIsPayPalReady(false);
               }}
-              className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
+              className="flex items-center gap-3 border border-indigo-500 rounded p-2 px-3 cursor-pointer"
             >
               <p
                 className={`min-w-3.5 h-3.5 border rounded-full ${
