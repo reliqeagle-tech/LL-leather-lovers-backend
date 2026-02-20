@@ -105,7 +105,7 @@
 
 // //       // FIXED: discountPrice is the ACTUAL discounted price, not a percentage!
 // //       const discountedPrice = Number(productInfo.discountPrice) || 0;
-      
+
 // //       // Determine the final price to use
 // //       let finalUnitPrice = originalPrice;
 // //       let discountAmount = 0;
@@ -155,10 +155,10 @@
 
 // //         // Validate all numbers before pushing
 // //         if (
-// //           isNaN(originalPrice) || 
-// //           isNaN(discountAmount) || 
-// //           isNaN(itemFinalPrice) || 
-// //           isNaN(itemSubtotal) || 
+// //           isNaN(originalPrice) ||
+// //           isNaN(discountAmount) ||
+// //           isNaN(itemFinalPrice) ||
+// //           isNaN(itemSubtotal) ||
 // //           isNaN(itemSaved)
 // //         ) {
 // //           console.error('NaN detected in item!', {
@@ -360,15 +360,6 @@
 // // };
 
 // // export default PlaceOrder;
-
-
-
-
-
-
-
-
-
 
 // import React, { useContext, useState } from "react";
 // import Title from "../components/Title";
@@ -672,13 +663,6 @@
 // };
 
 // export default PlaceOrder;
-
-
-
-
-
-
-
 
 // import React, { useContext, useState } from "react";
 // import Title from "../components/Title";
@@ -1157,7 +1141,6 @@
 
 // export default PlaceOrder;
 
-
 import React, { useContext, useState } from "react";
 import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
@@ -1168,7 +1151,7 @@ import { toast } from "react-toastify";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"; // ✅ Import PayPal components
 
 const PlaceOrder = () => {
-  const [method, setMethod] = useState("cod");
+  const [method, setMethod] = useState("razorpay");
   const [isPayPalReady, setIsPayPalReady] = useState(false); // ✅ Track PayPal readiness
   const [orderDataToPayPal, setOrderDataToPayPal] = useState(null); // ✅ Store order data for PayPal
 
@@ -1180,7 +1163,7 @@ const PlaceOrder = () => {
     setCartItems,
     products,
     delivery_fee,
-    userId
+    userId,
   } = useContext(ShopContext);
 
   const SHIPPING_FEE = 10;
@@ -1219,7 +1202,7 @@ const PlaceOrder = () => {
           const { data } = await axios.post(
             `${backendUrl}/api/order/verifyRazorpay`,
             response,
-            { headers: { Authorization: `Bearer ${token}` } }
+            { headers: { Authorization: `Bearer ${token}` } },
           );
 
           if (data.success) {
@@ -1255,7 +1238,10 @@ const PlaceOrder = () => {
       // Parse price safely
       const originalPrice = Number(productInfo.price);
       if (isNaN(originalPrice) || originalPrice <= 0) {
-        console.error(`Invalid price for product ${productId}:`, productInfo.price);
+        console.error(
+          `Invalid price for product ${productId}:`,
+          productInfo.price,
+        );
         toast.error(`Invalid price for product: ${productInfo.name}`);
         return null;
       }
@@ -1291,12 +1277,13 @@ const PlaceOrder = () => {
         const [size, color] = variantKey.split("-");
 
         // If there's a custom price, use it; otherwise use the calculated price
-        const itemFinalPrice = customPrice > 0 ? (finalUnitPrice + customPrice) : finalUnitPrice;
+        const itemFinalPrice =
+          customPrice > 0 ? finalUnitPrice + customPrice : finalUnitPrice;
         const itemSubtotal = itemFinalPrice * qty;
         const itemSaved = discountAmount * qty;
 
         // DEBUGGING: Log calculated values
-        console.log('Item calculation:', {
+        console.log("Item calculation:", {
           productId,
           name: productInfo.name,
           originalPrice,
@@ -1306,7 +1293,7 @@ const PlaceOrder = () => {
           itemFinalPrice,
           qty,
           itemSubtotal,
-          itemSaved
+          itemSaved,
         });
 
         // Validate all numbers before pushing
@@ -1317,12 +1304,12 @@ const PlaceOrder = () => {
           isNaN(itemSubtotal) ||
           isNaN(itemSaved)
         ) {
-          console.error('NaN detected in item!', {
+          console.error("NaN detected in item!", {
             originalPrice,
             discountAmount,
             itemFinalPrice,
             itemSubtotal,
-            itemSaved
+            itemSaved,
           });
           toast.error(`Error calculating price for ${productInfo.name}`);
           return null;
@@ -1369,17 +1356,21 @@ const PlaceOrder = () => {
     const finalAmount = subtotal + SHIPPING_FEE;
 
     // DEBUGGING: Log totals
-    console.log('Order totals:', {
+    console.log("Order totals:", {
       subtotal,
       discountTotal,
       shipping: SHIPPING_FEE,
       finalAmount,
-      itemCount: orderItems.length
+      itemCount: orderItems.length,
     });
 
     // Validate totals before sending
     if (isNaN(subtotal) || isNaN(discountTotal) || isNaN(finalAmount)) {
-      console.error('NaN detected in totals!', { subtotal, discountTotal, finalAmount });
+      console.error("NaN detected in totals!", {
+        subtotal,
+        discountTotal,
+        finalAmount,
+      });
       toast.error("Error calculating order total. Please try again.");
       return null;
     }
@@ -1427,7 +1418,7 @@ const PlaceOrder = () => {
         response = await axios.post(
           `${backendUrl}/api/order/place`,
           orderData,
-          config
+          config,
         );
         if (response.data.success) {
           setCartItems({});
@@ -1443,7 +1434,7 @@ const PlaceOrder = () => {
         response = await axios.post(
           `${backendUrl}/api/order/stripe`,
           orderData,
-          config
+          config,
         );
         if (response.data.success) {
           window.location.replace(response.data.session_url);
@@ -1457,7 +1448,7 @@ const PlaceOrder = () => {
         response = await axios.post(
           `${backendUrl}/api/order/razorpay`,
           orderData,
-          config
+          config,
         );
         if (response.data.success) {
           initPay(response.data.order);
@@ -1471,16 +1462,20 @@ const PlaceOrder = () => {
         console.log("🔄 Preparing for PayPal payment...");
         setOrderDataToPayPal(orderData);
         setIsPayPalReady(true);
-        
+
         // Scroll to PayPal buttons
         setTimeout(() => {
-          document.getElementById('paypal-button-container')?.scrollIntoView({ behavior: 'smooth' });
+          document
+            .getElementById("paypal-button-container")
+            ?.scrollIntoView({ behavior: "smooth" });
         }, 100);
       }
     } catch (error) {
       console.error("Order submission error:", error);
       toast.error(
-        error.response?.data?.message || error.message || "Something went wrong"
+        error.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
       );
     }
   };
@@ -1585,10 +1580,10 @@ const PlaceOrder = () => {
           <CartTotal />
         </div>
 
-        <div className="mt-12">
+        <div className="mt-12 ">
           <Title text1="PAYMENT" text2="METHOD" />
 
-          <div className="flex gap-3 flex-col lg:flex-row">
+          <div className="flex gap-3 flex-col lg:flex-row mt-2">
             <div
               onClick={() => {
                 setMethod("stripe");
@@ -1601,7 +1596,7 @@ const PlaceOrder = () => {
                   method === "stripe" ? "bg-green-400" : ""
                 }`}
               ></p>
-              <img className="h-5 mx-4" src={assets.stripe_logo} />
+              <img className="w-14" src={assets.stripe_logo} />
             </div>
 
             <div
@@ -1632,10 +1627,12 @@ const PlaceOrder = () => {
                   method === "paypal" ? "bg-green-400" : ""
                 }`}
               ></p>
-              <span className="text-gray-500 text-sm font-medium mx-4">PAYPAL</span>
+              <span className="text-blue-600 text-sm font-semibold italic mx-4">
+                <img src={assets.paypalLogo} alt="" className="w-20" />
+              </span>
             </div>
 
-            <div
+            {/* <div
               onClick={() => {
                 setMethod("cod");
                 setIsPayPalReady(false);
@@ -1650,48 +1647,64 @@ const PlaceOrder = () => {
               <span className="text-gray-500 text-sm font-medium mx-4">
                 CASH ON DELIVERY
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* ✅ NEW - PAYPAL BUTTONS SECTION */}
           {method === "paypal" && isPayPalReady && orderDataToPayPal && (
-            <div id="paypal-button-container" className="mt-8 mb-8 p-4 border rounded bg-gray-50">
+            <div
+              id="paypal-button-container"
+              className="mt-8 mb-8 p-4 border rounded bg-gray-50"
+            >
               <PayPalButtons
                 style={{ layout: "vertical" }}
                 createOrder={async (data, actions) => {
                   try {
                     console.log("🔄 Creating PayPal order...");
-                    
+
                     const response = await axios.post(
                       `${backendUrl}/api/order/paypal`,
                       orderDataToPayPal,
-                      { headers: { Authorization: `Bearer ${token}` } }
+                      { headers: { Authorization: `Bearer ${token}` } },
                     );
 
                     if (response.data.success) {
-                      console.log("✅ PayPal order created:", response.data.orderID);
+                      console.log(
+                        "✅ PayPal order created:",
+                        response.data.orderID,
+                      );
                       return response.data.orderID;
                     } else {
-                      throw new Error(response.data.message || "Failed to create PayPal order");
+                      throw new Error(
+                        response.data.message ||
+                          "Failed to create PayPal order",
+                      );
                     }
                   } catch (error) {
                     console.error("❌ Error creating PayPal order:", error);
-                    toast.error(error.response?.data?.message || error.message || "Failed to create PayPal order");
+                    toast.error(
+                      error.response?.data?.message ||
+                        error.message ||
+                        "Failed to create PayPal order",
+                    );
                     throw error;
                   }
                 }}
                 onApprove={async (data, actions) => {
                   try {
-                    console.log("✅ User approved PayPal payment. Order ID:", data.orderID);
+                    console.log(
+                      "✅ User approved PayPal payment. Order ID:",
+                      data.orderID,
+                    );
 
                     // Verify payment on backend
                     const response = await axios.post(
                       `${backendUrl}/api/order/verifyPaypal`,
                       {
                         orderID: data.orderID,
-                        userId: userId
+                        userId: userId,
                       },
-                      { headers: { Authorization: `Bearer ${token}` } }
+                      { headers: { Authorization: `Bearer ${token}` } },
                     );
 
                     if (response.data.success) {
@@ -1700,17 +1713,28 @@ const PlaceOrder = () => {
                       navigate("/orders");
                       toast.success("Payment successful!");
                     } else {
-                      console.error("❌ Payment verification failed:", response.data.message);
-                      toast.error(response.data.message || "Payment verification failed");
+                      console.error(
+                        "❌ Payment verification failed:",
+                        response.data.message,
+                      );
+                      toast.error(
+                        response.data.message || "Payment verification failed",
+                      );
                     }
                   } catch (error) {
                     console.error("❌ Error verifying PayPal payment:", error);
-                    toast.error(error.response?.data?.message || error.message || "Payment verification failed");
+                    toast.error(
+                      error.response?.data?.message ||
+                        error.message ||
+                        "Payment verification failed",
+                    );
                   }
                 }}
                 onError={(err) => {
                   console.error("❌ PayPal error:", err);
-                  toast.error("Payment failed or was cancelled. Please try again.");
+                  toast.error(
+                    "Payment failed or was cancelled. Please try again.",
+                  );
                 }}
               />
             </div>
@@ -1719,10 +1743,12 @@ const PlaceOrder = () => {
           <div className="w-full text-end mt-8">
             <button
               type="submit"
-              className="bg-black text-white px-16 py-3 text-sm hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-black text-white px-16 py-3 text-sm rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={method === "paypal" && isPayPalReady}
             >
-              {method === "paypal" && isPayPalReady ? "PAYPAL READY - USE BUTTONS BELOW" : "PLACE ORDER"}
+              {method === "paypal" && isPayPalReady
+                ? "PAYPAL READY - USE BUTTONS BELOW"
+                : "PLACE ORDER"}
             </button>
           </div>
         </div>
