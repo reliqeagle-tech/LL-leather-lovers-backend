@@ -1,5 +1,3 @@
-   
-
 import React, { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
@@ -17,11 +15,11 @@ const PromoBanner = () => {
     <section className="w-full lg:mb-10 overflow-hidden  ">
       {/* Full Horizontal Banner Image */}
       <Link to={"/collection"} className="block">
-        <img 
-          // src={banner.image} 
-          src={assets.bannerL}
-          alt={banner.title || "Promo Banner"} 
-          className="w-full h-50 md:h-80 lg:h-[400px] object-strech"  // Full width, fixed height, crop to fill horizontally
+        <img
+          // src={banner.image}
+          src={assets.colImg}
+          alt={banner.title || "Promo Banner"}
+          className="w-full h-50 md:h-80 lg:h-[400px] " // Full width, fixed height, crop to fill horizontally
         />
       </Link>
     </section>

@@ -111,6 +111,15 @@ import navImg from "./navImg.png";
 import about_img from "./about-Img.jpg";
 import profileImg from "./profileImg.jpg";
 import paypalLogo from "./paypal_logo.png";
+// import ll_lover from "./ll lover.png";
+import ll_lover from "./ll lover2.jpeg";
+import aboutUsImg from "./aboutUsImg.jpeg";
+import customLeatherImg from "./customLeatherImg.jpeg";
+import collectionImg from "./collectionImg.png";
+import collectionImg2 from "./collectionImg.png";
+import collectionImg3 from "./collectionImg.png";
+import colImg from "./colImg.png";
+import ll_lover3 from "./ll lover3.png";
 
 export const assets = {
   logo,
@@ -169,6 +178,13 @@ export const assets = {
   bannerL,
   profileImg,
   paypalLogo,
+  ll_lover,
+  aboutUsImg,
+  customLeatherImg,
+  collectionImg,
+  collectionImg2,
+  colImg,
+  ll_lover3,
 };
 
 export const products = [
