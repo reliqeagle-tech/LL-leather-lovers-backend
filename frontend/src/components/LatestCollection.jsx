@@ -631,20 +631,15 @@
 
 // export default LatestCollection;
 
+
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { ShopContext } from "../context/ShopContext";
 import ProductItem from "./ProductItem";
 import { Link } from "react-router-dom";
 
 const CARD_ACCENTS = [
-  "#6366f1",
-  "#8b5cf6",
-  "#6366f1",
-  "#a78bfa",
-  "#818cf8",
-  "#7c3aed",
-  "#6366f1",
-  "#8b5cf6",
+  "#6366f1","#8b5cf6","#6366f1","#a78bfa",
+  "#818cf8","#7c3aed","#6366f1","#8b5cf6",
 ];
 
 const LatestCollection = () => {
@@ -655,7 +650,7 @@ const LatestCollection = () => {
 
   const updateProductCount = () => {
     setLatestProducts(
-      window.innerWidth < 640 ? products.slice(0, 6) : products.slice(0, 8),
+      window.innerWidth < 640 ? products.slice(0, 6) : products.slice(0, 8)
     );
   };
 
@@ -667,10 +662,8 @@ const LatestCollection = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setVisible(true);
-      },
-      { threshold: 0.06 },
+      ([e]) => { if (e.isIntersecting) setVisible(true); },
+      { threshold: 0.06 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -683,89 +676,43 @@ const LatestCollection = () => {
         .lc-serif { font-family: 'Cormorant Garamond', serif; }
         .lc-sans  { font-family: 'Montserrat', sans-serif; }
 
-        /* stagger reveal */
         @keyframes cardReveal {
-          from { opacity:0; transform:translateY(20px); }
-          to   { opacity:1; transform:translateY(0); }
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         .lc-reveal {
           opacity: 0;
           animation: cardReveal 0.5s ease forwards;
         }
 
-        /* ── CARD WRAPPER ── */
+        /* ── Card wrapper — NO background override, NO color override ── */
         .lc-wrap {
-          border-radius: 8px;
+          border-radius: 14px;
           overflow: hidden;
-          border: 1px solid rgba(255,255,255,0.1);
-          border-left-width: 3px;
-          transition: box-shadow 0.3s, border-color 0.3s;
-          /* Force white background on entire card */
-          background: #ffffff !important;
+          border: 1px solid rgba(99,102,241,0.15);
+          border-left: 3px solid #6366f1;
+          transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+          position: relative;
         }
         .lc-wrap:hover {
-          box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.25);
-        }
-
-        /*
-          Force white bg on every child element inside the card
-          so ProductItem's internal dark bg is fully overridden.
-        */
-        .lc-wrap *:not(.lc-badge):not(.lc-num) {
-          background-color: transparent !important;
-        }
-        .lc-wrap {
-          background: #ffffff !important;
-        }
-
-        /* Product name text — dark on white */
-        .lc-wrap a,
-        .lc-wrap p,
-        .lc-wrap span:not(.lc-badge):not(.lc-num),
-        .lc-wrap h1, .lc-wrap h2, .lc-wrap h3 {
-          color: #111111 !important;
-        }
-
-        /* Keep price/discount colors readable */
-        .lc-wrap .text-red-500,
-        .lc-wrap .text-red-400,
-        .lc-wrap [class*="text-red"] { color: #dc2626 !important; }
-        .lc-wrap .text-green-500,
-        .lc-wrap .text-green-400,
-        .lc-wrap [class*="text-green"] { color: #16a34a !important; }
-        .lc-wrap .text-gray-400,
-        .lc-wrap .text-gray-500,
-        .lc-wrap [class*="text-gray"] { color: #6b7280 !important; }
-
-        /* Star ratings — keep yellow */
-        .lc-wrap .text-yellow-400,
-        .lc-wrap [class*="text-yellow"] { color: #eab308 !important; }
-
-        /* Image zoom only */
-        .lc-wrap img {
-          transition: transform 0.65s cubic-bezier(.22,1,.36,1) !important;
-          background: #f9f9f9 !important;
-        }
-        .lc-wrap:hover img {
-          transform: scale(1.06) !important;
-        }
-
-        /* Keep image container clean white */
-        .lc-wrap a > div,
-        .lc-wrap .overflow-hidden {
-          background: #f9fafb !important;
-          overflow: hidden;
+          transform: translateY(-3px);
+          box-shadow: 0 20px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.25);
+          border-color: rgba(99,102,241,0.4);
         }
 
         /* CTA fill wipe */
         .lc-cta {
-          position: relative; overflow: hidden;
+          position: relative;
+          overflow: hidden;
           transition: transform 0.2s, box-shadow 0.25s;
         }
         .lc-cta::before {
-          content: ''; position: absolute; inset: 0;
+          content: '';
+          position: absolute;
+          inset: 0;
           background: #6366f1;
-          transform: scaleX(0); transform-origin: left;
+          transform: scaleX(0);
+          transform-origin: left;
           transition: transform 0.3s cubic-bezier(.22,1,.36,1);
         }
         .lc-cta:hover::before { transform: scaleX(1); }
@@ -779,73 +726,52 @@ const LatestCollection = () => {
       <section
         ref={sectionRef}
         className="py-16 sm:py-20 lg:py-24 relative overflow-hidden"
-        style={{
-          background: "linear-gradient(180deg, #0b0b0f 0%, #0e0e14 100%)",
-        }}
+        style={{ background: "linear-gradient(180deg, #0b0b0f 0%, #0e0e14 100%)" }}
       >
         {/* Top separator */}
-        <div
-          className="absolute top-0 left-0 right-0 h-px"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent)",
-          }}
-        />
+        <div className="absolute top-0 left-0 right-0 h-px"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent)" }} />
 
         {/* Glow */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[240px] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at top, rgba(99,102,241,0.07) 0%, transparent 70%)",
-          }}
-        />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[240px] pointer-events-none"
+          style={{ background: "radial-gradient(ellipse at top, rgba(99,102,241,0.07) 0%, transparent 70%)" }} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* ── HEADING ── */}
+
+          {/* ── Heading ── */}
           <div className="text-center mb-12 sm:mb-16">
-            <h2
-              className="lc-serif text-white leading-tight tracking-tight"
-              style={{ fontSize: "clamp(34px,5vw,58px)", fontWeight: 300 }}
-            >
+            <p className="lc-sans uppercase tracking-[0.22em] text-indigo-400 mb-3"
+              style={{ fontSize: '10px', fontWeight: 600 }}>
+              New Arrivals
+            </p>
+
+            <h2 className="lc-serif text-white leading-tight tracking-tight"
+              style={{ fontSize: "clamp(34px,5vw,58px)", fontWeight: 300 }}>
               Latest{" "}
-              <em
-                className="text-indigo-400"
-                style={{ fontStyle: "italic", fontWeight: 300 }}
-              >
+              <em className="text-indigo-400" style={{ fontStyle: "italic", fontWeight: 300 }}>
                 Collections
               </em>
             </h2>
 
-            <div
-              className="w-12 h-px mx-auto my-4"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, #6366f1, transparent)",
-              }}
-            />
+            <div className="w-12 h-px mx-auto my-4"
+              style={{ background: "linear-gradient(90deg, transparent, #6366f1, transparent)" }} />
 
-            <p
-              className="lc-sans text-white/35 max-w-md mx-auto leading-relaxed tracking-wide"
-              style={{ fontSize: "13px" }}
-            >
-              Crafted with precision, styled for those who demand the
-              extraordinary.
+            <p className="lc-sans text-white/35 max-w-md mx-auto leading-relaxed tracking-wide"
+              style={{ fontSize: "13px" }}>
+              Crafted with precision, styled for those who demand the extraordinary.
             </p>
 
             <div className="flex justify-center mt-5">
-              <span
-                className="lc-sans inline-flex items-center gap-2 text-white/25
+              <span className="lc-sans inline-flex items-center gap-2 text-white/25
                 border border-white/[0.07] px-4 py-1.5 rounded-full"
-                style={{ fontSize: "10px", letterSpacing: "2px" }}
-              >
+                style={{ fontSize: "10px", letterSpacing: "2px" }}>
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block" />
-                {latestProducts.length} pieces
+                {latestProducts.length} top picks
               </span>
             </div>
           </div>
 
-          {/* ── GRID ── */}
+          {/* ── Grid ── */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             {latestProducts.map((item, index) => (
               <div
@@ -857,36 +783,41 @@ const LatestCollection = () => {
                     : { animation: "none", opacity: 0 }
                 }
               >
+                {/* Wrapper — only controls border/shadow/shape, nothing else */}
                 <div
-                  className="lc-wrap relative"
-                  style={{
-                    borderLeftColor: CARD_ACCENTS[index % CARD_ACCENTS.length],
-                  }}
+                  className="lc-wrap"
+                  style={{ borderLeftColor: CARD_ACCENTS[index % CARD_ACCENTS.length] }}
                 >
-                  {/* Item number */}
+                  {/* Item number overlay */}
                   <span
-                    className="lc-num absolute top-2.5 left-3 z-20 lc-sans select-none pointer-events-none"
+                    className="lc-sans select-none pointer-events-none"
                     style={{
-                      fontSize: "10px",
-                      color: "rgba(0,0,0,0.2)",
-                      letterSpacing: "1px",
-                      backgroundColor: "transparent !important",
+                      position: 'absolute', top: 10, left: 12, zIndex: 10,
+                      fontFamily: "'Montserrat',sans-serif",
+                      fontSize: '9px', fontWeight: 600,
+                      letterSpacing: '0.1em',
+                      color: 'rgba(255,255,255,0.25)',
+                      background: 'transparent',
+                      lineHeight: 1,
                     }}
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
 
-                  {/* NEW badge */}
+                  {/* NEW badge — only first 3 */}
                   {index < 3 && (
                     <span
-                      className="lc-badge absolute top-2.5 right-2.5 z-20 text-white
-                        lc-sans rounded-sm px-2 py-0.5 pointer-events-none"
+                      className="lc-sans pointer-events-none"
                       style={{
-                        fontSize: "9px",
-                        fontWeight: 600,
-                        letterSpacing: "1.5px",
-                        backgroundColor: "#6366f1",
-                        color: "#ffffff",
+                        position: 'absolute', top: 38, right: 10, zIndex: 10,
+                        fontFamily: "'Montserrat',sans-serif",
+                        fontSize: '8px', fontWeight: 700,
+                        letterSpacing: '0.12em',
+                        background: '#6366f1',
+                        color: '#fff',
+                        borderRadius: '4px',
+                        padding: '2px 6px',
+                        boxShadow: '0 2px 8px rgba(99,102,241,0.5)',
                       }}
                     >
                       NEW
@@ -912,29 +843,20 @@ const LatestCollection = () => {
               className="lc-cta lc-sans inline-flex items-center gap-3 no-underline
                 text-white border rounded-sm px-9 py-3.5"
               style={{
-                fontSize: "11px",
-                fontWeight: 600,
-                letterSpacing: "2.5px",
-                textTransform: "uppercase",
+                fontSize: "11px", fontWeight: 600,
+                letterSpacing: "2.5px", textTransform: "uppercase",
                 borderColor: "rgba(99,102,241,0.5)",
               }}
             >
               <span>Explore Full Collection</span>
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
               </svg>
             </Link>
           </div>
+
         </div>
       </section>
     </>
