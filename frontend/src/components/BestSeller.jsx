@@ -56,7 +56,7 @@
 //   const [bestSeller, setBestSeller] = useState([]);
 //   const [visible, setVisible] = useState(false);
 //   const sectionRef = useRef(null);
-  
+
 
 //   useEffect(() => {
 //     const bestProduct = products.filter((item) => item.bestseller);
@@ -113,7 +113,7 @@
 //           display: block; width: 100%; height: 100%;
 //           object-fit: contain; object-position: center ;
 //           padding: 8px;
-          
+
 //         }
 //         .bs-card:hover .bs-img img { transform: scale(1.06); }
 
@@ -365,7 +365,7 @@
 //           </div> */}
 
 
-          
+
 
 //           {/* ── CTA ── */}
 //           <div className="flex items-center justify-center mt-14 sm:mt-16">
@@ -494,11 +494,11 @@ const BestSeller = () => {
               display: 'inline-flex', alignItems: 'center', gap: '8px',
             }}>
               <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
               </svg>
               Top Rated
               <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
               </svg>
             </p>
 
@@ -550,7 +550,7 @@ const BestSeller = () => {
               >
                 {/* wrapper — only border/shape, no color overrides */}
                 <div className="bs-wrap" style={{
-                  borderLeftColor: ['#3b82f6','#6366f1','#2563eb','#4f46e5'][index % 4],
+                  borderLeftColor: ['#3b82f6', '#6366f1', '#2563eb', '#4f46e5'][index % 4],
                 }}>
                   {/* HOT badge */}
                   <span style={{
@@ -602,8 +602,8 @@ const BestSeller = () => {
               <span>Shop Best Sellers</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"/>
-                <polyline points="12 5 19 12 12 19"/>
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
               </svg>
             </Link>
           </div>

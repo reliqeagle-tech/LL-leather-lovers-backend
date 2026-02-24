@@ -814,16 +814,16 @@ const Collection = () => {
   const [searchParams] = useSearchParams();
 
   const subCategoriesMap = {
-    Men:    ["Topwear", "Bottomwear", "Winterwear"],
-    Women:  ["Topwear", "Bottomwear", "Winterwear"],
-    Others: ["Recliner Chair Headrest Cover","Cushion Cover","Aprons","Desk Mat","Pillow"],
+    Men: ["Topwear", "Bottomwear", "Winterwear"],
+    Women: ["Topwear", "Bottomwear", "Winterwear"],
+    Others: ["Recliner Chair Headrest Cover", "Cushion Cover", "Aprons", "Desk Mat", "Pillow"],
   };
 
   useEffect(() => {
     const rawCategory = searchParams.get("category");
-    const rawSub      = searchParams.get("sub");
+    const rawSub = searchParams.get("sub");
     if (rawCategory) setCategory([decodeURIComponent(rawCategory)]);
-    if (rawSub)      setSubCategory([decodeURIComponent(rawSub)]);
+    if (rawSub) setSubCategory([decodeURIComponent(rawSub)]);
   }, [searchParams]);
 
   const toggleCategory = (val) => {
@@ -837,7 +837,7 @@ const Collection = () => {
   const applyFilter = () => {
     let copy = products.slice();
     if (showSearch && search) copy = copy.filter(i => i.name.toLowerCase().includes(search.toLowerCase()));
-    if (category.length > 0)    copy = copy.filter(i => category.includes(i.category));
+    if (category.length > 0) copy = copy.filter(i => category.includes(i.category));
     if (subCategory.length > 0) copy = copy.filter(i => subCategory.includes(i.subCategory));
     setFilterProducts(copy);
     setCurrentPage(1);
@@ -846,9 +846,9 @@ const Collection = () => {
   const sortProduct = () => {
     let copy = filterProducts.slice();
     switch (sortType) {
-      case 'low-high':  setFilterProducts(copy.sort((a,b) => a.price - b.price)); break;
-      case 'high-low':  setFilterProducts(copy.sort((a,b) => b.price - a.price)); break;
-      default:          applyFilter(); break;
+      case 'low-high': setFilterProducts(copy.sort((a, b) => a.price - b.price)); break;
+      case 'high-low': setFilterProducts(copy.sort((a, b) => b.price - a.price)); break;
+      default: applyFilter(); break;
     }
     setCurrentPage(1);
   };
@@ -970,14 +970,16 @@ const Collection = () => {
       `}</style>
 
       <div style={{ background: "linear-gradient(180deg, #08080f 0%, #0b0b14 100%)", minHeight: "100vh" }}>
-        <PromoBanner />
+        {/* <PromoBanner /> */}
 
         {/* ── Page Header ── */}
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 pt-10 pb-8">
 
           {/* Top glow line */}
-          <div style={{ height: 1, marginBottom: 28,
-            background: 'linear-gradient(90deg, rgba(99,102,241,0.4), rgba(201,124,58,0.2), transparent)' }} />
+          <div style={{
+            height: 1, marginBottom: 28,
+            background: 'linear-gradient(90deg, rgba(99,102,241,0.4), rgba(201,124,58,0.2), transparent)'
+          }} />
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
@@ -995,8 +997,10 @@ const Collection = () => {
                 All{" "}
                 <em style={{ fontStyle: "italic", color: '#818cf8' }}>Collections</em>
               </h1>
-              <div style={{ width: 40, height: 1, marginTop: 10,
-                background: 'linear-gradient(90deg, #6366f1, transparent)' }} />
+              <div style={{
+                width: 40, height: 1, marginTop: 10,
+                background: 'linear-gradient(90deg, #6366f1, transparent)'
+              }} />
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
@@ -1006,7 +1010,7 @@ const Collection = () => {
                   onClick={() => category.includes(f) ? toggleCategory(f) : toggleSubCategory(f)}>
                   <span style={{ color: '#818cf8' }}>{f}</span>
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <path d="M2 2l6 6M8 2L2 8" stroke="rgba(129,140,248,0.7)" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M2 2l6 6M8 2L2 8" stroke="rgba(129,140,248,0.7)" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
                 </button>
               ))}
@@ -1033,9 +1037,9 @@ const Collection = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                   stroke="rgba(99,102,241,0.8)" strokeWidth="2" strokeLinecap="round">
-                  <line x1="4" y1="6" x2="20" y2="6"/>
-                  <line x1="8" y1="12" x2="20" y2="12"/>
-                  <line x1="12" y1="18" x2="20" y2="18"/>
+                  <line x1="4" y1="6" x2="20" y2="6" />
+                  <line x1="8" y1="12" x2="20" y2="12" />
+                  <line x1="12" y1="18" x2="20" y2="18" />
                 </svg>
                 <span>Filters</span>
                 {activeFilterCount > 0 && (
@@ -1052,7 +1056,7 @@ const Collection = () => {
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                 style={{ transform: showFilter ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s" }}>
-                <polyline points="6 9 12 15 18 9"/>
+                <polyline points="6 9 12 15 18 9" />
               </svg>
             </button>
 
@@ -1225,7 +1229,7 @@ const Collection = () => {
                 }}>
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                     stroke="rgba(99,102,241,0.5)" strokeWidth="1.5" strokeLinecap="round">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
                   </svg>
                 </div>
                 <p style={{
@@ -1266,7 +1270,7 @@ const Collection = () => {
                 {(() => {
                   const maxV = 5;
                   let start = Math.max(1, currentPage - Math.floor(maxV / 2));
-                  let end   = Math.min(totalPages, start + maxV - 1);
+                  let end = Math.min(totalPages, start + maxV - 1);
                   if (end - start < maxV - 1) start = Math.max(1, end - maxV + 1);
                   return Array.from({ length: end - start + 1 }, (_, i) => start + i);
                 })().map(page => (

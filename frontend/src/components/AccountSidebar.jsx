@@ -421,26 +421,23 @@ const NavItem = ({ to, icon, label, onClick }) => {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `${base} ${
-          isActive
-            ? "bg-indigo-600/15 border border-indigo-500/25"
-            : "hover:bg-white/[0.04] border border-transparent"
+        `${base} ${isActive
+          ? "bg-indigo-600/15 border border-indigo-500/25"
+          : "hover:bg-white/[0.04] border border-transparent"
         }`
       }
     >
       {({ isActive }) => (
         <span className="flex items-center gap-3 w-full">
           <span
-            className={`transition-colors duration-200 ${
-              isActive ? "text-indigo-400" : "text-white/35 group-hover:text-indigo-400"
-            }`}
+            className={`transition-colors duration-200 ${isActive ? "text-indigo-400" : "text-white/35 group-hover:text-indigo-400"
+              }`}
           >
             {icon}
           </span>
           <span
-            className={`font-medium transition-colors duration-200 ${
-              isActive ? "text-white" : "text-white/50 group-hover:text-white/90"
-            }`}
+            className={`font-medium transition-colors duration-200 ${isActive ? "text-white" : "text-white/50 group-hover:text-white/90"
+              }`}
             style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "12px", letterSpacing: "0.5px" }}
           >
             {label}
@@ -514,7 +511,7 @@ const AccountSidebar = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <div
-        className="sticky top-4 rounded-2xl overflow-hidden"
+        className="sticky top-20 rounded-2xl overflow-hidden"
         style={{
           background: "linear-gradient(160deg, #0e0e18 0%, #0b0b14 100%)",
           border: "1px solid rgba(255,255,255,0.07)",
@@ -557,8 +554,8 @@ const AccountSidebar = () => {
                 ) : (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                     stroke="white" strokeWidth="1.5" strokeLinecap="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                    <circle cx="12" cy="13" r="4"/>
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
                   </svg>
                 )}
               </div>
@@ -599,7 +596,7 @@ const AccountSidebar = () => {
             }}
           >
             <svg width="9" height="9" viewBox="0 0 24 24" fill="#818cf8">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
             </svg>
             <span
               className="text-indigo-300 font-semibold uppercase"
@@ -620,8 +617,8 @@ const AccountSidebar = () => {
             icon={
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
               </svg>
             }
           />
@@ -631,7 +628,7 @@ const AccountSidebar = () => {
             icon={
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
             }
           />
@@ -641,9 +638,9 @@ const AccountSidebar = () => {
             icon={
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
             }
           />
@@ -659,9 +656,9 @@ const AccountSidebar = () => {
             icon={
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                <polyline points="16 17 21 12 16 7"/>
-                <line x1="21" y1="12" x2="9" y2="12"/>
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
               </svg>
             }
           />

@@ -37,7 +37,7 @@
 
 //     // 2. Check if the discount is valid (must be between 0 and 100)
 //     const isValidDiscount = percentOff > 0 && percentOff < 100;
-    
+
 //     // 3. Calculate the final discounted price
 //     const discountedPriceValue = isValidDiscount
 //         ? price - (price * percentOff / 100)
@@ -49,7 +49,7 @@
 //     // console.log(discountedPriceValue)
 //     // console.log(isValidDiscount)
 //     // console.log("discount price is: ",discountedPriceValue);
-    
+
 //     // --- ⭐ FIXED MATH LOGIC END ---
 
 //   return (
@@ -413,7 +413,7 @@ import { Link } from "react-router-dom";
 
 const ProductItem = ({ id, image, name, price, discountPrice }) => {
   const { currency, getProductReviews } = useContext(ShopContext);
-  const [reviews,   setReviews]   = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [avgRating, setAvgRating] = useState(0);
 
   useEffect(() => {
@@ -427,20 +427,20 @@ const ProductItem = ({ id, image, name, price, discountPrice }) => {
   }, [id]);
 
   // ── Price logic ────────────────────────────────────────────────
-  const percentOff       = Number(discountPrice) || 0;
-  const isValidDiscount  = percentOff > 0 && percentOff < 100;
-  const discountedPrice  = isValidDiscount ? price - (price * percentOff / 100) : price;
+  const percentOff = Number(discountPrice) || 0;
+  const isValidDiscount = percentOff > 0 && percentOff < 100;
+  const discountedPrice = isValidDiscount ? price - (price * percentOff / 100) : price;
 
   // ── Star renderer ──────────────────────────────────────────────
   const Stars = ({ rating }) => (
     <span style={{ display: 'inline-flex', gap: '1px' }}>
       {[...Array(5)].map((_, i) => {
-        const full   = i < Math.floor(rating);
-        const half   = !full && i < rating;
-        const color  = full || half ? '#f59e0b' : 'rgba(255,255,255,0.15)';
+        const full = i < Math.floor(rating);
+        const half = !full && i < rating;
+        const color = full || half ? '#f59e0b' : 'rgba(255,255,255,0.15)';
         return (
           <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill={color} style={{ flexShrink: 0 }}>
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>
         );
       })}
@@ -562,9 +562,9 @@ const ProductItem = ({ id, image, name, price, discountPrice }) => {
           }}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 01-8 0"/>
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 01-8 0" />
           </svg>
           <span style={{
             fontFamily: "'Montserrat',sans-serif",
@@ -637,7 +637,8 @@ const ProductItem = ({ id, image, name, price, discountPrice }) => {
             <>
               {/* Final price */}
               <span style={{
-                fontFamily: "'Cormorant Garamond',serif",
+                // fontFamily: "'Cormorant Garamond',serif",
+                fontFamily: "'Montserrat',sans-serif",
                 fontSize: '18px', fontWeight: 500,
                 color: '#fff', lineHeight: 1,
               }}>
@@ -670,7 +671,8 @@ const ProductItem = ({ id, image, name, price, discountPrice }) => {
             </>
           ) : (
             <span style={{
-              fontFamily: "'Cormorant Garamond',serif",
+              // fontFamily: "'Cormorant Garamond',serif",
+              fontFamily: "'Montserrat',sans-serif",
               fontSize: '18px', fontWeight: 500,
               color: '#fff', lineHeight: 1,
             }}>

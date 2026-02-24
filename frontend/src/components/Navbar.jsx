@@ -1361,9 +1361,12 @@ const MegaMenu = ({ children, showMenu, hideMenu }) => (
   <div
     onMouseEnter={showMenu}
     onMouseLeave={hideMenu}
-    className="mega-enter fixed inset-x-0 top-[70px] bg-[#060606]/98 backdrop-blur-2xl
-      border-t border-indigo-600/50
-      shadow-2xl shadow-black/80 z-[9998]"
+    // className="mega-enter fixed inset-x-0 top-[70px] bg-[#060606]/98 backdrop-blur-2xl
+    //   border-t border-indigo-600/50
+    //   shadow-2xl shadow-black/80 z-[9998]"
+    className="mega-enter fixed inset-x-0 top-[70px] bg-[#060606] 
+  
+  shadow-2xl shadow-black/80 z-[9998]"
   >
     <div className="max-w-7xl mx-auto flex flex-wrap gap-8 xl:gap-12 px-6 xl:px-8 py-8 xl:py-10 items-start">
       {children}

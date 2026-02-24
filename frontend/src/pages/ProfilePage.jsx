@@ -380,10 +380,10 @@
 //         }
 //     };
 
-    // const handleLogout = () => {
-    //     localStorage.removeItem("token");
-    //     window.location.href = "/login";
-    // };
+// const handleLogout = () => {
+//     localStorage.removeItem("token");
+//     window.location.href = "/login";
+// };
 
 //     if (!user) {
 //         return <div className="text-center mt-10 text-gray-600">Loading profile...</div>;
@@ -726,15 +726,15 @@ const MyAccount = () => {
       <div className="fixed top-0 left-0 right-0 h-px z-50"
         style={{ background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent)" }} />
 
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-6">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
 
         {/* ── SIDEBAR ── */}
-        <div className="md:w-[22%] shrink-0">
+        <div className="md:w-[24%] shrink-0">
           <AccountSidebar />
         </div>
 
         {/* ── MAIN CONTENT ── */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 max-w-4xl">
 
           {/* Page heading */}
           <div className="mb-7">
@@ -763,16 +763,16 @@ const MyAccount = () => {
 
               {/* Avatar row */}
               <div className="flex items-center gap-5 mb-8 pb-8 border-b border-white/[0.06]">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center shrink-0
+                {/* <div className="w-16 h-16 rounded-full flex items-center justify-center shrink-0
                   border-2 border-indigo-500/40"
                   style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(99,102,241,0.05))" }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
                     stroke="rgba(129,140,248,0.8)" strokeWidth="1.2" strokeLinecap="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
                   </svg>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="text-white font-light"
                     style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "22px" }}>
                     {form.firstName || form.lastName
@@ -783,12 +783,12 @@ const MyAccount = () => {
                     style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "11px" }}>
                     {form.email || "your@email.com"}
                   </p>
-                </div>
+                </div> */}
                 {/* Member badge */}
                 <div className="ml-auto hidden sm:flex items-center gap-1.5
                   bg-indigo-600/10 border border-indigo-500/20 rounded-full px-3 py-1.5">
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="#818cf8">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
                   </svg>
                   <span className="text-indigo-300 font-semibold uppercase tracking-widest"
                     style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px" }}>
@@ -813,8 +813,8 @@ const MyAccount = () => {
                     icon={
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
                       </svg>
                     }
                   />
@@ -824,8 +824,8 @@ const MyAccount = () => {
                     icon={
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
                       </svg>
                     }
                   />
@@ -838,8 +838,8 @@ const MyAccount = () => {
                   icon={
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                      <polyline points="22,6 12,13 2,6"/>
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
                     </svg>
                   }
                 />
@@ -852,7 +852,7 @@ const MyAccount = () => {
                     icon={
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.88a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/>
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.88a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z" />
                       </svg>
                     }
                   />
@@ -868,22 +868,24 @@ const MyAccount = () => {
                     className="relative overflow-hidden inline-flex items-center gap-2
                       text-white rounded-lg px-7 py-2.5 font-semibold uppercase tracking-widest
                       hover:opacity-90 transition-all duration-200 group"
-                    style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "10px",
-                      letterSpacing: "2px", background: "#6366f1" }}>
+                    style={{
+                      fontFamily: "'Montserrat',sans-serif", fontSize: "10px",
+                      letterSpacing: "2px", background: "#6366f1"
+                    }}>
                     <span className="absolute inset-0 bg-indigo-500 scale-x-0 group-hover:scale-x-100
                       origin-left transition-transform duration-300 rounded-lg" />
                     <svg className="relative z-10" width="13" height="13" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                      <polyline points="17 21 17 13 7 13 7 21"/>
-                      <polyline points="7 3 7 8 15 8"/>
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                      <polyline points="7 3 7 8 15 8" />
                     </svg>
                     <span className="relative z-10">{saved ? "Saved!" : "Save Changes"}</span>
                   </button>
 
                   {/* Cancel */}
                   <button type="button"
-                    onClick={() => setForm({ firstName:"", lastName:"", email:"", phone:"" })}
+                    onClick={() => setForm({ firstName: "", lastName: "", email: "", phone: "" })}
                     className="inline-flex items-center gap-2 text-white/40 hover:text-white/70
                       rounded-lg px-5 py-2.5 border border-white/[0.08] hover:border-white/20
                       transition-all duration-200 font-semibold uppercase tracking-widest"
@@ -898,7 +900,7 @@ const MyAccount = () => {
                     rounded-lg px-4 py-2.5">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                       stroke="#4ade80" strokeWidth="2" strokeLinecap="round">
-                      <polyline points="20 6 9 17 4 12"/>
+                      <polyline points="20 6 9 17 4 12" />
                     </svg>
                     <span className="text-green-400"
                       style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "12px" }}>
