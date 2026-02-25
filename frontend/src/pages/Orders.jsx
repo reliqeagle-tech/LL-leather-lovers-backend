@@ -1084,7 +1084,7 @@ const OrderRow = ({ item, index, currency }) => {
         </TableCell>
 
         <TableCell>
-          <span className="text-white font-semibold" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "16px" }}>
+          <span className="text-white font-medium" style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "16px" }}>
             {currency}{item.subtotal?.toFixed(2)}
           </span>
           {item.saved > 0 && (
