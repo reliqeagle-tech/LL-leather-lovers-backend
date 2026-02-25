@@ -534,7 +534,7 @@ const Wishlist = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {wishlistProducts.map((product, index) => {
                   const price = parseFloat(product.price) || 0;
                   const discountPrice = product.discountPrice ? parseFloat(product.discountPrice) : 0;
@@ -554,16 +554,26 @@ const Wishlist = () => {
                         to={`/product/${product._id}`}
                         className="block relative overflow-hidden rounded-t-2xl"
                         style={{
-                          height: "280px",
-                          background: "linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%)",
+                          height: "250px",
+                          // background: "linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%)",
+                          // background: 'linear-gradient(to top, rgba(10,10,18,0.6) 0%, transparent 100%)',
+                          background: 'linear-gradient(135deg, #f5f3f0 0%, #ece9e4 100%)',
                         }}
                       >
                         <img
                           src={Array.isArray(product.image) ? product.image[0] : product.image}
                           alt={product.name}
-                          className="w-full h-full object-contain p-8 sm:p-10 transition-transform duration-700 group-hover:scale-105"
+                          className="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-105"
                           loading="lazy"
                         />
+
+                        {/* Gradient overlay at bottom
+                        <div style={{
+                          position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
+                          background: 'linear-gradient(to top, rgba(10,10,18,0.6) 0%, transparent 100%)',
+                          pointerEvents: 'none',
+                          zIndex: 1,
+                        }} /> */}
 
                         {/* Heart badge – filled red like wishlist item */}
                         <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-red-900/80 backdrop-blur-md border border-red-700/50 flex items-center justify-center shadow-xl z-10">
