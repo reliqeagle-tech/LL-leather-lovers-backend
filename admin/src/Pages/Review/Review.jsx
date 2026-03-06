@@ -943,7 +943,7 @@ const AVATAR_COLORS = [
 /* ════════════════════════════════════════════
    MAIN REVIEWS PAGE
 ════════════════════════════════════════════ */
-const Reviews = ({ token }) => {
+const Review = ({ token }) => {
     /* ── Data ── */
     const [reviews, setReviews] = useState([]);
     const [products, setProducts] = useState([]);
@@ -1695,4 +1695,4 @@ const ActionBtn = ({ icon, label, color, onClick }) => {
     );
 };
 
-export default Reviews;
+export default Review;

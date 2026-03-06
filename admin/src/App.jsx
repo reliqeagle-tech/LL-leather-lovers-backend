@@ -422,9 +422,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UploadBanner from './Pages/HomeSliderBanners/AddHomeSlide'
 import Analytics from './Pages/Analytics/Analytics'
-import Reviews from './Pages/review/review'
 import Reports from './Pages/Reports/Reports'
 import { ThemeProvider } from './Context/ThemeContext'
+import Review from './Pages/review/review'
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 export const currency = '$'
@@ -475,7 +475,7 @@ const Layout = ({ children, isSidebarOpen, pt = 'pt-4' }) => (
 )
 
 /* ═══════════════════════════
-   APP show here
+   APPz
 ═══════════════════════════ */
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -596,7 +596,7 @@ const App = () => {
       path: "/reviews",
       element: (
         <Layout isSidebarOpen={isSidebarOpen} pt='pt-20'>
-          <Reviews token={token} />
+          <Review token={token} />
         </Layout>
       )
     },
