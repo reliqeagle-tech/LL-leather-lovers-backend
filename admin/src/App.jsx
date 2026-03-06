@@ -475,7 +475,7 @@ const Layout = ({ children, isSidebarOpen, pt = 'pt-4' }) => (
 )
 
 /* ═══════════════════════════
-   APP
+   APP show here
 ═══════════════════════════ */
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
