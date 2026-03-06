@@ -99,3 +99,23 @@ export const deleteReview = async (req, res) => {
     }
 };
 
+
+// ========================
+//  ADD THIS to reviewController.js
+// ========================
+
+// Admin delete (bypasses user ownership check)
+export const adminDeleteReview = async (req, res) => {
+    try {
+        const { reviewId } = req.params;
+        const review = await reviewModel.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ success: false, message: "Review not found." });
+        }
+        await review.deleteOne();
+        res.json({ success: true, message: "Review deleted by admin." });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+

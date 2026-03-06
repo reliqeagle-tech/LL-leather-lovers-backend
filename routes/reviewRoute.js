@@ -1,5 +1,5 @@
 import express from "express";
-import { addReview, getReviewsByProduct, deleteReview } from "../controllers/reviewController.js";
+import { addReview, getReviewsByProduct, deleteReview, adminDeleteReview } from "../controllers/reviewController.js";
 import authUser from "../middleware/auth.js";  // your existing auth middleware
 
 const reviewRouter = express.Router();
@@ -12,5 +12,8 @@ reviewRouter.get("/:productId", getReviewsByProduct);
 
 // Delete review
 reviewRouter.delete("/:reviewId", authUser, deleteReview);
+
+// Admin delete (no ownership check)
+reviewRouter.delete("/admin/:reviewId", adminDeleteReview);
 
 export default reviewRouter;
