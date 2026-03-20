@@ -88,7 +88,7 @@
 
 //   const handleSizeSelect = (sizeObj) => {
 //     console.log("Size clicked:", sizeObj);
-    
+
 //     if (!sizeObj) {
 //       console.log("Invalid size object");
 //       return;
@@ -173,7 +173,7 @@
 //       // ✅ FIXED: Handle both old (string) and new (object) formats
 //       const firstColor = productData.color[0];
 //       let colorName;
-      
+
 //       if (typeof firstColor === 'string') {
 //         // Old format: just a string
 //         colorName = firstColor;
@@ -183,7 +183,7 @@
 //       } else {
 //         colorName = 'Unknown';
 //       }
-      
+
 //       setSelectedColor(colorName);
 //     }
 //   }, [productData]);
@@ -299,7 +299,7 @@
 //               <span className="text-sm text-gray-500">{customBreakdown}</span>
 //             </p>
 //           )}
-          
+
 //           {/* DEBUG: Show current state */}
 //           {/* <p className="text-xs text-gray-400 mt-2">Debug: displayPrice={displayPrice}, sizeMultiplier={sizeMultiplier}</p> */}
 
@@ -316,7 +316,7 @@
 //                   productData.color.map((colorObj, index) => {
 //                     // ✅ FIXED: Handle both old (string) and new (object) formats
 //                     let colorName, colorHex;
-                    
+
 //                     if (typeof colorObj === 'string') {
 //                       // Old format: just a string like "Red" or "Black"
 //                       colorName = colorObj;
@@ -3175,7 +3175,7 @@
 //               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 'clamp(20px,3.5vw,20px)' }}>
 //               {productData.name}
 //             </h1>
-            
+
 //             <div className="flex items-center gap-1.5 mb-2">
 //               {[...Array(5)].map((_,i)=>(
 //                 <svg key={i} width="14" height="14" viewBox="0 0 24 24"
@@ -3589,11 +3589,11 @@ import { toast } from 'react-toastify';
 import CartDrawer from '../components/CartDrawer';
 
 const colorMap = {
-  wine:'#722F37', red:'#FF0000', black:'#000000', olive:'#808000', green:'#008000',
-  cognac:'#D2691E', white:'#FFFFFF', yellow:'#FFFF00', gray:'#808080', rose:'#FF007F',
-  tobacco:'#A0522D', navy:'#000080', beige:'#F5F5DC', blue:'#0000FF', brown:'#8B4513',
-  'dark-wine':'#453333', 'tobacco-dark':'#6e351a',
-  'royal blue':'#4169e1', 'royal-blue':'#4169e1',
+  wine: '#722F37', red: '#FF0000', black: '#000000', olive: '#808000', green: '#008000',
+  cognac: '#D2691E', white: '#FFFFFF', yellow: '#FFFF00', gray: '#808080', rose: '#FF007F',
+  tobacco: '#A0522D', navy: '#000080', beige: '#F5F5DC', blue: '#0000FF', brown: '#8B4513',
+  'dark-wine': '#453333', 'tobacco-dark': '#6e351a',
+  'royal blue': '#4169e1', 'royal-blue': '#4169e1',
 };
 
 /* ══════════════════════════════════════════════════════════════════
@@ -3693,12 +3693,12 @@ const ProductPageStyles = () => (
 ══════════════════════════════════════════════════════════════════ */
 const ThumbRail = ({ images, selectedIndex, onSelect }) => {
   const scrollRef = useRef(null);
-  const [canUp,   setCanUp]   = useState(false);
+  const [canUp, setCanUp] = useState(false);
   const [canDown, setCanDown] = useState(false);
 
-  const THUMB_H   = 74;
+  const THUMB_H = 74;
   const THUMB_GAP = 8;
-  const STEP      = (THUMB_H + THUMB_GAP) * 2;
+  const STEP = (THUMB_H + THUMB_GAP) * 2;
 
   const sync = () => {
     const el = scrollRef.current;
@@ -3720,7 +3720,7 @@ const ThumbRail = ({ images, selectedIndex, onSelect }) => {
       <button className="thumb-arrow" disabled={!canUp}
         onClick={() => scrollRef.current?.scrollBy({ top: -STEP, behavior: 'smooth' })}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round">
-          <polyline points="18 15 12 9 6 15"/>
+          <polyline points="18 15 12 9 6 15" />
         </svg>
       </button>
 
@@ -3737,7 +3737,7 @@ const ThumbRail = ({ images, selectedIndex, onSelect }) => {
                 opacity: i === selectedIndex ? 1 : 0.6,
               }}>
               <img src={img} alt={`view-${i}`}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 5, display: 'block' }}/>
+                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 5, display: 'block' }} />
             </button>
           ))}
         </div>
@@ -3746,7 +3746,7 @@ const ThumbRail = ({ images, selectedIndex, onSelect }) => {
       <button className="thumb-arrow" disabled={!canDown}
         onClick={() => scrollRef.current?.scrollBy({ top: STEP, behavior: 'smooth' })}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round">
-          <polyline points="6 9 12 15 18 9"/>
+          <polyline points="6 9 12 15 18 9" />
         </svg>
       </button>
     </div>
@@ -3758,12 +3758,12 @@ const ThumbRail = ({ images, selectedIndex, onSelect }) => {
 ══════════════════════════════════════════════════════════════════ */
 const MobileThumbRail = ({ images, selectedIndex, onSelect }) => {
   const scrollRef = useRef(null);
-  const [canLeft,  setCanLeft]  = useState(false);
+  const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
 
-  const THUMB_W   = 60;
+  const THUMB_W = 60;
   const THUMB_GAP = 8;
-  const STEP      = (THUMB_W + THUMB_GAP) * 2;
+  const STEP = (THUMB_W + THUMB_GAP) * 2;
 
   const sync = () => {
     const el = scrollRef.current;
@@ -3786,7 +3786,7 @@ const MobileThumbRail = ({ images, selectedIndex, onSelect }) => {
         onClick={() => scrollRef.current?.scrollBy({ left: -STEP, behavior: 'smooth' })}
         style={{ width: 24, height: 60, flexShrink: 0 }}>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round">
-          <polyline points="15 18 9 12 15 6"/>
+          <polyline points="15 18 9 12 15 6" />
         </svg>
       </button>
 
@@ -3803,7 +3803,7 @@ const MobileThumbRail = ({ images, selectedIndex, onSelect }) => {
                 opacity: i === selectedIndex ? 1 : 0.6,
               }}>
               <img src={img} alt={`m-${i}`}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 4, display: 'block' }}/>
+                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 4, display: 'block' }} />
             </button>
           ))}
         </div>
@@ -3813,7 +3813,7 @@ const MobileThumbRail = ({ images, selectedIndex, onSelect }) => {
         onClick={() => scrollRef.current?.scrollBy({ left: STEP, behavior: 'smooth' })}
         style={{ width: 24, height: 60, flexShrink: 0 }}>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round">
-          <polyline points="9 18 15 12 9 6"/>
+          <polyline points="9 18 15 12 9 6" />
         </svg>
       </button>
     </div>
@@ -3829,29 +3829,29 @@ const RatingRing = ({ avg, total }) => {
     <div className="flex flex-col items-center justify-center gap-1" style={{ minWidth: 110 }}>
       <div className="relative" style={{ width: 90, height: 90 }}>
         <svg width="90" height="90" viewBox="0 0 90 90" style={{ transform: 'rotate(-90deg)' }}>
-          <circle cx="45" cy="45" r="35" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="7"/>
+          <circle cx="45" cy="45" r="35" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="7" />
           <circle cx="45" cy="45" r="35" fill="none" stroke="url(#rgrad)" strokeWidth="7" strokeLinecap="round"
-            strokeDasharray={circ} className="ring-arc" style={{ '--offset': offset, strokeDashoffset: offset }}/>
+            strokeDasharray={circ} className="ring-arc" style={{ '--offset': offset, strokeDashoffset: offset }} />
           <defs>
             <linearGradient id="rgrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#6366f1"/><stop offset="100%" stopColor="#a78bfa"/>
+              <stop offset="0%" stopColor="#6366f1" /><stop offset="100%" stopColor="#a78bfa" />
             </linearGradient>
           </defs>
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:26, color:'#fff', lineHeight:1 }}>{avg.toFixed(1)}</span>
-          <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, color:'rgba(255,255,255,.3)', letterSpacing:1 }}>/ 5.0</span>
+          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: '#fff', lineHeight: 1 }}>{avg.toFixed(1)}</span>
+          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.3)', letterSpacing: 1 }}>/ 5.0</span>
         </div>
       </div>
       <div className="flex gap-0.5">
-        {[...Array(5)].map((_,i) => (
-          <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill={i<Math.round(avg)?'#f59e0b':'none'} stroke="#f59e0b" strokeWidth="1.5">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+        {[...Array(5)].map((_, i) => (
+          <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill={i < Math.round(avg) ? '#f59e0b' : 'none'} stroke="#f59e0b" strokeWidth="1.5">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
           </svg>
         ))}
       </div>
-      <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, color:'rgba(255,255,255,.3)' }}>
-        {total} {total===1?'review':'reviews'}
+      <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.3)' }}>
+        {total} {total === 1 ? 'review' : 'reviews'}
       </span>
     </div>
   );
@@ -3861,22 +3861,24 @@ const RatingRing = ({ avg, total }) => {
    STAR BARS
 ══════════════════════════════════════════════════════════════════ */
 const StarBars = ({ reviews }) => {
-  const counts = [5,4,3,2,1].map(s => ({ star:s, count:reviews.filter(r=>r.rating===s).length }));
-  const max = Math.max(...counts.map(c=>c.count), 1);
+  const counts = [5, 4, 3, 2, 1].map(s => ({ star: s, count: reviews.filter(r => r.rating === s).length }));
+  const max = Math.max(...counts.map(c => c.count), 1);
   return (
-    <div className="flex flex-col gap-2 flex-1" style={{ minWidth:180 }}>
-      {counts.map(({star,count}) => (
+    <div className="flex flex-col gap-2 flex-1" style={{ minWidth: 180 }}>
+      {counts.map(({ star, count }) => (
         <div key={star} className="flex items-center gap-2.5">
-          <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, color:'rgba(255,255,255,.4)', width:8, textAlign:'right' }}>{star}</span>
+          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.4)', width: 8, textAlign: 'right' }}>{star}</span>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
           </svg>
-          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background:'rgba(255,255,255,0.06)' }}>
+          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
             <div className="bar-fill h-full rounded-full"
-              style={{ '--w':`${(count/max)*100}%`, width:`${(count/max)*100}%`,
-                background: star>=4?'linear-gradient(90deg,#6366f1,#818cf8)':star===3?'#f59e0b':'#f87171' }}/>
+              style={{
+                '--w': `${(count / max) * 100}%`, width: `${(count / max) * 100}%`,
+                background: star >= 4 ? 'linear-gradient(90deg,#6366f1,#818cf8)' : star === 3 ? '#f59e0b' : '#f87171'
+              }} />
           </div>
-          <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, color:'rgba(255,255,255,.25)', width:14, textAlign:'right' }}>{count}</span>
+          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.25)', width: 14, textAlign: 'right' }}>{count}</span>
         </div>
       ))}
     </div>
@@ -3895,23 +3897,23 @@ const Product = () => {
   } = useContext(ShopContext);
   const navigate = useNavigate();
 
-  const [productData, setProductData]           = useState(null);
-  const [image, setImage]                       = useState('');
-  const [selectedIndex, setSelectedIndex]       = useState(0);
-  const [size, setSize]                         = useState('');
-  const [selectedColor, setSelectedColor]       = useState('');
-  const [showModal, setShowModal]               = useState(false);
-  const [isExpanded, setIsExpanded]             = useState(false);
-  const [activeTab, setActiveTab]               = useState('description');
-  const [makeMeasure, setMakeMeasure]           = useState(false);
+  const [productData, setProductData] = useState(null);
+  const [image, setImage] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [size, setSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [activeTab, setActiveTab] = useState('description');
+  const [makeMeasure, setMakeMeasure] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [drawerOpen, setDrawerOpen]             = useState(false);
-  const [reviews, setReviews]                   = useState([]);
-  const [rating, setRating]                     = useState(5);
-  const [comment, setComment]                   = useState('');
-  const [sizeStock, setSizeStock]               = useState(0);
-  const [basePrice, setBasePrice]               = useState(0);
-  const [addonCost, setAddonCost]               = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [sizeStock, setSizeStock] = useState(0);
+  const [basePrice, setBasePrice] = useState(0);
+  const [addonCost, setAddonCost] = useState(0);
 
   const displayPrice = basePrice + addonCost;
   const isWishlisted = Array.isArray(wishlist) ? wishlist.some(w => w.productId === productId) : false;
@@ -3948,7 +3950,7 @@ const Product = () => {
     if (!size || !selectedColor) { toast.error('Please select a size and color.'); return; }
     addToCart(productData._id, size, selectedColor, addonCost);
     setIsButtonDisabled(true);
-    setTimeout(() => { toast.success('Product added to cart!'); setIsButtonDisabled(false); window.scrollTo({ top:0, behavior:'smooth' }); }, 2000);
+    setTimeout(() => { toast.success('Product added to cart!'); setIsButtonDisabled(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }, 2000);
   };
 
   const handleReviewSubmit = async () => {
@@ -3967,21 +3969,21 @@ const Product = () => {
     }
   }, [productData]);
 
-  if (!productData) return <div className="opacity-0"/>;
+  if (!productData) return <div className="opacity-0" />;
 
-  const avgRating     = reviews.length > 0 ? reviews.reduce((s,r) => s+r.rating, 0) / reviews.length : 0;
+  const avgRating = reviews.length > 0 ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
   const roundedRating = Math.round(avgRating);
-  const content       = `Simple 7-day return or exchange policy—no questions asked, just pure satisfaction. Get your order delivered swiftly with tracking updates every step of the way. We use sustainable, recyclable materials to keep your delivery green and guilt-free. Products adhere to international quality benchmarks, ensuring top-tier performance. Sizes tailored for real bodies—refer to our detailed size guide for the perfect match.`;
-  const shownContent  = isExpanded ? content : `${content.substring(0,250)}...`;
-  const extraAboveBase  = displayPrice - productData.price;
+  const content = `Simple 7-day return or exchange policy—no questions asked, just pure satisfaction. Get your order delivered swiftly with tracking updates every step of the way. We use sustainable, recyclable materials to keep your delivery green and guilt-free. Products adhere to international quality benchmarks, ensuring top-tier performance. Sizes tailored for real bodies—refer to our detailed size guide for the perfect match.`;
+  const shownContent = isExpanded ? content : `${content.substring(0, 250)}...`;
+  const extraAboveBase = displayPrice - productData.price;
   const customBreakdown = extraAboveBase > 0 ? ` (incl. +${currency}${extraAboveBase.toFixed(2)} for size/customization)` : '';
 
   return (
-    <div style={{ background:'linear-gradient(180deg,#08080f 0%,#0b0b14 100%)' }} className="min-h-screen">
-      <ProductPageStyles/>
+    <div style={{ background: 'linear-gradient(180deg,#08080f 0%,#0b0b14 100%)' }} className="min-h-screen">
+      <ProductPageStyles />
 
       {/* Original indigo top accent line */}
-      <div className="h-px w-full" style={{ background:'linear-gradient(90deg,transparent,rgba(99,102,241,0.4),transparent)' }}/>
+      <div className="h-px w-full" style={{ background: 'linear-gradient(90deg,transparent,rgba(99,102,241,0.4),transparent)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-10">
 
@@ -3994,10 +3996,10 @@ const Product = () => {
         }} className="product-main-grid">
 
           {/* ── IMAGE GALLERY ── */}
-          <div className="product-gallery-wrap lg:sticky lg:top-24 self-start" style={{ overflow:'hidden', maxWidth:'100%', width:'100%' }}>
+          <div className="product-gallery-wrap lg:sticky lg:top-24 self-start" style={{ overflow: 'hidden', maxWidth: '100%', width: '100%' }}>
 
             {/* DESKTOP: vertical thumb rail + main image */}
-            <div className="hidden sm:flex flex-row gap-3" style={{ alignItems:'flex-start' }}>
+            <div className="hidden sm:flex flex-row gap-3" style={{ alignItems: 'flex-start' }}>
               <ThumbRail
                 images={productData.image}
                 selectedIndex={selectedIndex}
@@ -4014,62 +4016,66 @@ const Product = () => {
                   maxHeight: 520,
                 }}>
                 <img src={image} alt={productData.name} className="main-img"
-                  style={{ width:'100%', height:'100%', objectFit:'contain', padding:16, display:'block' }}/>
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 16, display: 'block' }} />
                 <button onClick={() => toggleWishlistItem(productId)}
                   className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center"
-                  style={{ background: isWishlisted?'rgba(239,68,68,0.15)':'rgba(255,255,255,0.85)',
-                    border: isWishlisted?'1px solid rgba(239,68,68,0.4)':'1px solid rgba(0,0,0,0.1)',
-                    backdropFilter:'blur(4px)', boxShadow:'0 2px 8px rgba(0,0,0,0.15)', transition:'all .2s' }}>
+                  style={{
+                    background: isWishlisted ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.85)',
+                    border: isWishlisted ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(0,0,0,0.1)',
+                    backdropFilter: 'blur(4px)', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', transition: 'all .2s'
+                  }}>
                   <svg width="16" height="16" viewBox="0 0 24 24"
-                    fill={isWishlisted?'#ef4444':'none'} stroke={isWishlisted?'#ef4444':'#888'}
+                    fill={isWishlisted ? '#ef4444' : 'none'} stroke={isWishlisted ? '#ef4444' : '#888'}
                     strokeWidth="1.5" strokeLinecap="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                   </svg>
                 </button>
                 <div className="absolute bottom-3 left-3 rounded-full px-2.5 py-1"
-                  style={{ background:'rgba(0,0,0,0.45)', backdropFilter:'blur(6px)', border:'1px solid rgba(255,255,255,0.1)' }}>
-                  <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, color:'rgba(255,255,255,0.7)' }}>
-                    {selectedIndex+1} / {productData.image.length}
+                  style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.7)' }}>
+                    {selectedIndex + 1} / {productData.image.length}
                   </span>
                 </div>
               </div>
             </div>
 
             {/* MOBILE: main image + horizontal strip */}
-            <div className="flex sm:hidden flex-col gap-3" style={{ width:'100%', maxWidth:'100%' }}>
+            <div className="flex sm:hidden flex-col gap-3" style={{ width: '100%', maxWidth: '100%' }}>
               <div className="rounded-2xl overflow-hidden relative"
-                style={{ background:'#fff', border:'1px solid rgba(255,255,255,0.06)', width:'100%', aspectRatio:'1/1', maxHeight:'80vw' }}>
+                style={{ background: '#fff', border: '1px solid rgba(255,255,255,0.06)', width: '100%', aspectRatio: '1/1', maxHeight: '80vw' }}>
                 <img src={image} alt={productData.name}
-                  style={{ width:'100%', height:'100%', objectFit:'contain', padding:12, display:'block' }}/>
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 12, display: 'block' }} />
                 <button onClick={() => toggleWishlistItem(productId)}
                   className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center"
-                  style={{ background: isWishlisted?'rgba(239,68,68,0.15)':'rgba(255,255,255,0.85)',
-                    border: isWishlisted?'1px solid rgba(239,68,68,0.4)':'1px solid rgba(0,0,0,0.1)' }}>
+                  style={{
+                    background: isWishlisted ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.85)',
+                    border: isWishlisted ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(0,0,0,0.1)'
+                  }}>
                   <svg width="16" height="16" viewBox="0 0 24 24"
-                    fill={isWishlisted?'#ef4444':'none'} stroke={isWishlisted?'#ef4444':'#888'} strokeWidth="1.5" strokeLinecap="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    fill={isWishlisted ? '#ef4444' : 'none'} stroke={isWishlisted ? '#ef4444' : '#888'} strokeWidth="1.5" strokeLinecap="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                   </svg>
                 </button>
                 <div className="absolute bottom-3 left-3 rounded-full px-2.5 py-1"
-                  style={{ background:'rgba(0,0,0,0.45)', backdropFilter:'blur(6px)', border:'1px solid rgba(255,255,255,0.1)' }}>
-                  <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, color:'rgba(255,255,255,0.7)' }}>
-                    {selectedIndex+1} / {productData.image.length}
+                  style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.7)' }}>
+                    {selectedIndex + 1} / {productData.image.length}
                   </span>
                 </div>
               </div>
-              <div style={{ width:'100%', maxWidth:'100%', overflow:'hidden' }}>
+              <div style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
                 <MobileThumbRail images={productData.image} selectedIndex={selectedIndex}
-                  onSelect={(img,i) => { setImage(img); setSelectedIndex(i); }}/>
+                  onSelect={(img, i) => { setImage(img); setSelectedIndex(i); }} />
               </div>
             </div>
           </div>
 
           {/* ── PRODUCT INFO — improved spacing & hierarchy ── */}
-          <div style={{ maxWidth:'100%', width:'100%' }}>
+          <div style={{ maxWidth: '100%', width: '100%' }}>
 
             {/* Category */}
             <p className="text-indigo-400 font-semibold uppercase tracking-widest mb-3"
-              style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'9px', letterSpacing:'3px' }}>
+              style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '3px' }}>
               {productData.category} / {productData.subCategory}
             </p>
 
@@ -4085,14 +4091,14 @@ const Product = () => {
 
             {/* Stars */}
             <div className="flex items-center gap-1.5 mb-2">
-              {[...Array(5)].map((_,i) => (
+              {[...Array(5)].map((_, i) => (
                 <svg key={i} width="14" height="14" viewBox="0 0 24 24"
-                  fill={i<roundedRating?'#f59e0b':'none'} stroke="#f59e0b" strokeWidth="1.5">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+                  fill={i < roundedRating ? '#f59e0b' : 'none'} stroke="#f59e0b" strokeWidth="1.5">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
                 </svg>
               ))}
-              <span className="text-white/35 ml-1" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px' }}>
-                ({reviews.length} {reviews.length===1?'review':'reviews'})
+              <span className="text-white/35 ml-1" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>
+                ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
               </span>
             </div>
 
@@ -4150,7 +4156,7 @@ const Product = () => {
             </div>
 
             <p className="text-white/50 leading-relaxed mb-7"
-              style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'13px', lineHeight:'1.8' }}>
+              style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '13px', lineHeight: '1.8' }}>
               {productData.description}
             </p>
 
@@ -4158,29 +4164,29 @@ const Product = () => {
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
                 <p className="text-white/40 font-semibold uppercase tracking-widest"
-                  style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'9px', letterSpacing:'2px' }}>Colour</p>
+                  style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px' }}>Colour</p>
                 <span className="text-white/70 capitalize"
-                  style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px' }}>— {selectedColor}</span>
+                  style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>— {selectedColor}</span>
               </div>
               <div className="flex gap-2.5 flex-wrap">
-                {productData.color?.length > 0 ? productData.color.map((c,i) => {
-                  const n = typeof c==='string'?c:c?.name||'Unknown';
-                  const h = typeof c==='string'?(colorMap[c.toLowerCase()]||'#CCCCCC'):(c.hex||colorMap[c?.name?.toLowerCase()]||'#CCCCCC');
-                  const sel = selectedColor===n;
+                {productData.color?.length > 0 ? productData.color.map((c, i) => {
+                  const n = typeof c === 'string' ? c : c?.name || 'Unknown';
+                  const h = typeof c === 'string' ? (colorMap[c.toLowerCase()] || '#CCCCCC') : (c.hex || colorMap[c?.name?.toLowerCase()] || '#CCCCCC');
+                  const sel = selectedColor === n;
                   return (
-                    <button key={i} onClick={()=>setSelectedColor(n)} title={n}
+                    <button key={i} onClick={() => setSelectedColor(n)} title={n}
                       className="color-swatch"
                       style={{
-                        width:34, height:34, borderRadius:'50%',
-                        backgroundColor:h,
-                        border: sel?'3px solid #6366f1':'2px solid rgba(255,255,255,0.15)',
-                        boxShadow: sel?'0 0 0 3px rgba(99,102,241,0.3)':'none',
-                        cursor:'pointer', outline:'none',
-                        transition:'transform .15s, box-shadow .15s',
-                      }}/>
+                        width: 34, height: 34, borderRadius: '50%',
+                        backgroundColor: h,
+                        border: sel ? '3px solid #6366f1' : '2px solid rgba(255,255,255,0.15)',
+                        boxShadow: sel ? '0 0 0 3px rgba(99,102,241,0.3)' : 'none',
+                        cursor: 'pointer', outline: 'none',
+                        transition: 'transform .15s, box-shadow .15s',
+                      }} />
                   );
                 }) : (
-                  <p className="text-white/30" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'12px' }}>No colors available</p>
+                  <p className="text-white/30" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>No colors available</p>
                 )}
               </div>
             </div>
@@ -4189,115 +4195,121 @@ const Product = () => {
             <div className="mb-7">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-white/40 font-semibold uppercase tracking-widest"
-                  style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'9px', letterSpacing:'2px' }}>Select Size</p>
-                <button onClick={()=>setShowModal(true)}
+                  style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px' }}>Select Size</p>
+                <button onClick={() => setShowModal(true)}
                   className="text-indigo-400 hover:text-indigo-300 transition-colors"
-                  style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px', textDecoration:'underline', background:'none', border:'none', cursor:'pointer', padding:0 }}>
+                  style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                   Size Guide
                 </button>
-                {showModal && <Modal onclose={()=>setShowModal(false)}/>}
+                {showModal && <Modal onclose={() => setShowModal(false)} />}
               </div>
               <div className="flex gap-2 flex-wrap">
-                {productData.sizes?.length > 0 ? productData.sizes.map((s,i) => {
-                  const lbl = s?.size||s;
+                {productData.sizes?.length > 0 ? productData.sizes.map((s, i) => {
+                  const lbl = s?.size || s;
                   let sp = productData.price;
-                  if (typeof s==='object') sp = (s.useCustomPrice&&s.customPrice>0) ? s.customPrice : productData.price*(s.priceMultiplier||1);
-                  const sel = size===lbl;
-                  const oos = typeof s==='object' && s.stock===0;
+                  if (typeof s === 'object') sp = (s.useCustomPrice && s.customPrice > 0) ? s.customPrice : productData.price * (s.priceMultiplier || 1);
+                  const sel = size === lbl;
+                  const oos = typeof s === 'object' && s.stock === 0;
                   return (
-                    <button key={i} type="button" onClick={()=>handleSizeSelect(s)}
+                    <button key={i} type="button" onClick={() => handleSizeSelect(s)}
                       className="size-btn flex flex-col items-center rounded-xl px-3 py-2.5 transition-all duration-200"
-                      style={{ border: sel?'2px solid #6366f1':'1px solid rgba(255,255,255,0.1)',
-                        background: sel?'rgba(99,102,241,0.15)':'rgba(255,255,255,0.03)',
-                        transform: sel?'scale(1.05)':'scale(1)', minWidth:'60px',
-                        opacity: oos?0.4:1, boxShadow: sel?'0 0 0 3px rgba(99,102,241,0.18)':'none',
-                        cursor: oos?'not-allowed':'pointer' }}>
-                      <span className="text-white font-semibold" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'12px' }}>{lbl}</span>
-                      <span className="text-white/40" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'10px' }}>{currency}{sp.toFixed(2)}</span>
+                      style={{
+                        border: sel ? '2px solid #6366f1' : '1px solid rgba(255,255,255,0.1)',
+                        background: sel ? 'rgba(99,102,241,0.15)' : 'rgba(255,255,255,0.03)',
+                        transform: sel ? 'scale(1.05)' : 'scale(1)', minWidth: '60px',
+                        opacity: oos ? 0.4 : 1, boxShadow: sel ? '0 0 0 3px rgba(99,102,241,0.18)' : 'none',
+                        cursor: oos ? 'not-allowed' : 'pointer'
+                      }}>
+                      <span className="text-white font-semibold" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>{lbl}</span>
+                      <span className="text-white/40" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>{currency}{sp.toFixed(2)}</span>
                     </button>
                   );
                 }) : (
-                  <p className="text-white/30" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'12px' }}>No sizes available</p>
+                  <p className="text-white/30" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>No sizes available</p>
                 )}
               </div>
-              {size && sizeStock<=0 && <p className="text-red-400 mt-2" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px' }}>⚠️ This size is out of stock</p>}
-              {size && sizeStock>0 && sizeStock<5 && <p className="text-amber-400 mt-2" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px' }}>⚠️ Only {sizeStock} left in stock</p>}
+              {size && sizeStock <= 0 && <p className="text-red-400 mt-2" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>⚠️ This size is out of stock</p>}
+              {size && sizeStock > 0 && sizeStock < 5 && <p className="text-amber-400 mt-2" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>⚠️ Only {sizeStock} left in stock</p>}
             </div>
 
             {/* MADE TO MEASURE */}
             <div className="mb-4">
-              <button onClick={()=>setMakeMeasure(!makeMeasure)}
+              <button onClick={() => setMakeMeasure(!makeMeasure)}
                 className="w-full rounded-xl py-3 transition-all duration-200 font-semibold uppercase tracking-widest flex items-center justify-center gap-2"
-                style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'10px', letterSpacing:'2px',
-                  color: makeMeasure?'rgba(255,255,255,0.85)':'rgba(255,255,255,0.55)',
-                  border: makeMeasure?'1px solid rgba(99,102,241,0.35)':'1px solid rgba(255,255,255,0.1)',
-                  background: makeMeasure?'rgba(99,102,241,0.08)':'rgba(255,255,255,0.02)',
-                  cursor:'pointer' }}>
+                style={{
+                  fontFamily: "'Montserrat',sans-serif", fontSize: '10px', letterSpacing: '2px',
+                  color: makeMeasure ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.55)',
+                  border: makeMeasure ? '1px solid rgba(99,102,241,0.35)' : '1px solid rgba(255,255,255,0.1)',
+                  background: makeMeasure ? 'rgba(99,102,241,0.08)' : 'rgba(255,255,255,0.02)',
+                  cursor: 'pointer'
+                }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                  <path d="M21 3H3v18h18V3z M7 7h.01 M7 12h.01 M7 17h.01 M11 7h6 M11 12h6 M11 17h6"/>
+                  <path d="M21 3H3v18h18V3z M7 7h.01 M7 12h.01 M7 17h.01 M11 7h6 M11 12h6 M11 17h6" />
                 </svg>
                 Made to Measure
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                  style={{ transform: makeMeasure?'rotate(180deg)':'none', transition:'transform .2s' }}>
-                  <polyline points="6 9 12 15 18 9"/>
+                  style={{ transform: makeMeasure ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }}>
+                  <polyline points="6 9 12 15 18 9" />
                 </svg>
               </button>
               {makeMeasure && (
                 <div className="mt-2 rounded-xl p-3 flex items-center gap-2"
-                  style={{ background:'rgba(99,102,241,0.06)', border:'1px solid rgba(99,102,241,0.15)' }}>
-                  <FaInfoCircle className="text-indigo-400 shrink-0" size={14}/>
-                  <p className="text-white/50" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px' }}>Measurements can be added on the Cart page</p>
+                  style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)' }}>
+                  <FaInfoCircle className="text-indigo-400 shrink-0" size={14} />
+                  <p className="text-white/50" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>Measurements can be added on the Cart page</p>
                 </div>
               )}
             </div>
 
             {/* ADD TO CART — original indigo gradient */}
-            <button onClick={()=>{ handleAddToCart(); setDrawerOpen(true); }}
-              disabled={isButtonDisabled||!size||!selectedColor}
+            <button onClick={() => { handleAddToCart(); setDrawerOpen(true); }}
+              disabled={isButtonDisabled || !size || !selectedColor}
               className="w-full relative overflow-hidden rounded-xl text-white font-semibold uppercase tracking-widest py-4 mb-4 group"
-              style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px', letterSpacing:'2.5px',
-                background: isButtonDisabled?'#4b4b6b':'linear-gradient(135deg,#6366f1,#4f46e5)',
-                opacity: (!size||!selectedColor)?0.5:1,
-                cursor: (!size||!selectedColor)?'not-allowed':'pointer', transition:'all 0.2s', border:'none',
-                boxShadow: (!size||!selectedColor||isButtonDisabled)?'none':'0 8px 24px rgba(99,102,241,0.35)' }}>
+              style={{
+                fontFamily: "'Montserrat',sans-serif", fontSize: '11px', letterSpacing: '2.5px',
+                background: isButtonDisabled ? '#4b4b6b' : 'linear-gradient(135deg,#6366f1,#4f46e5)',
+                opacity: (!size || !selectedColor) ? 0.5 : 1,
+                cursor: (!size || !selectedColor) ? 'not-allowed' : 'pointer', transition: 'all 0.2s', border: 'none',
+                boxShadow: (!size || !selectedColor || isButtonDisabled) ? 'none' : '0 8px 24px rgba(99,102,241,0.35)'
+              }}>
               <span className="absolute inset-0 bg-indigo-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 rounded-xl"
-                style={{ display:(!size||!selectedColor)?'none':'block' }}/>
+                style={{ display: (!size || !selectedColor) ? 'none' : 'block' }} />
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {isButtonDisabled ? (
-                  <><svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Adding…</>
+                  <><svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>Adding…</>
                 ) : (
-                  <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Add to Cart</>
+                  <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>Add to Cart</>
                 )}
               </span>
             </button>
 
-            <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={()=>setDrawerOpen(!drawerOpen)}/>
-            <JacketLiningSelector basePrice={basePrice} onPriceChange={(c)=>setAddonCost(c)}/>
+            <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={() => setDrawerOpen(!drawerOpen)} />
+            <JacketLiningSelector basePrice={basePrice} onPriceChange={(c) => setAddonCost(c)} />
 
             {/* POLICY — original indigo icons */}
-            <div className="mt-6 space-y-2.5 pb-6" style={{ borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
+            <div className="mt-6 space-y-2.5 pb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               {[
-                { icon:'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', text:'100% original, premium materials' },
-                { icon:'M9 12l2 2 4-4', text:'Secure cash on delivery + multiple payment methods' },
-                { icon:'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8 M3 3v5h5', text:'Simple 7-day return or exchange policy' },
-              ].map(({icon,text}) => (
+                { icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', text: '100% original, premium materials' },
+                { icon: 'M9 12l2 2 4-4', text: 'Secure cash on delivery + multiple payment methods' },
+                { icon: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8 M3 3v5h5', text: 'Simple 7-day return or exchange policy' },
+              ].map(({ icon, text }) => (
                 <div key={text} className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ background:'rgba(99,102,241,0.1)', border:'1px solid rgba(99,102,241,0.2)' }}>
+                    style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)' }}>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(99,102,241,0.8)" strokeWidth="1.5" strokeLinecap="round">
-                      <path d={icon}/>
+                      <path d={icon} />
                     </svg>
                   </div>
-                  <span className="text-white/35" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px' }}>{text}</span>
+                  <span className="text-white/35" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>{text}</span>
                 </div>
               ))}
-              <p className="text-white/30 leading-relaxed" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px', lineHeight:'1.8' }}>
+              <p className="text-white/30 leading-relaxed" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', lineHeight: '1.8' }}>
                 {shownContent}
               </p>
-              <button onClick={()=>setIsExpanded(p=>!p)}
+              <button onClick={() => setIsExpanded(p => !p)}
                 className="text-indigo-400 hover:text-indigo-300 transition-colors"
-                style={{ fontFamily:"'Montserrat',sans-serif", fontSize:'11px', textDecoration:'underline', background:'none', border:'none', cursor:'pointer', padding:0 }}>
-                {isExpanded?'Read Less':'Read More'}
+                style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                {isExpanded ? 'Read Less' : 'Read More'}
               </button>
             </div>
           </div>
@@ -4305,48 +4317,50 @@ const Product = () => {
 
         {/* ══ TABS — all original ══ */}
         <div className="mt-20">
-          <div className="flex items-end gap-0 mb-0" style={{ borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
-            {['description','reviews'].map(tab => (
-              <button key={tab} onClick={()=>setActiveTab(tab)}
-                className={`ptab-btn px-8 py-4 font-semibold uppercase tracking-widest transition-colors duration-200 ${activeTab===tab?'ptab-active':''}`}
-                style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, letterSpacing:'2.5px',
-                  color: activeTab===tab?'#fff':'rgba(255,255,255,0.28)', background:'none', border:'none', cursor:'pointer' }}>
-                {tab==='reviews'?`Reviews (${reviews.length})`:'Description'}
+          <div className="flex items-end gap-0 mb-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            {['description', 'reviews'].map(tab => (
+              <button key={tab} onClick={() => setActiveTab(tab)}
+                className={`ptab-btn px-8 py-4 font-semibold uppercase tracking-widest transition-colors duration-200 ${activeTab === tab ? 'ptab-active' : ''}`}
+                style={{
+                  fontFamily: "'Montserrat',sans-serif", fontSize: 10, letterSpacing: '2.5px',
+                  color: activeTab === tab ? '#fff' : 'rgba(255,255,255,0.28)', background: 'none', border: 'none', cursor: 'pointer'
+                }}>
+                {tab === 'reviews' ? `Reviews (${reviews.length})` : 'Description'}
               </button>
             ))}
           </div>
 
-          {activeTab==='description' && (
+          {activeTab === 'description' && (
             <div className="pt-10 pb-4">
               <div className="flex items-center gap-4 mb-8">
-                <div className="h-px flex-1" style={{ background:'linear-gradient(90deg,rgba(99,102,241,.3),transparent)' }}/>
-                <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:13, color:'rgba(99,102,241,.6)', letterSpacing:'4px', textTransform:'uppercase' }}>Product Details</span>
-                <div className="h-px flex-1" style={{ background:'linear-gradient(90deg,transparent,rgba(99,102,241,.3))' }}/>
+                <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg,rgba(99,102,241,.3),transparent)' }} />
+                <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 13, color: 'rgba(99,102,241,.6)', letterSpacing: '4px', textTransform: 'uppercase' }}>Product Details</span>
+                <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg,transparent,rgba(99,102,241,.3))' }} />
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
-                  <div className="desc-prose" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:13, lineHeight:2, color:'rgba(255,255,255,.45)' }}
-                    dangerouslySetInnerHTML={{ __html:productData.detailedDescription }}/>
+                  <div className="desc-prose" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 13, lineHeight: 2, color: 'rgba(255,255,255,.45)' }}
+                    dangerouslySetInnerHTML={{ __html: productData.detailedDescription }} />
                 </div>
               </div>
             </div>
           )}
 
-          {activeTab==='reviews' && (
+          {activeTab === 'reviews' && (
             <div className="pt-10 space-y-8">
-              {reviews.length>0 && (
+              {reviews.length > 0 && (
                 <div className="rounded-2xl p-6 flex flex-wrap gap-8 items-center"
-                  style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)' }}>
-                  <RatingRing avg={avgRating} total={reviews.length}/>
-                  <div className="w-px self-stretch hidden sm:block" style={{ background:'rgba(255,255,255,0.07)' }}/>
-                  <StarBars reviews={reviews}/>
-                  <div className="w-px self-stretch hidden lg:block" style={{ background:'rgba(255,255,255,0.07)' }}/>
+                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                  <RatingRing avg={avgRating} total={reviews.length} />
+                  <div className="w-px self-stretch hidden sm:block" style={{ background: 'rgba(255,255,255,0.07)' }} />
+                  <StarBars reviews={reviews} />
+                  <div className="w-px self-stretch hidden lg:block" style={{ background: 'rgba(255,255,255,0.07)' }} />
                   <div className="flex flex-col gap-2">
-                    <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, color:'rgba(255,255,255,.25)', letterSpacing:'2px', textTransform:'uppercase' }}>Top sentiments</span>
-                    {['Premium quality','Great fit','Fast delivery'].map(s => (
+                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.25)', letterSpacing: '2px', textTransform: 'uppercase' }}>Top sentiments</span>
+                    {['Premium quality', 'Great fit', 'Fast delivery'].map(s => (
                       <span key={s} className="rounded-full px-3 py-1.5 flex items-center gap-1.5"
-                        style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, color:'rgba(255,255,255,.5)', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)' }}>
-                        <span style={{ color:'#6366f1', fontSize:12 }}>✦</span> {s}
+                        style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.5)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <span style={{ color: '#6366f1', fontSize: 12 }}>✦</span> {s}
                       </span>
                     ))}
                   </div>
@@ -4354,135 +4368,141 @@ const Product = () => {
               )}
 
               {token ? (
-                <div className="rounded-2xl overflow-hidden" style={{ background:'rgba(255,255,255,0.015)', border:'1px solid rgba(255,255,255,0.08)' }}>
-                  <div className="px-6 py-4 flex items-center gap-3" style={{ borderBottom:'1px solid rgba(255,255,255,0.06)', background:'rgba(99,102,241,0.04)' }}>
+                <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.015)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div className="px-6 py-4 flex items-center gap-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(99,102,241,0.04)' }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="1.5" strokeLinecap="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                     </svg>
-                    <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:18, color:'#fff', fontWeight:300 }}>Share Your Experience</span>
+                    <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 18, color: '#fff', fontWeight: 300 }}>Share Your Experience</span>
                   </div>
                   <div className="p-6 space-y-6">
                     <div>
-                      <p style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, color:'rgba(255,255,255,.25)', letterSpacing:'2.5px', textTransform:'uppercase', marginBottom:12 }}>Your Rating</p>
+                      <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.25)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 12 }}>Your Rating</p>
                       <div className="flex gap-3 flex-wrap">
-                        {[5,4,3,2,1].map(r => {
-                          const active = Number(rating)===r;
+                        {[5, 4, 3, 2, 1].map(r => {
+                          const active = Number(rating) === r;
                           return (
-                            <button key={r} type="button" onClick={()=>setRating(r)}
+                            <button key={r} type="button" onClick={() => setRating(r)}
                               className="star-pick flex items-center gap-2 rounded-xl px-4 py-2.5 transition-all duration-200"
-                              style={{ fontFamily:"'Montserrat',sans-serif", fontSize:12,
-                                background: active?'rgba(245,158,11,0.1)':'rgba(255,255,255,0.03)',
-                                border: active?'1px solid rgba(245,158,11,0.45)':'1px solid rgba(255,255,255,0.08)',
-                                color: active?'#f59e0b':'rgba(255,255,255,.3)',
-                                boxShadow: active?'0 0 16px rgba(245,158,11,0.2)':'none', cursor:'pointer' }}>
-                              <span style={{ fontSize:14 }}>{'★'.repeat(r)}</span>
-                              <span style={{ fontSize:11 }}>{r}.0</span>
+                              style={{
+                                fontFamily: "'Montserrat',sans-serif", fontSize: 12,
+                                background: active ? 'rgba(245,158,11,0.1)' : 'rgba(255,255,255,0.03)',
+                                border: active ? '1px solid rgba(245,158,11,0.45)' : '1px solid rgba(255,255,255,0.08)',
+                                color: active ? '#f59e0b' : 'rgba(255,255,255,.3)',
+                                boxShadow: active ? '0 0 16px rgba(245,158,11,0.2)' : 'none', cursor: 'pointer'
+                              }}>
+                              <span style={{ fontSize: 14 }}>{'★'.repeat(r)}</span>
+                              <span style={{ fontSize: 11 }}>{r}.0</span>
                             </button>
                           );
                         })}
                       </div>
                     </div>
                     <div>
-                      <p style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, color:'rgba(255,255,255,.25)', letterSpacing:'2.5px', textTransform:'uppercase', marginBottom:10 }}>Your Review</p>
+                      <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.25)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 10 }}>Your Review</p>
                       <div className="relative">
                         <textarea className="rev-textarea w-full rounded-xl resize-none transition-all duration-200"
-                          value={comment} onChange={e=>setComment(e.target.value)}
+                          value={comment} onChange={e => setComment(e.target.value)}
                           placeholder="What did you love about this product? Quality, fit, style…" rows={4}
-                          style={{ fontFamily:"'Montserrat',sans-serif", fontSize:13, lineHeight:1.7,
-                            padding:'14px 16px', background:'rgba(255,255,255,0.04)',
-                            border:'1px solid rgba(255,255,255,0.09)', color:'rgba(255,255,255,.65)', width:'100%' }}/>
-                        <span className="absolute bottom-3 right-4" style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, color:'rgba(255,255,255,.2)' }}>
+                          style={{
+                            fontFamily: "'Montserrat',sans-serif", fontSize: 13, lineHeight: 1.7,
+                            padding: '14px 16px', background: 'rgba(255,255,255,0.04)',
+                            border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,.65)', width: '100%'
+                          }} />
+                        <span className="absolute bottom-3 right-4" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.2)' }}>
                           {comment.length}/500
                         </span>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <button onClick={handleReviewSubmit} className="submit-btn rounded-xl text-white font-semibold uppercase tracking-widest px-8 py-3.5"
-                        style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, letterSpacing:'2.5px', cursor:'pointer', border:'none' }}>
+                        style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, letterSpacing: '2.5px', cursor: 'pointer', border: 'none' }}>
                         <span className="flex items-center gap-2">
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
                           </svg>
                           Submit Review
                         </span>
                       </button>
-                      <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, color:'rgba(255,255,255,.2)' }}>Your review is public</span>
+                      <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.2)' }}>Your review is public</span>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div className="rounded-2xl p-8 text-center" style={{ background:'rgba(99,102,241,0.04)', border:'1px dashed rgba(99,102,241,0.2)' }}>
+                <div className="rounded-2xl p-8 text-center" style={{ background: 'rgba(99,102,241,0.04)', border: '1px dashed rgba(99,102,241,0.2)' }}>
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(99,102,241,.5)" strokeWidth="1.2" strokeLinecap="round" className="mx-auto mb-3">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                   </svg>
-                  <p style={{ fontFamily:"'Montserrat',sans-serif", fontSize:12, color:'rgba(255,255,255,.35)' }}>Sign in to share your experience</p>
+                  <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 12, color: 'rgba(255,255,255,.35)' }}>Sign in to share your experience</p>
                 </div>
               )}
 
-              {reviews.length===0 ? (
-                <div className="rounded-2xl p-12 text-center" style={{ background:'rgba(255,255,255,0.015)', border:'1px solid rgba(255,255,255,0.06)' }}>
-                  <div className="text-4xl mb-3" style={{ opacity:.18 }}>✦</div>
-                  <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:20, color:'rgba(255,255,255,.3)', fontWeight:300 }}>No reviews yet</p>
-                  <p style={{ fontFamily:"'Montserrat',sans-serif", fontSize:11, color:'rgba(255,255,255,.2)', marginTop:6 }}>Be the first to share your thoughts</p>
+              {reviews.length === 0 ? (
+                <div className="rounded-2xl p-12 text-center" style={{ background: 'rgba(255,255,255,0.015)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div className="text-4xl mb-3" style={{ opacity: .18 }}>✦</div>
+                  <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 20, color: 'rgba(255,255,255,.3)', fontWeight: 300 }}>No reviews yet</p>
+                  <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 11, color: 'rgba(255,255,255,.2)', marginTop: 6 }}>Be the first to share your thoughts</p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between pb-2" style={{ borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, color:'rgba(255,255,255,.25)', letterSpacing:'2px', textTransform:'uppercase' }}>
-                      {reviews.length} {reviews.length===1?'Review':'Reviews'}
+                  <div className="flex items-center justify-between pb-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.25)', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                      {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'}
                     </span>
-                    <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, color:'rgba(255,255,255,.2)', letterSpacing:'1px' }}>Most recent</span>
+                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.2)', letterSpacing: '1px' }}>Most recent</span>
                   </div>
-                  {reviews.map((rev,idx) => {
-                    const init = (rev.user?.name||'U')[0].toUpperCase();
-                    const cols = ['#6366f1','#8b5cf6','#ec4899','#14b8a6','#f59e0b'];
-                    const col  = cols[idx%cols.length];
+                  {reviews.map((rev, idx) => {
+                    const init = (rev.user?.name || 'U')[0].toUpperCase();
+                    const cols = ['#6366f1', '#8b5cf6', '#ec4899', '#14b8a6', '#f59e0b'];
+                    const col = cols[idx % cols.length];
                     return (
                       <div key={rev._id} className="rev-card rounded-2xl p-5"
-                        style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)' }}>
+                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold flex-shrink-0"
-                              style={{ background:`${col}22`, border:`1px solid ${col}44`, fontFamily:"'Montserrat',sans-serif", fontSize:13, color:col }}>
+                              style={{ background: `${col}22`, border: `1px solid ${col}44`, fontFamily: "'Montserrat',sans-serif", fontSize: 13, color: col }}>
                               {init}
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <p style={{ fontFamily:"'Montserrat',sans-serif", fontSize:12, color:'rgba(255,255,255,.75)', fontWeight:600 }}>
-                                  {rev.user?.name||'User'}
+                                <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 12, color: 'rgba(255,255,255,.75)', fontWeight: 600 }}>
+                                  {rev.user?.name || 'User'}
                                 </p>
                                 <span className="verified-badge rounded-full px-2 py-0.5 flex items-center gap-1"
-                                  style={{ background:'rgba(99,102,241,0.1)', border:'1px solid rgba(99,102,241,.25)' }}>
+                                  style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,.25)' }}>
                                   <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round">
-                                    <polyline points="20 6 9 17 4 12"/>
+                                    <polyline points="20 6 9 17 4 12" />
                                   </svg>
-                                  <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:8, color:'#818cf8', letterSpacing:'1px' }}>Verified</span>
+                                  <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 8, color: '#818cf8', letterSpacing: '1px' }}>Verified</span>
                                 </span>
                               </div>
                               <div className="flex gap-0.5 mt-0.5">
-                                {[...Array(5)].map((_,i) => (
+                                {[...Array(5)].map((_, i) => (
                                   <svg key={i} width="10" height="10" viewBox="0 0 24 24"
-                                    fill={i<rev.rating?'#f59e0b':'none'} stroke="#f59e0b" strokeWidth="1.5">
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+                                    fill={i < rev.rating ? '#f59e0b' : 'none'} stroke="#f59e0b" strokeWidth="1.5">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
                                   </svg>
                                 ))}
                               </div>
                             </div>
                           </div>
                           <div className="flex items-center gap-3 shrink-0">
-                            <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, color:'rgba(255,255,255,.2)' }}>
-                              {new Date(rev.createdAt).toLocaleDateString('en-US',{ day:'numeric', month:'short', year:'numeric' })}
+                            <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.2)' }}>
+                              {new Date(rev.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
-                            {rev.user?._id===userId && (
-                              <button onClick={async()=>{ const ok=await deleteReview(rev._id); if(ok)loadReviews(); }}
+                            {rev.user?._id === userId && (
+                              <button onClick={async () => { const ok = await deleteReview(rev._id); if (ok) loadReviews(); }}
                                 className="flex items-center gap-1 rounded-lg px-2.5 py-1 transition-all duration-150"
-                                style={{ fontFamily:"'Montserrat',sans-serif", fontSize:9, letterSpacing:'1px',
-                                  color:'rgba(248,113,113,.6)', background:'rgba(248,113,113,0.07)', border:'1px solid rgba(248,113,113,0.15)', textTransform:'uppercase', cursor:'pointer' }}
-                                onMouseEnter={e=>{e.currentTarget.style.color='#f87171';e.currentTarget.style.background='rgba(248,113,113,0.12)';}}
-                                onMouseLeave={e=>{e.currentTarget.style.color='rgba(248,113,113,.6)';e.currentTarget.style.background='rgba(248,113,113,0.07)';}}>
+                                style={{
+                                  fontFamily: "'Montserrat',sans-serif", fontSize: 9, letterSpacing: '1px',
+                                  color: 'rgba(248,113,113,.6)', background: 'rgba(248,113,113,0.07)', border: '1px solid rgba(248,113,113,0.15)', textTransform: 'uppercase', cursor: 'pointer'
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.background = 'rgba(248,113,113,0.12)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(248,113,113,.6)'; e.currentTarget.style.background = 'rgba(248,113,113,0.07)'; }}>
                                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                  <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6 M14 11v6"/>
+                                  <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6 M14 11v6" />
                                 </svg>
                                 Delete
                               </button>
@@ -4490,16 +4510,16 @@ const Product = () => {
                           </div>
                         </div>
                         <p className="mt-4 leading-relaxed"
-                          style={{ fontFamily:"'Montserrat',sans-serif", fontSize:12, lineHeight:1.8, color:'rgba(255,255,255,.45)', paddingLeft:52 }}>
+                          style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 12, lineHeight: 1.8, color: 'rgba(255,255,255,.45)', paddingLeft: 52 }}>
                           {rev.comment}
                         </p>
-                        <div className="flex items-center gap-3 mt-4" style={{ paddingLeft:52 }}>
-                          <span style={{ fontFamily:"'Montserrat',sans-serif", fontSize:10, color:'rgba(255,255,255,.2)' }}>Helpful?</span>
-                          {['👍','👎'].map(e => (
+                        <div className="flex items-center gap-3 mt-4" style={{ paddingLeft: 52 }}>
+                          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.2)' }}>Helpful?</span>
+                          {['👍', '👎'].map(e => (
                             <button key={e} className="rounded-lg px-2.5 py-1 transition-colors"
-                              style={{ fontSize:11, background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)', cursor:'pointer' }}
-                              onMouseEnter={ev=>{ev.currentTarget.style.background='rgba(255,255,255,0.07)';}}
-                              onMouseLeave={ev=>{ev.currentTarget.style.background='rgba(255,255,255,0.03)';}}>
+                              style={{ fontSize: 11, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', cursor: 'pointer' }}
+                              onMouseEnter={ev => { ev.currentTarget.style.background = 'rgba(255,255,255,0.07)'; }}
+                              onMouseLeave={ev => { ev.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}>
                               {e}
                             </button>
                           ))}
@@ -4514,7 +4534,7 @@ const Product = () => {
         </div>
 
         <div className="mt-20">
-          <RelatedProducts category={productData.category} subCategory={productData.subCategory}/>
+          <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
         </div>
 
       </div>
@@ -4630,7 +4650,7 @@ export default Product;
 //   // ✅ FIXED: Handle size selection with custom price support
 //   const handleSizeSelect = (sizeObj) => {
 //     console.log("🔥 Size clicked:", sizeObj);
-    
+
 //     if (!sizeObj) {
 //       console.log("Invalid size object");
 //       return;
@@ -4647,7 +4667,7 @@ export default Product;
 //       // New format: object with size, multiplier, stock, customPrice
 //       setSize(sizeObj.size);
 //       setSizeStock(sizeObj.stock || 0);
-      
+
 //       // ✅ CHECK FOR CUSTOM PRICE FIRST
 //       if (sizeObj.useCustomPrice && sizeObj.customPrice > 0) {
 //         console.log(`✅ Using CUSTOM PRICE: ₹${sizeObj.customPrice}`);
@@ -4659,7 +4679,7 @@ export default Product;
 //         console.log(`✅ Using MULTIPLIER: ${multiplier}, Price: ₹${calculatedPrice}`);
 //         setDisplayPrice(calculatedPrice);
 //       }
-      
+
 //       console.log(`✅ Final Display Price: ₹${sizeObj.useCustomPrice ? sizeObj.customPrice : productData.price * (sizeObj.priceMultiplier || 1)}`);
 //     }
 //   };
@@ -4721,7 +4741,7 @@ export default Product;
 //       console.log("Product Name:", productData.name);
 //       console.log("Base Price:", productData.price);
 //       console.log("Sizes:", productData.sizes);
-      
+
 //       if (productData.sizes && productData.sizes.length > 0) {
 //         console.log("\n--- Size Details ---");
 //         productData.sizes.forEach((sizeObj, index) => {
@@ -4744,7 +4764,7 @@ export default Product;
 //     if (productData?.color?.length) {
 //       const firstColor = productData.color[0];
 //       let colorName;
-      
+
 //       if (typeof firstColor === 'string') {
 //         colorName = firstColor;
 //       } else if (typeof firstColor === 'object' && firstColor.name) {
@@ -4752,7 +4772,7 @@ export default Product;
 //       } else {
 //         colorName = 'Unknown';
 //       }
-      
+
 //       setSelectedColor(colorName);
 //     }
 //   }, [productData]);
@@ -4785,7 +4805,7 @@ export default Product;
 //             {productData.image.map((item, index) => (
 //               <div
 //                 key={index}
-//                 className={`flex-shrink-0 cursor-pointer transition-all duration-200 w-[70px] h-[50px] sm:w-full rounded-md 
+//                 className={`flex-shrink-0 cursor-pointer transition-all duration-200 w-[70px] h-[50px] sm:w-full rounded-md
 //                 ${index === selectedIndex ? 'border-2 border-blue-500' : 'border-2 border-transparent'}`}
 //                 onClick={() => {
 //                   setImage(item);
@@ -4853,7 +4873,7 @@ export default Product;
 //                 {productData.color && productData.color.length > 0 ? (
 //                   productData.color.map((colorObj, index) => {
 //                     let colorName, colorHex;
-                    
+
 //                     if (typeof colorObj === 'string') {
 //                       colorName = colorObj;
 //                       colorHex = colorMap[colorObj.toLowerCase()] || '#CCCCCC';
@@ -4870,11 +4890,10 @@ export default Product;
 //                       <div key={index} className="flex flex-col items-center">
 //                         <button
 //                           onClick={() => setSelectedColor(colorName)}
-//                           className={`w-10 h-10 rounded-md border-2 transition-all duration-200 ${
-//                             isSelected
+//                           className={`w-10 h-10 rounded-md border-2 transition-all duration-200 ${isSelected
 //                               ? 'ring-2 ring-black scale-110 border-black'
 //                               : 'border-gray-800 hover:ring-1 hover:ring-gray-400'
-//                           }`}
+//                             }`}
 //                           style={{ backgroundColor: colorHex }}
 //                           title={`${colorName} (${colorHex})`}
 //                         ></button>
@@ -4905,11 +4924,11 @@ export default Product;
 //                   productData.sizes.map((sizeObj, index) => {
 //                     const sizeLabel = sizeObj?.size || sizeObj;
 //                     const stock = sizeObj?.stock || 0;
-                    
+
 //                     // ✅ CALCULATE PRICE: Check custom price first, then multiplier
 //                     let sizePrice;
 //                     let isCustomPrice = false;
-                    
+
 //                     if (typeof sizeObj === 'object') {
 //                       if (sizeObj.useCustomPrice && sizeObj.customPrice > 0) {
 //                         sizePrice = sizeObj.customPrice;
@@ -4921,7 +4940,7 @@ export default Product;
 //                     } else {
 //                       sizePrice = productData.price;
 //                     }
-                    
+
 //                     const isInStock = stock > 0 || stock === 0;
 //                     const isSelected = size === sizeLabel;
 
@@ -4934,11 +4953,10 @@ export default Product;
 //                           handleSizeSelect(sizeObj);
 //                         }}
 //                         disabled={!isInStock}
-//                         className={`border-2 border-gray-400 py-2 px-4 rounded-md flex flex-col items-center gap-1 transition-all ${
-//                           isSelected
+//                         className={`border-2 border-gray-400 py-2 px-4 rounded-md flex flex-col items-center gap-1 transition-all ${isSelected
 //                             ? 'border-orange-500 bg-orange-100 scale-105'
 //                             : 'border-gray-300 hover:border-orange-300 hover:bg-gray-50'
-//                         } ${!isInStock ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+//                           } ${!isInStock ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
 //                         title={!isInStock ? 'Out of stock' : `Select ${sizeLabel}`}
 //                       >
 //                         <span className="font-semibold text-gray-800">{sizeLabel}</span>

@@ -851,10 +851,39 @@ const Collection = () => {
   const [searchParams] = useSearchParams();
   const loaderRef = useRef(null);
 
+  // const subCategoriesMap = {
+  //   Men: ["Topwear", "Bottomwear", "Winterwear"],
+  //   Women: ["Topwear", "Bottomwear", "Winterwear"],
+  //   Others: ["Recliner Chair Headrest Cover", "Cushion Cover", "Aprons", "Desk Mat", "Pillow"],
+  // };
+
   const subCategoriesMap = {
-    Men: ["Topwear", "Bottomwear", "Winterwear"],
-    Women: ["Topwear", "Bottomwear", "Winterwear"],
-    Others: ["Recliner Chair Headrest Cover", "Cushion Cover", "Aprons", "Desk Mat", "Pillow"],
+    Men: [
+      "Jackets",
+      "Bomber Biker Jacket",
+      "Moto Biker Jacket",
+      "Racing Coat",
+      "Leather Coats",
+      "Men Winter Wear",
+    ],
+    Women: [
+      "Jackets",
+      "Bomber Biker Jacket",
+      "Moto Biker Jacket",
+      "Racing Coat",
+      "Women Winter Wear",
+      "Women Night Dress",
+      "Leather Pencil Skirt",
+      "Leather Full Skirt",
+      "Slim Bodycon Skirt",
+    ],
+    Others: [
+      "Pillow",
+      "Cushion Cover",
+      "Aprons",
+      "Desk Mat",
+      "Chair Cover",
+    ],
   };
 
   useEffect(() => {

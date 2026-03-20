@@ -1385,10 +1385,13 @@ const MegaColumn = ({ title, items }) => (
     </h3>
     <ul className="space-y-[10px]">
       {items.map((item, i) => {
-        const toURL =
-          item.category === "Others"
-            ? `/collection?category=Others&sub=${encodeURIComponent(item.label)}`
-            : `/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.category)}`;
+        // const toURL =
+        //   item.category === "Others"
+        //     ? `/collection?category=Others&sub=${encodeURIComponent(item.label)}`
+        //     : `/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.category)}`;
+        const toURL = item.category === "Others"
+          ? `/collection?category=Others&sub=${encodeURIComponent(item.label)}`
+          : `/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.label)}`;
         return (
           <li key={i}>
             <Link
@@ -1413,11 +1416,10 @@ const MobileSidebarLink = ({ to, label, close }) => (
     className={({ isActive }) =>
       `block px-6 py-3.5 text-[11px] tracking-[2px] uppercase font-[500]
        border-b border-white/[0.05] transition-all duration-150
-       ${
-         isActive
-           ? "text-indigo-400 bg-indigo-500/8 border-l-2 border-l-indigo-500 pl-5"
-           : "text-white/60 hover:text-white hover:bg-white/[0.03] hover:pl-7"
-       }`
+       ${isActive
+        ? "text-indigo-400 bg-indigo-500/8 border-l-2 border-l-indigo-500 pl-5"
+        : "text-white/60 hover:text-white hover:bg-white/[0.03] hover:pl-7"
+      }`
     }
   >
     {label}

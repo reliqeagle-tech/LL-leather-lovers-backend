@@ -6438,7 +6438,7 @@ const Add = ({ token }) => {
                                 </div>
                             </Field>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <Field label="Category">
                                     <select className={selectCls} value={category} onChange={e => { setCategory(e.target.value); setSubCategory(e.target.value === 'Others' ? 'Cushion Cover' : 'Topwear'); }}>
                                         <option>Men</option><option>Women</option><option>Others</option>
@@ -6454,6 +6454,82 @@ const Add = ({ token }) => {
                                 <Field label="SKU / Code" hint="Optional — auto-generated if blank">
                                     <input className={inputCls} type="text" placeholder="Auto-generated" />
                                 </Field>
+                            </div> */}
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+                                <Field label="Category">
+                                    <select
+                                        className={selectCls}
+                                        value={category}
+                                        onChange={(e) => {
+                                            setCategory(e.target.value)
+                                        }}
+                                    >
+                                        <option value="Men">Men</option>
+                                        <option value="Women">Women</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </Field>
+
+
+                                <Field label="Sub Category">
+                                    <select
+                                        className={selectCls}
+                                        value={subCategory}
+                                        onChange={(e) => setSubCategory(e.target.value)}
+                                    >
+
+                                        {/* MEN */}
+                                        {category === "Men" && (
+                                            <>
+                                                <option value="Jackets">Jackets</option>
+                                                <option value="Bomber Biker Jacket">Bomber Biker Jacket</option>
+                                                <option value="Moto Biker Jacket">Moto Biker Jacket</option>
+                                                <option value="Racing Coat">Racing Coat</option>
+                                                <option value="Leather Coats">Leather Coats</option>
+                                                <option value="Men Winter Wear">Men Winter Wear</option>
+                                            </>
+                                        )}
+
+                                        {/* WOMEN */}
+                                        {category === "Women" && (
+                                            <>
+                                                <option value="Jackets">Jackets</option>
+                                                <option value="Bomber Biker Jacket">Bomber Biker Jacket</option>
+                                                <option value="Moto Biker Jacket">Moto Biker Jacket</option>
+                                                <option value="Racing Coat">Racing Coat</option>
+                                                <option value="Women Winter Wear">Women Winter Wear</option>
+                                                <option value="Women Night Dress">Women Night Dress</option>
+                                                <option value="Leather Pencil Skirt">Leather Pencil Skirt</option>
+                                                <option value="Leather Full Skirt">Leather Full Skirt</option>
+                                                <option value="Slim Bodycon Skirt">Slim Bodycon Skirt</option>
+                                            </>
+                                        )}
+
+                                        {/* OTHERS */}
+                                        {category === "Others" && (
+                                            <>
+                                                <option value="Pillow">Pillow</option>
+                                                <option value="Cushion Cover">Cushion Cover</option>
+                                                <option value="Aprons">Aprons</option>
+                                                <option value="Desk Mat">Desk Mat</option>
+                                                <option value="Chair Cover">Chair Cover</option>
+                                            </>
+                                        )}
+
+                                    </select>
+                                </Field>
+
+
+                                <Field label="SKU / Code" hint="Optional — auto-generated if blank">
+                                    <input
+                                        className={inputCls}
+                                        type="text"
+                                        placeholder="Auto-generated"
+                                    />
+                                </Field>
+
                             </div>
 
                             <div className="border-t border-gray-100 pt-5 mt-1">

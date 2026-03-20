@@ -478,16 +478,16 @@ const AccountSidebar = () => {
     if (!file) return;
     setPreviewImage(URL.createObjectURL(file));
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("avatar", file);
     try {
       setUploading(true);
       const token = localStorage.getItem("token");
-      const { data } = await axios.post(`${backendUrl}/api/user/upload-profile`, formData, {
+      const { data } = await axios.put(`${backendUrl}/api/user/user-avatar`, formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
       if (data.success) {
         toast.success("Profile photo updated!");
-        setUser((prev) => ({ ...prev, profilePhoto: data.imageUrl }));
+        setUser((prev) => ({ ...prev, avatar: data.imageUrl }));
         setPreviewImage(null);
       }
     } catch {
@@ -504,9 +504,10 @@ const AccountSidebar = () => {
 
   if (!user) return null;
 
-  const imageSrc =
-    previewImage ||
-    (user.profilePhoto ? `${backendUrl}${user.profilePhoto}` : assets.profileImg);
+  // const imageSrc =
+  //   previewImage ||
+  //   (user.profilePhoto ? `${backendUrl}${user.profilePhoto}` : assets.profileImg);
+  const imageSrc = previewImage || user.avatar || assets.profileImg;
 
   return (
     <ThemeProvider theme={darkTheme}>
