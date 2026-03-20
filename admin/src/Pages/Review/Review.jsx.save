@@ -1,0 +1,358 @@
+// import React, { useState, useEffect, useMemo, useCallback } from 'react';
+// import axios from 'axios';
+// import { toast } from 'react-toastify';
+// import { backendUrl } from '../../App';
+// import {
+//     TbStar, TbStarFilled, TbSearch, TbX, TbRefresh,
+//     TbTrash, TbThumbUp, TbThumbDown, TbMessage,
+//     TbDownload, TbChevronLeft, TbChevronRight,
+//     TbAlertTriangle, TbCircleCheck, TbClock,
+//     TbStarHalfFilled, TbSend, TbFlag, TbShield,
+//     TbMoodSmile, TbMoodSad, TbMoodNeutral,
+//     TbEye, TbEyeOff, TbPackage, TbChartBar,
+//     TbPhoto,
+// } from 'react-icons/tb';
+
+// /* ════════════════════════════════════════════
+//    PURE UI PRIMITIVES  (top-level, never nested)
+// ════════════════════════════════════════════ */
+
+// const Stars = ({ rating, size = 13 }) => (
+//     <span className="inline-flex items-center gap-0.5">
+//         {[1, 2, 3, 4, 5].map(i => (
+//             <span key={i}>
+//                 {i <= Math.floor(rating)
+//                     ? <TbStarFilled size={size} className="text-amber-400" />
+//                     : i - 0.5 <= rating
+//                         ? <TbStarHalfFilled size={size} className="text-amber-400" />
+//                         : <TbStar size={size} className="text-gray-300" />}
+//             </span>
+//         ))}
+//     </span>
+// );
+
+// const RatingBar = ({ star, count, total }) => {
+//     const pct = total > 0 ? (count / total) * 100 : 0;
+//     const COLOR = { 5: '#10b981', 4: '#6366f1', 3: '#f59e0b', 2: '#f97316', 1: '#ef4444' };
+//     return (
+//         <button className="flex items-center gap-2 w-full group">
+//             <span className="text-[11.5px] font-bold text-gray-500 w-3">{star}</span>
+//             <TbStarFilled size={9} className="text-amber-400 flex-shrink-0" />
+//             <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+//                 <div
+//                     className="h-full rounded-full transition-all duration-700"
+//                     style={{ width: `${pct}%`, background: COLOR[star] }}
+//                 />
+//             </div>
+//             <span className="text-[11px] text-gray-400 w-5 text-right tabular-nums">{count}</span>
+//         </button>
+//     );
+// };
+
+// const StatusPill = ({ status, flagged }) => {
+//     if (flagged) return (
+//         <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
+//             <TbFlag size={9} /> Flagged
+//         </span>
+//     );
+//     if (status === 'pending') return (
+//         <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+//             <TbClock size={9} /> Pending
+//         </span>
+//     );
+//     return (
+//         <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+//             <TbCircleCheck size={9} /> Approved
+//         </span>
+//     );
+// };
+
+// const VerifiedBadge = () => (
+//     <span className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">
+//         <TbShield size={9} /> Verified
+//     </span>
+// );
+
+// const KPICard = ({ icon, label, value, sub, iconBg, loading }) => (
+//     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3">
+//         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconBg}`}>{icon}</div>
+//         <div>
+//             <p className="text-[12px] text-gray-500 font-medium">{label}</p>
+//             <p className="text-[26px] font-extrabold text-gray-900 leading-tight mt-0.5">
+//                 {loading ? <span className="inline-block w-16 h-7 bg-gray-100 rounded animate-pulse" /> : value}
+//             </p>
+//             {sub && <p className="text-[11px] text-gray-400 mt-0.5">{sub}</p>}
+//         </div>
+//     </div>
+// );
+
+// const SkeletonReview = () => (
+//     <div className="flex gap-4 px-6 py-5 border-b border-gray-50 animate-pulse">
+//         <div className="w-10 h-10 rounded-xl bg-gray-100 flex-shrink-0" />
+//         <div className="flex-1 space-y-2.5">
+//             <div className="flex justify-between">
+//                 <div className="h-4 bg-gray-100 rounded w-32" />
+//                 <div className="h-4 bg-gray-100 rounded w-24" />
+//             </div>
+//             <div className="h-3 bg-gray-100 rounded w-48" />
+//             <div className="h-3 bg-gray-100 rounded w-full max-w-lg" />
+//             <div className="h-3 bg-gray-100 rounded w-3/4" />
+//         </div>
+//     </div>
+// );
+
+// const AVATAR_COLORS = [
+//     'bg-indigo-100 text-indigo-700',
+//     'bg-pink-100 text-pink-700',
+//     'bg-amber-100 text-amber-700',
+//     'bg-emerald-100 text-emerald-700',
+//     'bg-violet-100 text-violet-700',
+//     'bg-cyan-100 text-cyan-700',
+//     'bg-rose-100 text-rose-700',
+//     'bg-teal-100 text-teal-700',
+// ];
+
+// /* ════════════════════════════════════════════
+//    MAIN REVIEWS PAGE
+// ════════════════════════════════════════════ */
+// const Reviews = ({ token }) => {
+//     /* ── Data ── */
+//     const [reviews, setReviews] = useState([]);
+//     const [products, setProducts] = useState([]);
+//     const [loading, setLoading] = useState(true);
+
+//     /* ── UI state ── */
+//     const [search, setSearch] = useState('');
+//     const [filterRating, setFilterRating] = useState('all');
+//     const [filterStatus, setFilterStatus] = useState('all');
+//     const [filterProduct, setFilterProduct] = useState('all');
+//     const [sortBy, setSortBy] = useState('newest');
+//     const [page, setPage] = useState(1);
+//     const [expandedIds, setExpandedIds] = useState(new Set());
+//     const [replyingTo, setReplyingTo] = useState(null);
+//     const [replyText, setReplyText] = useState('');
+//     const [hiddenIds, setHiddenIds] = useState(new Set());
+//     const PER_PAGE = 10;
+
+//     /* ── Fetch ── */
+//     const fetchData = useCallback(async () => {
+//         if (!token) return;
+//         setLoading(true);
+//         try {
+//             const res = await axios.get(backendUrl + '/api/product/list', { headers: { token } });
+//             if (!res.data.success) { toast.error(res.data.message); return; }
+//             const prods = res.data.products || [];
+//             setProducts(prods);
+
+//             /* Flatten reviews from all products */
+//             const flat = [];
+//             prods.forEach(p => {
+//                 (Array.isArray(p.reviews) ? p.reviews : []).forEach((r, idx) => {
+//                     flat.push({
+//                         id: `${p._id}-rv-${idx}`,
+//                         productId: p._id,
+//                         productName: p.name || 'Unknown Product',
+//                         productImg: Array.isArray(p.images) ? p.images[0] : (p.image || null),
+//                         productCat: p.category || '',
+//                         reviewer: r.userName || r.user || r.name || 'Anonymous',
+//                         email: r.userEmail || r.email || '',
+//                         rating: Math.min(5, Math.max(0, Number(r.rating) || 0)),
+//                         title: r.title || '',
+//                         comment: r.comment || r.review || r.text || '',
+//                         date: r.date || r.createdAt || null,
+//                         helpful: Number(r.helpful) || 0,
+//                         unhelpful: Number(r.unhelpful) || 0,
+//                         verified: !!(r.verified || r.verifiedPurchase),
+//                         status: r.status || 'approved',
+//                         adminReply: r.adminReply || r.reply || '',
+//                         flagged: !!r.flagged,
+//                     });
+//                 });
+//             });
+
+//             flat.sort((a, b) =>
+//                 (b.date ? new Date(b.date) : 0) - (a.date ? new Date(a.date) : 0)
+//             );
+//             setReviews(flat);
+//         } catch (e) {
+//             toast.error(e?.message || 'Failed to load reviews');
+//         } finally {
+//             setLoading(false);
+//         }
+//     }, [token]);
+
+//     useEffect(() => { fetchData(); }, [fetchData]);
+
+//     /* ── Computed stats ── */
+//     const stats = useMemo(() => {
+//         const dist = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+//         let totalRating = 0, pending = 0, flagged = 0, verified = 0, withReply = 0;
+//         reviews.forEach(r => {
+//             const s = Math.round(r.rating);
+//             if (dist[s] !== undefined) dist[s]++;
+//             totalRating += r.rating;
+//             if (r.status === 'pending') pending++;
+//             if (r.flagged) flagged++;
+//             if (r.verified) verified++;
+//             if (r.adminReply) withReply++;
+//         });
+//         const total = reviews.length;
+//         const avg = total > 0 ? (totalRating / total).toFixed(1) : '0.0';
+//         const positive = (dist[5] + dist[4]);
+//         const positivePct = total > 0 ? Math.round((positive / total) * 100) : 0;
+//         return { total, avg, dist, pending, flagged, verified, withReply, positivePct };
+//     }, [reviews]);
+
+//     /* ── Filtered + sorted ── */
+//     const filtered = useMemo(() => {
+//         let r = reviews.filter(rv => !hiddenIds.has(rv.id));
+
+//         if (search.trim()) {
+//             const q = search.toLowerCase();
+//             r = r.filter(rv =>
+//                 rv.reviewer.toLowerCase().includes(q) ||
+//                 rv.comment.toLowerCase().includes(q) ||
+//                 rv.productName.toLowerCase().includes(q) ||
+//                 rv.title.toLowerCase().includes(q)
+//             );
+//         }
+//         if (filterRating !== 'all') r = r.filter(rv => Math.round(rv.rating) === Number(filterRating));
+//         if (filterProduct !== 'all') r = r.filter(rv => rv.productId === filterProduct);
+//         if (filterStatus === 'pending') r = r.filter(rv => rv.status === 'pending');
+//         if (filterStatus === 'approved') r = r.filter(rv => rv.status === 'approved' && !rv.flagged);
+//         if (filterStatus === 'flagged') r = r.filter(rv => rv.flagged);
+//         if (filterStatus === 'replied') r = r.filter(rv => !!rv.adminReply);
+
+//         r.sort((a, b) => {
+//             if (sortBy === 'newest') return (b.date ? new Date(b.date) : 0) - (a.date ? new Date(a.date) : 0);
+//             if (sortBy === 'oldest') return (a.date ? new Date(a.date) : 0) - (b.date ? new Date(b.date) : 0);
+//             if (sortBy === 'highest') return b.rating - a.rating;
+//             if (sortBy === 'lowest') return a.rating - b.rating;
+//             if (sortBy === 'helpful') return (b.helpful - b.unhelpful) - (a.helpful - a.unhelpful);
+//             return 0;
+//         });
+//         return r;
+//     }, [reviews, search, filterRating, filterStatus, filterProduct, sortBy, hiddenIds]);
+
+//     const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+//     const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+//     /* Reset page on filter change */
+//     const applyFilter = (setter, val) => { setter(val); setPage(1); };
+
+//     /* ── Helpers ── */
+//     const fmtRel = (d) => {
+//         if (!d) return '—';
+//         const days = Math.floor((Date.now() - new Date(d)) / 86400000);
+//         if (days === 0) return 'Today';
+//         if (days === 1) return 'Yesterday';
+//         if (days < 30) return `${days}d ago`;
+//         if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+//         return `${Math.floor(days / 365)}y ago`;
+//     };
+//     const fmtDate = (d) => {
+//         if (!d) return '—';
+//         return new Date(d).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+//     };
+//     const avatarColor = (name) => AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+//     const ratingBadgeClass = (r) => {
+//         if (r >= 4.5) return 'text-emerald-700 bg-emerald-50';
+//         if (r >= 3.5) return 'text-amber-700 bg-amber-50';
+//         return 'text-red-700 bg-red-50';
+//     };
+
+//     /* ── Actions ── */
+//     const approveReview = (id) => {
+//         setReviews(p => p.map(r => r.id === id ? { ...r, status: 'approved', flagged: false } : r));
+//         toast.success('Review approved');
+//     };
+//     const deleteReview = (id) => {
+//         setReviews(p => p.filter(r => r.id !== id));
+//         toast.success('Review deleted');
+//     };
+//     const flagReview = (id) => {
+//         setReviews(p => p.map(r => r.id === id ? { ...r, flagged: !r.flagged } : r));
+//     };
+//     const toggleHide = (id) => {
+//         setHiddenIds(p => {
+//             const n = new Set(p);
+//             n.has(id) ? n.delete(id) : n.add(id);
+//             return n;
+//         });
+//     };
+//     const submitReply = (id) => {
+//         if (!replyText.trim()) return;
+//         setReviews(p => p.map(r => r.id === id ? { ...r, adminReply: replyText.trim() } : r));
+//         toast.success('Reply saved');
+//         setReplyingTo(null);
+//         setReplyText('');
+//     };
+//     const toggleExpand = (id) => {
+//         setExpandedIds(p => {
+//             const n = new Set(p);
+//             n.has(id) ? n.delete(id) : n.add(id);
+//             return n;
+//         });
+//     };
+
+//     /* ── Export ── */
+//     const exportCSV = () => {
+//         const rows = [['Product', 'Reviewer', 'Email', 'Rating', 'Title', 'Comment', 'Date', 'Verified', 'Status', 'Admin Reply']];
+//         filtered.forEach(r => rows.push([
+//             r.productName, r.reviewer, r.email, r.rating,
+//             `"${r.title}"`, `"${r.comment.replace(/"/g, '""')}"`,
+//             fmtDate(r.date), r.verified ? 'Yes' : 'No',
+//             r.status, `"${r.adminReply}"`,
+//         ]));
+//         const csv = rows.map(r => r.join(',')).join('\n');
+//         const blob = new Blob([csv], { type: 'text/csv' });
+//         const url = URL.createObjectURL(blob);
+//         const a = document.createElement('a');
+//         a.href = url; a.download = `reviews_${new Date().toISOString().slice(0, 10)}.csv`;
+//         a.click(); URL.revokeObjectURL(url);
+//         toast.success('Reviews exported!');
+//     };
+
+//     /* ── Unique products for filter dropdown ── */
+//     const productOptions = useMemo(() => {
+//         const seen = new Map();
+//         reviews.forEach(r => { if (!seen.has(r.productId)) seen.set(r.productId, r.productName); });
+//         return [...seen.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+//     }, [reviews]);
+
+//     const SELECT_STYLE = {
+//         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
+//         backgroundRepeat: 'no-repeat',
+//         backgroundPosition: 'right 9px center',
+//     };
+
+//     /* ════════════════════════════════════════════
+//        RENDER
+//     ════════════════════════════════════════════ */
+//     return (
+//         <div className="min-h-screen bg-[#f7f7f5] p-5 space-y-5">
+
+//             {/* ── Header ── */}
+//             <div className="flex items-center justify-between flex-wrap gap-3">
+//                 <div>
+//                     <h1 className="text-[22px] font-extrabold text-gray-900 tracking-tight flex items-center gap-2.5">
+//                         <TbStarFilled className="text-amber-400" size={22} />
+//                         Reviews & Ratings
+//                     </h1>
+//                     <p className="text-[13px] text-gray-400 mt-0.5">
+//                         {loading
+//                             ? 'Loading product reviews…'
+//                             : `${stats.total} review${stats.total !== 1 ? 's' : ''} across ${products.length} product${products.length !== 1 ? 's' : ''}`}
+//                     </p>
+//                 </div>
+//                 <div className="flex items-center gap-2">
+//                     <button onClick={fetchData} title="Refresh"
+//                         className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm">
+//                         <TbRefresh size={16} className={loading ? 'animate-spin' : ''} />
+//                     </button>
+//                     <button onClick={exportCSV}
+//                         className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-700 text-[13px] font-semibold hover:bg-gray-50 transition-all shadow-sm">
+//                         <TbDownload size={15} /> Export CSV
+//                     </button>
+//                     {(stats.pending + stats.flagged) > 0 && (
+//                         <button onClick={() => applyFilter(setFilterStatus, 'pending')}
