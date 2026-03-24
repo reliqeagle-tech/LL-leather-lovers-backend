@@ -15,7 +15,7 @@
 //   </div>
 
 //   <div className="grid grid-cols-1 md:grid-cols-2 border border-white/20 w-full">
-    
+
 //     {/* Tile 1 */}
 //     <div className="flex p-6 border-b border-white/20 md:border-r gap-6">
 //       <img src={assets.Trust3}
@@ -222,7 +222,7 @@ const TrustWorthy = () => {
 
       <section
         ref={sectionRef}
-        className="relative overflow-hidden py-16 sm:py-20 lg:py-24"
+        className="relative overflow-hidden py-8"
         style={{ background: "linear-gradient(160deg, #160e06 0%, #1e1208 40%, #110a04 100%)" }}
       >
         {/* Top separator — amber */}
@@ -241,33 +241,33 @@ const TrustWorthy = () => {
         <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none"
           style={{ background: "radial-gradient(ellipse at right, rgba(99,102,241,0.06) 0%, transparent 70%)" }} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-6xl mx-auto px-4  relative z-10">
 
           {/* ── HEADING ── */}
           <div className="text-center mb-12 sm:mb-16 tw-reveal"
-            style={visible ? { animationDelay:"0s" } : { animation:"none", opacity:0 }}>
+            style={visible ? { animationDelay: "0s" } : { animation: "none", opacity: 0 }}>
 
             <p className="tw-sans mb-3 inline-flex items-center gap-3"
-              style={{ fontSize:"10px", letterSpacing:"4px", textTransform:"uppercase", color:"#c97c3a", fontWeight:600 }}>
+              style={{ fontSize: "10px", letterSpacing: "4px", textTransform: "uppercase", color: "#c97c3a", fontWeight: 600 }}>
               <span className="w-6 h-px bg-amber-700/60 inline-block" />
               Behind the Brand
               <span className="w-6 h-px bg-amber-700/60 inline-block" />
             </p>
 
             <h2 className="tw-serif text-white leading-tight tracking-tight"
-              style={{ fontSize:"clamp(34px,4.5vw,56px)", fontWeight:300 }}>
+              style={{ fontSize: "clamp(34px,4.5vw,56px)", fontWeight: 300 }}>
               The{" "}
-              <em style={{ fontStyle:"italic", color:"#c97c3a", fontWeight:300 }}>
+              <em style={{ fontStyle: "italic", color: "#c97c3a", fontWeight: 300 }}>
                 LL Leather Lovers
               </em>
               {" "}Difference
             </h2>
 
             <div className="w-12 h-px mx-auto my-5"
-              style={{ background:"linear-gradient(90deg, transparent, #c97c3a, transparent)" }} />
+              style={{ background: "linear-gradient(90deg, transparent, #c97c3a, transparent)" }} />
 
             <p className="tw-sans text-white/35 max-w-lg mx-auto leading-relaxed"
-              style={{ fontSize:"13px" }}>
+              style={{ fontSize: "13px" }}>
               Four pillars that define every piece we make — from the hide we select to the hand that delivers it.
             </p>
           </div>
@@ -279,14 +279,14 @@ const TrustWorthy = () => {
                 key={i}
                 className="tw-reveal"
                 style={visible
-                  ? { animationDelay:`${0.1 + i * 0.1}s` }
-                  : { animation:"none", opacity:0 }
+                  ? { animationDelay: `${0.1 + i * 0.1}s` }
+                  : { animation: "none", opacity: 0 }
                 }
               >
                 <div className="tw-tile h-full">
 
                   {/* Image */}
-                  <div className="overflow-hidden" style={{ borderRadius:"12px 12px 0 0" }}>
+                  <div className="overflow-hidden" style={{ borderRadius: "12px 12px 0 0" }}>
                     <img
                       src={tile.image}
                       alt={tile.title}

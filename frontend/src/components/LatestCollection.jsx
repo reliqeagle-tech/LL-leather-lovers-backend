@@ -638,8 +638,8 @@ import ProductItem from "./ProductItem";
 import { Link } from "react-router-dom";
 
 const CARD_ACCENTS = [
-  "#6366f1","#8b5cf6","#6366f1","#a78bfa",
-  "#818cf8","#7c3aed","#6366f1","#8b5cf6",
+  "#6366f1", "#8b5cf6", "#6366f1", "#a78bfa",
+  "#818cf8", "#7c3aed", "#6366f1", "#8b5cf6",
 ];
 
 const LatestCollection = () => {
@@ -772,7 +772,7 @@ const LatestCollection = () => {
           </div>
 
           {/* ── Grid ── */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 w-[90%] m-auto">
             {latestProducts.map((item, index) => (
               <div
                 key={item._id}
@@ -851,8 +851,8 @@ const LatestCollection = () => {
               <span>Explore Full Collection</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"/>
-                <polyline points="12 5 19 12 12 19"/>
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
               </svg>
             </Link>
           </div>

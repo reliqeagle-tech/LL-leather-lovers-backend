@@ -3696,8 +3696,8 @@ const ThumbRail = ({ images, selectedIndex, onSelect }) => {
   const [canUp, setCanUp] = useState(false);
   const [canDown, setCanDown] = useState(false);
 
-  const THUMB_H = 74;
-  const THUMB_GAP = 8;
+  const THUMB_H = 60;
+  const THUMB_GAP = 6;
   const STEP = (THUMB_H + THUMB_GAP) * 2;
 
   const sync = () => {
@@ -3716,7 +3716,7 @@ const ThumbRail = ({ images, selectedIndex, onSelect }) => {
   }, [images]);
 
   return (
-    <div className="flex flex-col items-center gap-1.5" style={{ width: 72, flexShrink: 0 }}>
+    <div className="flex flex-col items-center gap-1.5" style={{ width: 60, flexShrink: 0 }}>
       <button className="thumb-arrow" disabled={!canUp}
         onClick={() => scrollRef.current?.scrollBy({ top: -STEP, behavior: 'smooth' })}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round">
@@ -3985,13 +3985,14 @@ const Product = () => {
       {/* Original indigo top accent line */}
       <div className="h-px w-full" style={{ background: 'linear-gradient(90deg,transparent,rgba(99,102,241,0.4),transparent)' }} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 py-10">
 
         {/* ══ PRODUCT MAIN — improved grid layout ══ */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'minmax(0,5fr) minmax(0,7fr)',
-          gap: '48px',
+          // gridTemplateColumns: 'minmax(0,5fr) minmax(0,7fr)',
+          gridTemplateColumns: '420px 1fr',
+          gap: '24px',
           alignItems: 'start',
         }} className="product-main-grid">
 
@@ -4007,13 +4008,13 @@ const Product = () => {
               />
 
               {/* MAIN IMAGE — aspect-ratio based, not fixed px */}
-              <div className="main-img-wrap flex-1 overflow-hidden relative"
+              <div className="main-img-wrap overflow-hidden relative"
                 style={{
                   background: '#fff',
                   border: '1px solid rgba(255,255,255,0.06)',
                   borderRadius: 16,
                   aspectRatio: '3/4',
-                  maxHeight: 520,
+                  maxHeight: 450,
                 }}>
                 <img src={image} alt={productData.name} className="main-img"
                   style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 16, display: 'block' }} />
