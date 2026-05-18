@@ -424,7 +424,7 @@ import UploadBanner from './Pages/HomeSliderBanners/AddHomeSlide'
 import Analytics from './Pages/Analytics/Analytics'
 import Reports from './Pages/Reports/Reports'
 import { ThemeProvider } from './Context/ThemeContext'
-import Review from './Pages/review/review'
+import Review from './Pages/Review/Review'
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 export const currency = '$'
