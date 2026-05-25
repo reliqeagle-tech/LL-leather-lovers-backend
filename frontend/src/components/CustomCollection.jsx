@@ -112,7 +112,7 @@ const CustomCollection = () => {
       to: "/collection?category=Women",
       label: "Women",
       sub: "Jackets & Skirts",
-      image: assets.women,
+      image: assets.menImg2,
       accent: "#818cf8",
       span: "large", // takes left half full height
     },
@@ -120,7 +120,7 @@ const CustomCollection = () => {
       to: "/collection?category=Men",
       label: "Men",
       sub: "Jackets & Coats",
-      image: assets.men,
+      image: assets.menI,
       accent: "#6366f1",
       span: "small",
     },
@@ -180,7 +180,7 @@ const CustomCollection = () => {
           background: linear-gradient(
             to top,
             rgba(0,0,0,0.85) 0%,
-            rgba(0,0,0,0.3) 45%,
+            rgba(0,0,0,0.1) 45%,
             transparent 70%
           );
           transition: opacity 0.4s;
@@ -415,7 +415,7 @@ const CustomCollection = () => {
                 }}
               >
                 <img
-                  src={assets.women}
+                  src={assets.menImg3}
                   alt="Women Collection"
                   style={{
                     width: "100%",
@@ -427,8 +427,8 @@ const CustomCollection = () => {
                 />
                 <div className="cc-corner" style={{ "--accent": "#818cf8" }} />
                 <div className="cc-content">
-                  <span className="cc-sub">Women's Edit</span>
-                  <span className="cc-label">Women</span>
+                  {/* <span className="cc-sub">Women's Edit</span> */}
+                  <span className="cc-label">Explore more</span>
                   <span className="cc-arrow" style={{ "--accent": "#6366f1" }}>
                     Shop Now
                     <svg
@@ -469,7 +469,7 @@ const CustomCollection = () => {
                 }}
               >
                 <img
-                  src={assets.men}
+                  src={assets.menImg4}
                   alt="Men Collection"
                   style={{
                     width: "100%",
@@ -481,8 +481,8 @@ const CustomCollection = () => {
                 />
                 <div className="cc-corner" style={{ "--accent": "#6366f1" }} />
                 <div className="cc-content">
-                  <span className="cc-sub">Men's Edit</span>
-                  <span className="cc-label">Men</span>
+                  {/* <span className="cc-sub">Men's Edit</span> */}
+                  {/* <span className="cc-label">Men</span> */}
                   <span className="cc-arrow" style={{ "--accent": "#4f46e5" }}>
                     Shop Now
                     <svg
@@ -523,7 +523,7 @@ const CustomCollection = () => {
                 }}
               >
                 <img
-                  src={assets.pillow}
+                  src={assets.menImg5}
                   alt="Others Collection"
                   style={{
                     width: "100%",
@@ -535,8 +535,8 @@ const CustomCollection = () => {
                 />
                 <div className="cc-corner" style={{ "--accent": "#a5b4fc" }} />
                 <div className="cc-content">
-                  <span className="cc-sub">Pillows, Aprons & More</span>
-                  <span className="cc-label">Others</span>
+                  {/* <span className="cc-sub">Pillows, Aprons & More</span> */}
+                  {/* <span className="cc-label">Others</span> */}
                   <span className="cc-arrow" style={{ "--accent": "#6366f1" }}>
                     Shop Now
                     <svg

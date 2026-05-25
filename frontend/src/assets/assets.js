@@ -121,6 +121,13 @@ import collectionImg2 from "./collectionImg.png";
 import collectionImg3 from "./collectionImg.png";
 import colImg from "./colImg.png";
 import ll_lover3 from "./ll lover3.png";
+import menImg from "./MenImg1.png";
+import menImg2 from "./menImg2.png";
+import menImg3 from "./MenImg3.png";
+import menImg4 from "./MenImg4.png";
+import menImg5 from "./MenImg5.png";
+import contactImg from "./ContactImg.png";
+
 
 export const assets = {
   logo,
@@ -186,6 +193,12 @@ export const assets = {
   collectionImg2,
   colImg,
   ll_lover3,
+  menImg,
+  menImg2,
+  menImg3,
+  menImg4,
+  menImg5,
+  contactImg,
 };
 
 export const products = [
