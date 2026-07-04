@@ -690,7 +690,8 @@ const LatestCollection = () => {
           border-radius: 14px;
           overflow: hidden;
           border: 1px solid rgba(99,102,241,0.15);
-          border-left: 3px solid #6366f1;
+          // border-left: 3px solid #6366f1;
+          border:2px solid rgba(99,102,241,.12);
           transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
           position: relative;
         }
@@ -725,7 +726,7 @@ const LatestCollection = () => {
 
       <section
         ref={sectionRef}
-        className="py-16 sm:py-20 lg:py-24 relative overflow-hidden"
+        className="py-16 sm:py-16 relative overflow-hidden"
         style={{ background: "linear-gradient(180deg, #0b0b0f 0%, #0e0e14 100%)" }}
       >
         {/* Top separator */}
@@ -736,10 +737,10 @@ const LatestCollection = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[240px] pointer-events-none"
           style={{ background: "radial-gradient(ellipse at top, rgba(99,102,241,0.07) 0%, transparent 70%)" }} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
           {/* ── Heading ── */}
-          <div className="text-center mb-12 sm:mb-16">
+          <div className="text-center mb-10">
             <p className="lc-sans uppercase tracking-[0.22em] text-indigo-400 mb-3"
               style={{ fontSize: '10px', fontWeight: 600 }}>
               New Arrivals
@@ -753,26 +754,26 @@ const LatestCollection = () => {
               </em>
             </h2>
 
-            <div className="w-12 h-px mx-auto my-4"
+            <div className="w-48 h-[2px] mx-auto mt-1  mb-6"
               style={{ background: "linear-gradient(90deg, transparent, #6366f1, transparent)" }} />
 
-            <p className="lc-sans text-white/35 max-w-md mx-auto leading-relaxed tracking-wide"
+            <p className="lc-sans text-white/65 max-w-md mx-auto leading-relaxed tracking-wide"
               style={{ fontSize: "13px" }}>
               Crafted with precision, styled for those who demand the extraordinary.
             </p>
 
             <div className="flex justify-center mt-5">
-              <span className="lc-sans inline-flex items-center gap-2 text-white/25
-                border border-white/[0.07] px-4 py-1.5 rounded-full"
+              <span className="lc-sans inline-flex items-center gap-2 text-white/70
+                border border-white/30 bg-white/[0.03] px-4 py-1.5 rounded-full"
                 style={{ fontSize: "10px", letterSpacing: "2px" }}>
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block" />
-                {latestProducts.length} top picks
+                {latestProducts.length} Limited Collection
               </span>
             </div>
           </div>
 
           {/* ── Grid ── */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 w-[90%] m-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 ">
             {latestProducts.map((item, index) => (
               <div
                 key={item._id}
@@ -820,7 +821,7 @@ const LatestCollection = () => {
                         boxShadow: '0 2px 8px rgba(99,102,241,0.5)',
                       }}
                     >
-                      NEW
+                      LATEST
                     </span>
                   )}
 
@@ -830,6 +831,9 @@ const LatestCollection = () => {
                     name={item.name}
                     price={item.price}
                     discountPrice={item.discountPrice}
+                    category={item.category}
+                    subCategory={item.subCategory}
+                    sku={item.sku}
                   />
                 </div>
               </div>
@@ -837,15 +841,17 @@ const LatestCollection = () => {
           </div>
 
           {/* ── CTA ── */}
-          <div className="flex items-center justify-center mt-14 sm:mt-16">
+          <div className="flex items-center justify-center  sm:mt-10">
             <Link
               to="/collection"
               className="lc-cta lc-sans inline-flex items-center gap-3 no-underline
-                text-white border rounded-sm px-9 py-3.5"
+                text-white border rounded-full px-5 py-3.5 hover:border-none"
               style={{
                 fontSize: "11px", fontWeight: 600,
                 letterSpacing: "2.5px", textTransform: "uppercase",
                 borderColor: "rgba(99,102,241,0.5)",
+                background:
+                  "radial-gradient(circle at center, rgba(99,102,241,.04), transparent 60%), linear-gradient(180deg,#090909,#0d0d13)",
               }}
             >
               <span>Explore Full Collection</span>

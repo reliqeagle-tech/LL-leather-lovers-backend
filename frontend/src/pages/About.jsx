@@ -580,7 +580,7 @@ const About = () => {
     <div style={{ background: "linear-gradient(180deg, #08080f 0%, #0b0b14 100%)" }} className="min-h-screen">
 
       {/* ══ SECTION 1 — HERO / STORY ══ */}
-      <section ref={heroRef} className="relative overflow-hidden py-16 sm:py-20 lg:py-24">
+      <section ref={heroRef} className="relative overflow-hidden py-10 ">
 
         {/* Top separator */}
         <div className="absolute top-0 left-0 right-0 h-px"
@@ -594,17 +594,17 @@ const About = () => {
 
           {/* Page heading */}
           <Reveal visible={heroVisible} delay={0}>
-            <div className="text-center mb-14">
+            <div className="text-center mb-4">
               <p className="text-indigo-400 font-semibold mb-3 tracking-widest uppercase text-xs"
                 style={{ fontFamily: "'Montserrat', sans-serif" }}>
                 Our Story
               </p>
               <h1 className="text-white leading-tight tracking-tight font-light"
-                style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(34px,5vw,60px)" }}>
+                style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(34px,5vw,48px)" }}>
                 About{" "}
                 <em className="text-indigo-400 italic font-light">LL Leather Lovers</em>
               </h1>
-              <div className="w-12 h-px mx-auto mt-5"
+              <div className="w-48 h-[2px] mx-auto mt-5"
                 style={{ background: "linear-gradient(90deg, transparent, #6366f1, transparent)" }} />
             </div>
           </Reveal>
@@ -618,9 +618,9 @@ const About = () => {
                 <img
                   src={assets.aboutUsImg}
                   alt="LL Leather Lovers Workshop"
-                  className="relative z-10 w-full rounded-xl object-cover transition-transform duration-700 hover:-translate-y-1 hover:scale-[1.015]"
+                  className="relative z-10 w-full rounded-xl object-cover transition-transform duration-700 hover:-translate-y-1 hover:scale-[1.015] border border-white/10"
                   style={{
-                    maxHeight: "500px", objectPosition: "center",
+                    maxHeight: "660px", objectPosition: "center",
                     boxShadow: "0 24px 64px rgba(0,0,0,0.5)"
                   }}
                 />
@@ -651,7 +651,7 @@ const About = () => {
                   <em style={{ fontStyle: "italic", color: "#c97c3a" }}>Craft</em>
                 </h2>
 
-                <div className="space-y-4 mb-8 text-white/45"
+                <div className="space-y-4 mb-8 text-white/60"
                   style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "13.5px", lineHeight: "1.85" }}>
                   <p>
                     LL Leather Lovers was founded from a deep appreciation for genuine craftsmanship
@@ -666,9 +666,26 @@ const About = () => {
                 </div>
 
                 {/* Stats row with counters */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-white/[0.07]">
+                {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-white/[0.07]"> */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-8 border-t border-white/30">
                   {stats.map(({ end, suffix = "", decimals = 0, label }, i) => (
-                    <div key={label} className="text-center">
+                    // <div key={label} className="text-center">
+                    <div
+                      key={label}
+                      className="
+  text-center
+  rounded-2xl
+  border
+  border-white/5
+  bg-white/10
+  py-5
+  px-4
+  hover:border-indigo-500/30
+  hover:bg-white/[0.05]
+  transition-all
+  duration-300
+"
+                    >
                       <p className="text-white font-light leading-none"
                         style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(22px,3vw,30px)" }}>
                         <Counter
@@ -678,7 +695,7 @@ const About = () => {
                           duration={1800 + i * 300} // staggered slightly
                         />
                       </p>
-                      <p className="text-white/25 mt-1.5 uppercase tracking-widest"
+                      <p className="text-white/55 mt-1.5 uppercase tracking-widest"
                         style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "2px" }}>
                         {label}
                       </p>
@@ -693,7 +710,7 @@ const About = () => {
       </section>
 
       {/* ══ SECTION 2 — MISSION ══ */}
-      <section ref={missionRef} className="relative overflow-hidden py-14 sm:py-16"
+      <section ref={missionRef} className="relative overflow-hidden py-10"
         style={{ background: "linear-gradient(135deg, #1a0e05 0%, #1e1208 50%, #150d06 100%)" }}>
 
         <div className="absolute top-0 left-0 right-0 h-px"
@@ -703,7 +720,7 @@ const About = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-72 pointer-events-none"
           style={{ background: "radial-gradient(ellipse, rgba(201,124,58,0.07) 0%, transparent 70%)" }} />
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <Reveal visible={missionVisible} delay={0}>
             <p className="inline-flex items-center gap-3 font-semibold uppercase mb-4"
               style={{
@@ -721,10 +738,10 @@ const About = () => {
               <em style={{ fontStyle: "italic", color: "#c97c3a" }}>Authentic Leather</em>
             </h2>
 
-            <div className="w-12 h-px mx-auto mb-7"
+            <div className="w-40 h-[2px] mx-auto mb-7"
               style={{ background: "linear-gradient(90deg, transparent, #c97c3a, transparent)" }} />
 
-            <p className="text-white/40 max-w-2xl mx-auto leading-relaxed"
+            <p className="text-white/60 max-w-2xl mx-auto leading-relaxed"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "14px", lineHeight: "1.9" }}>
               Our mission is to celebrate the beauty of authentic leather by creating products that
               stand the test of time. We are committed to exceptional craftsmanship, premium materials,
@@ -735,7 +752,7 @@ const About = () => {
       </section>
 
       {/* ══ SECTION 3 — WHY CHOOSE US ══ */}
-      <section ref={whyRef} className="relative overflow-hidden py-16 sm:py-20"
+      <section ref={whyRef} className="relative overflow-hidden py-10"
         style={{ background: "linear-gradient(180deg, #0b0b14 0%, #08080f 100%)" }}>
 
         <div className="absolute top-0 left-0 right-0 h-px"
@@ -759,7 +776,7 @@ const About = () => {
                 Why Choose{" "}
                 <em className="text-indigo-400 italic font-light">Us</em>
               </h2>
-              <div className="w-12 h-px mx-auto mt-5"
+              <div className="w-40 h-[2px] mx-auto mt-5"
                 style={{ background: "linear-gradient(90deg, transparent, #6366f1, transparent)" }} />
             </div>
           </Reveal>
@@ -801,7 +818,7 @@ const About = () => {
                   </h3>
 
                   {/* Body */}
-                  <p className="text-white/40 flex-1"
+                  <p className="text-white/60 flex-1"
                     style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "12.5px", lineHeight: "1.8" }}>
                     {item.body}
                   </p>

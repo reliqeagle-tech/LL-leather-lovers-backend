@@ -98,7 +98,7 @@ const tiles = [
   {
     image: assets.Trust3,
     tag: "01 — Materials",
-    title: "Sourced From the Finest Tanneries",
+    title: "Finest Tanneries",
     body: "Every hide we use is hand-selected from premium tanneries — full-grain, vegetable-tanned, and built to age beautifully with you. No shortcuts. No synthetic blends.",
   },
   {
@@ -151,7 +151,7 @@ const TrustWorthy = () => {
         .tw-tile {
           background: rgba(255,255,255,0.03);
           border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 12px;
+          border-radius: 18px;
           overflow: hidden;
           transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
           display: flex;
@@ -166,7 +166,7 @@ const TrustWorthy = () => {
         /* image */
         .tw-tile-img {
           width: 100%;
-          height: 220px;
+          height: 210px;
           object-fit: cover;
           object-position: center;
           display: block;
@@ -186,7 +186,7 @@ const TrustWorthy = () => {
           text-transform: uppercase;
           color: #c97c3a;
           font-weight: 600;
-          margin-bottom: 10px;
+          margin-bottom: 6  px;
         }
 
         /* tile title */
@@ -196,28 +196,28 @@ const TrustWorthy = () => {
           font-weight: 400;
           color: #ffffff;
           line-height: 1.2;
-          margin-bottom: 10px;
+          margin-bottom: 6px;
           letter-spacing: -0.01em;
         }
 
         /* tile body */
         .tw-tile-body {
           font-family: 'Montserrat', sans-serif;
-          font-size: 12.5px;
-          color: rgba(255,255,255,0.45);
-          line-height: 1.8;
+          font-size: 12px;
+          color: rgba(255,255,255,0.62);
+          line-height: 1.55;
           font-weight: 400;
         }
 
         /* accent line on hover */
         .tw-tile-line {
           width: 0;
-          height: 1.5px;
+          height: 2px;
           background: linear-gradient(90deg, #c97c3a, transparent);
-          margin-bottom: 14px;
+          margin-bottom: 10gap-4 sm:gap-5px;
           transition: width 0.4s ease;
         }
-        .tw-tile:hover .tw-tile-line { width: 40px; }
+        .tw-tile:hover .tw-tile-line { width: 60px; }
       `}</style>
 
       <section
@@ -244,7 +244,7 @@ const TrustWorthy = () => {
         <div className="max-w-6xl mx-auto px-4  relative z-10">
 
           {/* ── HEADING ── */}
-          <div className="text-center mb-12 sm:mb-16 tw-reveal"
+          <div className="text-center mb-10 tw-reveal"
             style={visible ? { animationDelay: "0s" } : { animation: "none", opacity: 0 }}>
 
             <p className="tw-sans mb-3 inline-flex items-center gap-3"
@@ -255,7 +255,7 @@ const TrustWorthy = () => {
             </p>
 
             <h2 className="tw-serif text-white leading-tight tracking-tight"
-              style={{ fontSize: "clamp(34px,4.5vw,56px)", fontWeight: 300 }}>
+              style={{ fontSize: "clamp(30px,4.5vw,48px)", fontWeight: 300 }}>
               The{" "}
               <em style={{ fontStyle: "italic", color: "#c97c3a", fontWeight: 300 }}>
                 LL Leather Lovers
@@ -263,17 +263,17 @@ const TrustWorthy = () => {
               {" "}Difference
             </h2>
 
-            <div className="w-12 h-px mx-auto my-5"
+            <div className="w-40 h-[1.5px] mx-auto my-5"
               style={{ background: "linear-gradient(90deg, transparent, #c97c3a, transparent)" }} />
 
-            <p className="tw-sans text-white/35 max-w-lg mx-auto leading-relaxed"
+            <p className="tw-sans text-white/60 max-w-lg mx-auto leading-relaxed"
               style={{ fontSize: "13px" }}>
               Four pillars that define every piece we make — from the hide we select to the hand that delivers it.
             </p>
           </div>
 
           {/* ── TILES GRID ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {tiles.map((tile, i) => (
               <div
                 key={i}
@@ -295,11 +295,11 @@ const TrustWorthy = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="flex flex-col flex-1 p-5">
+                  <div className="flex flex-col px-5 py-4">
                     <p className="tw-tag">{tile.tag}</p>
                     <div className="tw-tile-line" />
                     <h3 className="tw-tile-title">{tile.title}</h3>
-                    <p className="tw-tile-body flex-1">{tile.body}</p>
+                    <p className="tw-tile-body line-clamp-4">{tile.body}</p>
                   </div>
 
                 </div>
@@ -308,11 +308,11 @@ const TrustWorthy = () => {
           </div>
 
           {/* ── BOTTOM TAGLINE ── */}
-          <div className="mt-14 sm:mt-16 text-center">
-            <p className="tw-sans text-white/20 text-[10px] tracking-[3px] uppercase inline-flex items-center gap-3">
-              <span className="w-8 h-px bg-white/10 inline-block" />
+          <div className="mt-10 text-center">
+            <p className="tw-sans text-white/40 text-[10px] tracking-[3px] uppercase inline-flex items-center gap-3">
+              <span className="w-8 h-px bg-white/40 inline-block" />
               Premium Leather Since 2020 · Made for Real Individuality
-              <span className="w-8 h-px bg-white/10 inline-block" />
+              <span className="w-8 h-px bg-white/40 inline-block" />
             </p>
           </div>
 

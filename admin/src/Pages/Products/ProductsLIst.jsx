@@ -3313,9 +3313,14 @@ const getStock = (sizes) => {
   return sizes.reduce((sum, s) => sum + (Number(s?.stock) || 0), 0)
 }
 
+// const getDiscount = (price, discountPrice) => {
+//   if (!discountPrice || !price || +discountPrice >= +price) return null
+//   return Math.round((1 - discountPrice / price) * 100)
+// }
+
 const getDiscount = (price, discountPrice) => {
-  if (!discountPrice || !price || +discountPrice >= +price) return null
-  return Math.round((1 - discountPrice / price) * 100)
+  if (!discountPrice || +discountPrice <= 0 || +discountPrice >= 100) return null
+  return Math.round(+discountPrice)
 }
 
 const formatId = (id) => id ? `#${id.toString().slice(-6).toUpperCase()}` : '—'
@@ -3588,7 +3593,8 @@ const ProductsList = ({ token }) => {
         !q ||
         p.name?.toLowerCase().includes(q) ||
         p.category?.toLowerCase().includes(q) ||
-        p.subCategory?.toLowerCase().includes(q)
+        p.subCategory?.toLowerCase().includes(q) ||
+        (p.sku && p.sku.toLowerCase().includes(q))
       const matchCat = catFilter === 'all' || p.category === catFilter
       const matchSub = subCatFilter === 'all' || p.subCategory === subCatFilter
       const stock = getStock(p.sizes)
@@ -3681,7 +3687,7 @@ const ProductsList = ({ token }) => {
               <SortBtn col="stock" label="Stock" />
             </th>
             <th className="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">Colors</th>
-            <th className="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">Sizes</th>
+            <th className="px-4 py-3.5 min-w-[160px] text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">Sizes</th>
             <th className="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">Status</th>
             <th className="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400 min-w-[140px]">Actions</th>
           </tr>
@@ -3756,7 +3762,7 @@ const ProductsList = ({ token }) => {
                       >
                         {item.name}
                       </div>
-                      <div className="text-[10.5px] text-gray-400 font-mono mt-0.5">{formatId(item._id)}</div>
+                      <div className="text-[10.5px] text-gray-400 font-mono mt-0.5">SKU : {item.sku}</div>
                       {item.bestseller && (
                         <span className="inline-block mt-0.5 text-[9px] font-bold text-amber-600 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-full">
                           ⭐ Bestseller
@@ -3778,13 +3784,22 @@ const ProductsList = ({ token }) => {
 
                 {/* Price */}
                 <td className="px-4 py-3.5">
-                  <div className="text-[14px] font-bold text-gray-900">
+                  {/* <div className="text-[14px] font-bold text-gray-900">
                     {currency}{(item.discountPrice || item.price || 0).toLocaleString()}
                   </div>
                   {disc && (
                     <>
                       <div className="text-[11px] text-gray-400 line-through">{currency}{(+item.price).toLocaleString()}</div>
                       <div className="text-[10.5px] text-emerald-600 font-bold">{disc}% off</div>
+                    </>
+                  )} */}
+                  <div className="text-[14px] font-bold text-gray-900">
+                    {currency}{(disc ? (item.price - (item.price * disc) / 100) : (item.price || 0)).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                  </div>
+                  {disc && (
+                    <>
+                      <div className="text-[11px] text-gray-400 line-through">{currency}{(+item.price).toLocaleString()}</div>
+                      <div className="text-[10.5px] text-emerald-600 font-bold whitespace-nowrap">{disc}% off</div>
                     </>
                   )}
                 </td>
@@ -4103,7 +4118,7 @@ const ProductsList = ({ token }) => {
           <HiOutlineSearch size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search by name, category…"
+            placeholder="Search by Name, Category, SKU..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-gray-200 bg-white text-[13px] text-gray-700 placeholder-gray-400 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-50 transition-all"

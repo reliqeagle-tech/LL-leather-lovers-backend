@@ -463,7 +463,7 @@ const OurPolicy = () => {
           background: rgba(255,255,255,0.055);
           border-color: rgba(99,102,241,0.35);
           box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.12);
-          transform: translateY(-4px);
+          transform: translateY(-8px);
         }
 
         /* top accent line expands on hover */
@@ -520,7 +520,7 @@ const OurPolicy = () => {
 
       <section
         ref={sectionRef}
-        className="relative overflow-hidden py-16 sm:py-20"
+        className="relative overflow-hidden py-16"
         style={{ background: "linear-gradient(180deg, #08080f 0%, #0b0b14 100%)" }}
       >
         {/* Top separator */}
@@ -558,7 +558,7 @@ const OurPolicy = () => {
               </em>
             </h2>
 
-            <div className="w-12 h-px mx-auto my-4"
+            <div className="w-40 h-[1.5px] mx-auto my-4"
               style={{ background: "linear-gradient(90deg, transparent, #6366f1, transparent)" }} />
 
             <p className="op-sans text-white/35 max-w-md mx-auto"
@@ -568,7 +568,7 @@ const OurPolicy = () => {
           </div>
 
           {/* ── POLICY CARDS ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {policies.map((p, i) => (
               <div key={i} className="op-reveal"
                 style={visible
@@ -581,7 +581,7 @@ const OurPolicy = () => {
                   <div className="op-icon">{p.icon}</div>
 
                   {/* Tag */}
-                  <p className="op-sans text-white/30 mb-2"
+                  <p className="op-sans text-white/60 mb-2"
                     style={{ fontSize: "9px", letterSpacing: "3px", textTransform: "uppercase", fontWeight: 600 }}>
                     {p.tag}
                   </p>
@@ -593,7 +593,7 @@ const OurPolicy = () => {
                   </h3>
 
                   {/* Body */}
-                  <p className="op-sans text-white/40 flex-1"
+                  <p className="op-sans text-white/60 flex-1"
                     style={{ fontSize: "12px", lineHeight: "1.8" }}>
                     {p.body}
                   </p>
@@ -607,9 +607,20 @@ const OurPolicy = () => {
           </div>
 
           {/* ── BOTTOM BAR WITH COUNTERS ── */}
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-6 sm:gap-10 lg:gap-16">
+          {/* <div className="mt-14 flex flex-wrap items-center justify-center gap-6 sm:gap-10 lg:gap-16"> */}
+          <div
+            className="mt-10 rounded-2xl border border-white/10 bg-white/[0.02]
+  px-8 py-8 flex flex-wrap items-center justify-center
+  gap-8 lg:gap-16"
+          >
             {bottomStats.map(({ end, suffix, label, decimals = false }, i) => (
-              <div key={label} className="text-center min-w-[100px]">
+              <div
+                key={label}
+                className="min-w-[150px] rounded-xl border border-white/10
+    bg-white/[0.02] py-5 px-6 text-center
+    hover:border-indigo-500/30
+    transition-all duration-300"
+              >
                 <p className="op-serif text-white"
                   style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: 300, lineHeight: 1 }}>
                   {decimals ? (
@@ -618,7 +629,7 @@ const OurPolicy = () => {
                     <Counter end={end} suffix={suffix} />
                   )}
                 </p>
-                <p className="op-sans text-white/25 mt-1"
+                <p className="op-sans text-white/45 mt-1"
                   style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}>
                   {label}
                 </p>

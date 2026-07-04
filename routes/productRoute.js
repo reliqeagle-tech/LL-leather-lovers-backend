@@ -93,7 +93,9 @@ import {
   singleProduct,
   updateProduct,
   bulkUploadProducts,
-  bulkUploadZipProducts
+  bulkUploadZipProducts,
+  getProductBySlug,
+  getProductBySku
 } from '../controllers/productController.js';
 
 import upload from '../middleware/multer.js';               // Image upload
@@ -157,10 +159,13 @@ productRouter.post('/remove', adminAuth, removeProduct);
 // ----------------------------------------------
 productRouter.post(
   '/bulk-upload',
-  adminAuth,
   uploadFile.single('file'),
   bulkUploadProducts
 );
+
+productRouter.get('/slug/:slug', getProductBySlug);
+
+productRouter.get('/sku/:sku', getProductBySku);
 
 productRouter.post(
   "/bulk-upload-zip",

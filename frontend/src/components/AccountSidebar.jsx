@@ -392,16 +392,16 @@ const darkTheme = createTheme({
 });
 
 // Nav link item
-const NavItem = ({ to, icon, label, onClick }) => {
+const NavItem = ({ to, icon, label, onClick, danger = false }) => {
   const base =
     "flex items-center gap-3 w-full px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer select-none group";
   const content = (
     <span className="flex items-center gap-3 w-full">
-      <span className="text-white/35 group-hover:text-indigo-400 transition-colors duration-200">
+      <span className={`text-white/35 ${danger ? 'group-hover:text-red-400' : 'group-hover:text-indigo-400'} transition-colors duration-200`}>
         {icon}
       </span>
       <span
-        className="text-white/50 group-hover:text-white/90 font-medium transition-colors duration-200"
+        className={`text-white/50 ${danger ? 'group-hover:text-red-400' : 'group-hover:text-white/90'} font-medium transition-colors duration-200`}
         style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "12px", letterSpacing: "0.5px" }}
       >
         {label}
@@ -582,8 +582,8 @@ const AccountSidebar = () => {
 
           {/* Email */}
           <p
-            className="text-white/35 text-center"
-            style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "11px" }}
+            className="text-white/55 text-center"
+            style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "11px", letterSpacing: "1px" }}
           >
             {user.email}
           </p>
@@ -654,6 +654,7 @@ const AccountSidebar = () => {
           <NavItem
             label="Logout"
             onClick={handleLogout}
+            danger={true}
             icon={
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -668,7 +669,7 @@ const AccountSidebar = () => {
         {/* Bottom brand line */}
         <div className="px-5 pb-5 pt-1 text-center">
           <p
-            className="text-white/15 uppercase tracking-widest"
+            className="text-white/55 uppercase tracking-widest"
             style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "2px" }}
           >
             LL Leather Lovers · 2020

@@ -473,7 +473,7 @@ const ShopContextProvider = (props) => {
 
     /* ─────────────────────────────── CART FUNCTIONS ─────────────────────────────── */
 
-    const addToCart = async (itemId, size, color, customPrice = 0) => {
+    const addToCart = async (itemId, size, color, customPrice = 0, sizePrice = null) => {
         if (!size || !color) {
             toast.error("Please select size and color");
             return;
@@ -487,7 +487,7 @@ const ShopContextProvider = (props) => {
         if (cartData[itemId][key]) {
             cartData[itemId][key].quantity += 1;
         } else {
-            cartData[itemId][key] = { quantity: 1, customPrice };
+            cartData[itemId][key] = { quantity: 1, customPrice, sizePrice };
         }
 
         setCartItems(cartData);
@@ -496,7 +496,7 @@ const ShopContextProvider = (props) => {
             try {
                 await axios.post(
                     `${backendUrl}/api/cart/add`,
-                    { itemId, size, color, customPrice },
+                    { itemId, size, color, customPrice, sizePrice },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
             } catch (err) {
@@ -770,6 +770,26 @@ const ShopContextProvider = (props) => {
         return total;
     };
 
+    // const getCartAmount = () => {
+    //     let total = 0;
+    //     for (const id in cartItems) {
+    //         const product = products.find((p) => p._id === id);
+    //         if (!product) continue;
+
+    //         for (const combo in cartItems[id]) {
+    //             const item = cartItems[id][combo];
+    //             const qty = item.quantity || 0;
+    //             const extra = Number(item.customPrice) || 0;
+
+    //             const original = Number(item.sizePrice) || Number(product.price);
+    //             const discounted = Number(product.discountPrice) || 0;
+    //             const finalPrice = discounted > 0 && discounted < original ? discounted : original;
+
+    //             total += (finalPrice + extra) * qty;
+    //         }
+    //     }
+    //     return Number(total.toFixed(2));
+    // };
     const getCartAmount = () => {
         let total = 0;
         for (const id in cartItems) {
@@ -781,15 +801,37 @@ const ShopContextProvider = (props) => {
                 const qty = item.quantity || 0;
                 const extra = Number(item.customPrice) || 0;
 
-                const original = Number(product.price);
-                const discounted = Number(product.discountPrice) || 0;
-                const finalPrice = discounted > 0 && discounted < original ? discounted : original;
+                const original = Number(item.sizePrice) || Number(product.price);
+                const discountPercent = Number(product.discountPrice) || 0;
+                const discountAmount = discountPercent > 0 && discountPercent < 100
+                    ? (original * discountPercent) / 100 : 0;
+                const finalPrice = original - discountAmount;
 
                 total += (finalPrice + extra) * qty;
             }
         }
         return Number(total.toFixed(2));
     };
+
+    // const getCartDiscount = () => {
+    //     let saved = 0;
+    //     for (const id in cartItems) {
+    //         const product = products.find((p) => p._id === id);
+    //         if (!product) continue;
+
+    //         for (const combo in cartItems[id]) {
+    //             const item = cartItems[id][combo];
+    //             const qty = cartItems[id][combo].quantity || 0;
+    //             const original = Number(item.sizePrice) || Number(product.price);
+    //             const discounted = Number(product.discountPrice) || 0;
+
+    //             if (discounted > 0 && discounted < original) {
+    //                 saved += (original - discounted) * qty;
+    //             }
+    //         }
+    //     }
+    //     return Number(saved.toFixed(2));
+    // };
 
     const getCartDiscount = () => {
         let saved = 0;
@@ -798,13 +840,15 @@ const ShopContextProvider = (props) => {
             if (!product) continue;
 
             for (const combo in cartItems[id]) {
-                const qty = cartItems[id][combo].quantity || 0;
-                const original = Number(product.price);
-                const discounted = Number(product.discountPrice) || 0;
+                const item = cartItems[id][combo];
+                const qty = item.quantity || 0;
 
-                if (discounted > 0 && discounted < original) {
-                    saved += (original - discounted) * qty;
-                }
+                const original = Number(item.sizePrice) || Number(product.price);
+                const discountPercent = Number(product.discountPrice) || 0;
+                const discountAmount = discountPercent > 0 && discountPercent < 100
+                    ? (original * discountPercent) / 100 : 0;
+
+                saved += discountAmount * qty;
             }
         }
         return Number(saved.toFixed(2));

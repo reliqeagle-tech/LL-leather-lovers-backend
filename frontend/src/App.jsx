@@ -47,7 +47,8 @@ const App = () => {
         <Route path='/collection' element={<Collection />} />
         <Route path='/about' element={<About />} />
         <Route path='/contact' element={<Contact />} />
-        <Route path='/product/:productId' element={<Product />} />
+        {/* <Route path='/product/:productId' element={<Product />} /> */}
+        <Route path="/product/:category/:subCategory/:productName/:sku" element={<Product />} />
         <Route path='/cart' element={<Cart />} />
         <Route path='/login' element={<Login />} />
         <Route path='/place-order' element={<PlaceOrder />} />
@@ -60,7 +61,7 @@ const App = () => {
         <Route path='/privacy&policy' element={<OurPolicy />} />
         <Route path='/CmInchConverter' element={<CmInchConverter />} />
         <Route path='/wishlist' element={<WishList />} />
-        <Route path='/bestseller' element={<BestSeller />}/>
+        <Route path='/bestseller' element={<BestSeller />} />
 
       </Routes>
       <Footer />

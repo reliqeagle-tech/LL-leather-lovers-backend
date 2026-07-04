@@ -160,7 +160,7 @@ const NewsletterBox = () => {
       `}</style>
 
       <section
-        className="relative overflow-hidden py-16 sm:py-20"
+        className="relative overflow-hidden py-14 "
         style={{ background: "linear-gradient(160deg, #0d0b18 0%, #0f0d1c 50%, #0a0912 100%)" }}
       >
         {/* Top separator */}
@@ -184,18 +184,19 @@ const NewsletterBox = () => {
           nl-serif text-white pointer-events-none select-none hidden lg:block"
           style={{
             fontSize: "clamp(80px,12vw,160px)", fontWeight: 300,
-            opacity: 0.025, whiteSpace: "nowrap", letterSpacing: "0.15em",
+            opacity: 0.055, whiteSpace: "nowrap", letterSpacing: "0.15em",
           }}>
-          SUBSCRIBE
+          LL LEATHER
         </p>
 
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 relative z-10 text-center">
+        {/* <div className="max-w-2xl mx-auto px-4 sm:px-6 relative z-10 text-center"> */}
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
 
           {/* Pulsing dots */}
           <div className="flex items-center justify-center gap-1.5 mb-5">
-            {[0,1,2].map(i => (
+            {[0, 1, 2].map(i => (
               <span key={i} className="nl-dot w-1 h-1 rounded-full bg-indigo-400 inline-block"
-                style={{ animationDelay:`${i*0.4}s` }} />
+                style={{ animationDelay: `${i * 0.4}s` }} />
             ))}
           </div>
 
@@ -208,18 +209,18 @@ const NewsletterBox = () => {
           {/* Heading */}
           <h2 className="nl-serif text-white leading-tight tracking-tight mb-4"
             style={{ fontSize: "clamp(32px,5vw,52px)", fontWeight: 300 }}>
-            Subscribe & Get{" "}
-            <em className="text-indigo-400" style={{ fontStyle:"italic", fontWeight:300 }}>
+            Join & Get{" "}
+            <em className="text-indigo-400" style={{ fontStyle: "italic", fontWeight: 300 }}>
               20% Off
             </em>
           </h2>
 
           {/* Divider */}
-          <div className="w-12 h-px mx-auto mb-5"
+          <div className="w-40 h-[1.5px] mx-auto mb-5"
             style={{ background: "linear-gradient(90deg, transparent, #6366f1, transparent)" }} />
 
           {/* Subtitle */}
-          <p className="nl-sans text-white/35 max-w-md mx-auto leading-relaxed mb-8"
+          <p className="nl-sans text-white/60 max-w-xl mx-auto leading-relaxed mb-8"
             style={{ fontSize: "13px" }}>
             Be the first to know about new leather arrivals, limited drops, and
             members-only offers — delivered straight to your inbox.
@@ -232,28 +233,28 @@ const NewsletterBox = () => {
                 flex items-center justify-center">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                   stroke="#818cf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
+                  <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
-              <p className="nl-sans text-white/80 font-medium" style={{ fontSize:"14px" }}>
-                You're on the list!
+              <p className="nl-sans text-white/80 font-medium" style={{ fontSize: "14px" }}>
+                Welcome to The LL Leather Lovers Club
               </p>
-              <p className="nl-sans text-white/35" style={{ fontSize:"12px" }}>
-                Check your inbox for your 20% off code.
+              <p className="nl-sans text-white/60" style={{ fontSize: "12px" }}>
+                Your exclusive offers will arrive soon.
               </p>
             </div>
           ) : (
             <form
               onSubmit={onSubmitHandler}
-              className="flex flex-col sm:flex-row items-stretch gap-3 w-full max-w-md mx-auto"
+              className="flex flex-col sm:flex-row items-stretch gap-3 w-full max-w-xl mx-auto"
             >
               {/* Email input */}
               <div className="flex-1 relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                     stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeLinecap="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                    <polyline points="22,6 12,13 2,6"/>
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
                   </svg>
                 </div>
                 <input
@@ -262,7 +263,7 @@ const NewsletterBox = () => {
                   placeholder="your@email.com"
                   required
                   disabled={loading}
-                  className="nl-input nl-sans w-full pl-9 pr-4 py-3.5 rounded-sm
+                  className="nl-input nl-sans w-full pl-9 pr-4 py-4 rounded-full
                     text-white/85 placeholder-white/25 disabled:opacity-50"
                   style={{
                     fontSize: "12px",
@@ -277,7 +278,7 @@ const NewsletterBox = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="nl-btn nl-sans text-white rounded-sm px-7 py-3.5
+                className="nl-btn nl-sans text-white rounded-full px-7 py-4
                   disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                 style={{
                   fontSize: "10px", fontWeight: 600,
@@ -285,25 +286,25 @@ const NewsletterBox = () => {
                   background: "#6366f1",
                 }}
               >
-                <span>{loading ? "Sending…" : "Subscribe"}</span>
+                <span>{loading ? "Sending…" : "Join Now"}</span>
               </button>
             </form>
           )}
 
           {/* Privacy note */}
           {!success && (
-            <p className="nl-sans text-white/20 mt-4" style={{ fontSize:"10px", letterSpacing:"0.5px" }}>
-              No spam, ever. Unsubscribe anytime.
+            <p className="nl-sans text-white/60 mt-4" style={{ fontSize: "10px", letterSpacing: "0.5px" }}>
+              Exclusive updates • Early access • No spam
             </p>
           )}
 
           {/* Bottom brand line */}
           <div className="mt-10 flex items-center justify-center gap-3">
-            <span className="w-8 h-px bg-white/10 inline-block" />
-            <p className="nl-sans text-white/15 tracking-[3px] uppercase" style={{ fontSize:"9px" }}>
+            <span className="w-8 h-px bg-white/40 inline-block" />
+            <p className="nl-sans text-white/60 tracking-[3px] uppercase" style={{ fontSize: "9px" }}>
               LL Leather Lovers · Premium Since 2020
             </p>
-            <span className="w-8 h-px bg-white/10 inline-block" />
+            <span className="w-8 h-px bg-white/40 inline-block" />
           </div>
 
         </div>

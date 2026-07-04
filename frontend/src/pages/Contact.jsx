@@ -376,7 +376,7 @@ const Contact = () => {
     <div style={{ background: "linear-gradient(180deg, #08080f 0%, #0b0b14 100%)" }} className="min-h-screen">
 
       {/* ══ HERO ══ */}
-      <section ref={heroRef} className="relative overflow-hidden py-16 sm:py-20 lg:py-24">
+      <section ref={heroRef} className="relative overflow-hidden py-10">
 
         {/* Top separator */}
         <div className="absolute top-0 left-0 right-0 h-px"
@@ -400,9 +400,9 @@ const Contact = () => {
                 Contact{" "}
                 <em className="text-indigo-400 italic font-light">Us</em>
               </h1>
-              <div className="w-12 h-px mx-auto mt-5"
+              <div className="w-40 h-[2px] mx-auto mt-5"
                 style={{ background: "linear-gradient(90deg, transparent, #6366f1, transparent)" }} />
-              <p className="text-white/35 max-w-md mx-auto mt-4 leading-relaxed"
+              <p className="text-white/55 max-w-md mx-auto mt-4 leading-relaxed"
                 style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "13px" }}>
                 We'd love to hear from you — whether it's a question about our leather, your order, or just to say hello.
               </p>
@@ -548,8 +548,8 @@ const Contact = () => {
 
                     {/* Explore Jobs button */}
                     <button
-                      className="relative overflow-hidden shrink-0 border border-indigo-500/50 text-white
-                        rounded-sm px-7 py-3 transition-all duration-300 hover:-translate-y-0.5
+                      className="relative overflow-hidden shrink-0 border border-indigo-500/50 hover:border-none text-white
+                        rounded-full px-7 py-3 transition-all duration-300 hover:-translate-y-0.5
                         hover:shadow-lg hover:border-indigo-400 group/btn whitespace-nowrap"
                       style={{
                         fontFamily: "'Montserrat',sans-serif", fontSize: "10px",
@@ -557,7 +557,7 @@ const Contact = () => {
                         boxShadow: undefined
                       }}>
                       <span className="absolute inset-0 bg-indigo-600 scale-x-0 group-hover/btn:scale-x-100
-                        origin-left transition-transform duration-300 rounded-sm" />
+                        origin-left transition-transform duration-300 rounded-full" />
                       <span className="relative z-10 flex items-center gap-2">
                         Explore Jobs
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none"

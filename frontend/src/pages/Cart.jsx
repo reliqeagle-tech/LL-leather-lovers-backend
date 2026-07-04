@@ -637,23 +637,41 @@ const Cart = () => {
   const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
 
+  // useEffect(() => {
+  //   if (products.length > 0 && Object.keys(cartItems).length > 0) {
+  //     const tempData = [];
+  //     for (const items in cartItems) {
+  //       for (const itemKey in cartItems[items]) {
+  //         const raw = cartItems[items][itemKey];
+  //         const quantity = typeof raw === 'number' ? raw : (raw?.quantity || 0);
+  //         const customPrice = typeof raw === 'number' ? 0 : (raw?.customPrice || 0);
+  //         if (quantity > 0) {
+  //           const [size, color] = itemKey.includes('-') ? itemKey.split('-') : [itemKey, ''];
+  //           tempData.push({ _id: items, size, color, quantity, customPrice });
+  //         }
+  //       }
+  //     }
+  //     setCartData(tempData);
+  //   } else { setCartData([]); }
+  // }, [cartItems, products]);
   useEffect(() => {
-    if (products.length > 0 && Object.keys(cartItems).length > 0) {
-      const tempData = [];
-      for (const items in cartItems) {
-        for (const itemKey in cartItems[items]) {
-          const raw = cartItems[items][itemKey];
-          const quantity = typeof raw === 'number' ? raw : (raw?.quantity || 0);
-          const customPrice = typeof raw === 'number' ? 0 : (raw?.customPrice || 0);
-          if (quantity > 0) {
-            const [size, color] = itemKey.includes('-') ? itemKey.split('-') : [itemKey, ''];
-            tempData.push({ _id: items, size, color, quantity, customPrice });
-          }
+  if (products.length > 0 && Object.keys(cartItems).length > 0) {
+    const tempData = [];
+    for (const items in cartItems) {
+      for (const itemKey in cartItems[items]) {
+        const raw = cartItems[items][itemKey];
+        const quantity = typeof raw === 'number' ? raw : (raw?.quantity || 0);
+        const customPrice = typeof raw === 'number' ? 0 : (raw?.customPrice || 0);
+        const sizePrice = typeof raw === 'number' ? null : (raw?.sizePrice || null);   // ✅ add kiya
+        if (quantity > 0) {
+          const [size, color] = itemKey.includes('-') ? itemKey.split('-') : [itemKey, ''];
+          tempData.push({ _id: items, size, color, quantity, customPrice, sizePrice });   // ✅ pass kiya
         }
       }
-      setCartData(tempData);
-    } else { setCartData([]); }
-  }, [cartItems, products]);
+    }
+    setCartData(tempData);
+  } else { setCartData([]); }
+}, [cartItems, products]);
 
   const isCartEmpty = cartData.length === 0;
 
@@ -666,7 +684,7 @@ const Cart = () => {
           style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px', letterSpacing: '4px' }}>Review</p>
         <h1 className="text-white font-light" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 'clamp(28px,4vw,44px)' }}>
           Your <em className="text-indigo-400 italic font-light">Cart</em>
-          {!isCartEmpty && <span className="ml-3 text-white/25" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '14px', fontStyle: 'normal', fontWeight: 400 }}>({cartData.length} {cartData.length === 1 ? 'item' : 'items'})</span>}
+          {!isCartEmpty && <span className="ml-3 text-white/55" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '14px', fontStyle: 'normal', fontWeight: 400 }}>({cartData.length} {cartData.length === 1 ? 'item' : 'items'})</span>}
         </h1>
         <div className="w-10 h-px mt-3" style={{ background: 'linear-gradient(90deg, #6366f1, transparent)' }} />
       </div>
@@ -696,11 +714,23 @@ const Cart = () => {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
           <div className="flex-1 space-y-3">
             {cartData.map((item, index) => {
+              // const productData = products.find(p => p._id === item._id);
+              // if (!productData) return null;
+              // const imageSrc = Array.isArray(productData.image) ? productData.image[0] : productData.image || assets.placeholder_image;
+              // const unitPrice = productData.price + item.customPrice;
+              // const lineTotal = unitPrice * item.quantity;
+
               const productData = products.find(p => p._id === item._id);
-              if (!productData) return null;
-              const imageSrc = Array.isArray(productData.image) ? productData.image[0] : productData.image || assets.placeholder_image;
-              const unitPrice = productData.price + item.customPrice;
-              const lineTotal = unitPrice * item.quantity;
+if (!productData) return null;
+const imageSrc = Array.isArray(productData.image) ? productData.image[0] : productData.image || assets.placeholder_image;
+
+const original = Number(item.sizePrice) || Number(productData.price);   // ✅ size-specific price
+const discountPercent = Number(productData.discountPrice) || 0;
+const discountAmount = discountPercent > 0 && discountPercent < 100
+  ? (original * discountPercent) / 100 : 0;
+const discountedPrice = original - discountAmount;
+const unitPrice = discountedPrice + item.customPrice;
+const lineTotal = unitPrice * item.quantity;
               return (
                 <div key={`${item._id}-${item.size}-${item.color}-${index}`}
                   className="rounded-xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] hover:border-indigo-500/20 transition-all duration-300 p-4 flex items-center gap-4">
@@ -721,7 +751,7 @@ const Cart = () => {
                     <div className="mt-2 flex flex-wrap items-center gap-3">
                       <span className="text-white font-semibold" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '18px' }}>{currency}{unitPrice.toFixed(2)}</span>
                       {item.customPrice > 0 && <span className="text-green-400" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>Base {currency}{productData.price.toFixed(2)} + Lining {currency}{item.customPrice.toFixed(2)}</span>}
-                      <span className="text-white/30" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>Line total: {currency}{lineTotal.toFixed(2)}</span>
+                      <span className="text-white/55" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>Line total: {currency}{lineTotal.toFixed(2)}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -745,7 +775,7 @@ const Cart = () => {
             <div className="pt-2">
               <button onClick={() => navigate('/collection')}
                 className="inline-flex items-center gap-2 hover:text-indigo-400 transition-colors group"
-                style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', letterSpacing: '1px', color: 'rgba(255,255,255,0.35)' }}>
+                style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', letterSpacing: '1px', color: 'rgba(255,255,255,0.55)' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="group-hover:-translate-x-1 transition-transform duration-200">
                   <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
                 </svg>
@@ -778,8 +808,8 @@ const Cart = () => {
                     { icon: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z', text: 'Free insured shipping' },
                   ].map(({ icon, text }) => (
                     <div key={text} className="flex items-center gap-2.5">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(129,140,248,0.7)" strokeWidth="1.5" strokeLinecap="round"><path d={icon}/></svg>
-                      <span className="text-white/30" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>{text}</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(129,140,248,0.7)" strokeWidth="1.5" strokeLinecap="round"><path d={icon}/></svg>
+                      <span className="text-white/70" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>{text}</span>
                     </div>
                   ))}
                 </div>

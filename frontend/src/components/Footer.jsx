@@ -8,11 +8,11 @@
 //   const isDevelopment = import.meta.env.MODE === 'development'
 //     const backendUrl = isDevelopment ? import.meta.env.VITE_BACKEND_URL_D : import.meta.env.VITE_BACKEND_URL
 //     const [loading, setLoading] = useState(false);
-  
+
 //     const onSubmitHandler = async (event) => {
 //       event.preventDefault();
 //       const email = event.target.email.value;
-  
+
 //       console.log(backendUrl)
 //       setLoading(true);
 //       try {
@@ -21,9 +21,9 @@
 //           headers: { "Content-Type": "application/json" },
 //           body: JSON.stringify({ email }),
 //         });
-  
+
 //         const data = await res.json();
-  
+
 //         if (data.success) {
 //           alert("🎉 Subscription successful! Check your email.");
 //           event.target.reset();
@@ -169,13 +169,18 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect } from 'react';
+
+const buildUrl = (categoryName, subCategory) =>
+  `/collection?category=${encodeURIComponent(categoryName)}&sub=${encodeURIComponent(subCategory)}`;
 
 const FooterLink = ({ to, children }) => (
   <li>
     <Link to={to}
-      className="text-white/40 hover:text-white transition-colors duration-200 inline-flex items-center gap-1 group"
+      className="text-white/70 hover:text-indigo-400 transition-colors duration-200 inline-flex items-center gap-1 group"
       style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "12px", lineHeight: "1.9" }}>
-      <span className="w-0 group-hover:w-2 h-px bg-indigo-400 inline-block transition-all duration-300 overflow-hidden" />
+      <span className="w-0 group-hover:w-4 h-px bg-indigo-400 inline-block transition-all duration-300 overflow-hidden" />
       {children}
     </Link>
   </li>
@@ -186,6 +191,7 @@ const Footer = () => {
   const backendUrl = isDevelopment ? import.meta.env.VITE_BACKEND_URL_D : import.meta.env.VITE_BACKEND_URL;
   const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -211,6 +217,24 @@ const Footer = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(
+          `${backendUrl}/api/category/list`
+        );
+
+        if (res.data.success) {
+          setCategories(res.data.categories || []);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCategories();
+  }, [backendUrl]);
+
   return (
     <footer style={{ background: "linear-gradient(180deg, #09090f 0%, #060610 100%)" }}
       className="relative overflow-hidden">
@@ -226,8 +250,10 @@ const Footer = () => {
       {/* Watermark */}
       <div className="absolute bottom-8 right-0 pointer-events-none select-none hidden lg:block overflow-hidden">
         <p className="text-white font-light"
-          style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "120px",
-            fontWeight: 300, opacity: 0.025, letterSpacing: "0.1em", lineHeight: 1 }}>
+          style={{
+            fontFamily: "'Cormorant Garamond',serif", fontSize: "120px",
+            fontWeight: 300, opacity: 0.055, letterSpacing: "0.1em", lineHeight: 1
+          }}>
           LEATHER
         </p>
       </div>
@@ -245,7 +271,7 @@ const Footer = () => {
               LL <span className="font-normal">Leather</span>{" "}
               <span className="text-indigo-400 italic">Lovers</span>
             </p>
-            <p className="text-white/30"
+            <p className="text-white/55"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "11px", letterSpacing: "2px" }}>
               Premium Leather · Crafted Since 2020
             </p>
@@ -261,7 +287,7 @@ const Footer = () => {
             ].map(({ label, path }) => (
               <button key={label}
                 className="w-9 h-9 rounded-lg border border-white/[0.08] bg-white/[0.03]
-                  flex items-center justify-center text-white/35
+                  flex items-center justify-center text-white/55
                   hover:bg-indigo-600/20 hover:border-indigo-500/40 hover:text-indigo-300
                   transition-all duration-300"
                 aria-label={label}>
@@ -275,12 +301,12 @@ const Footer = () => {
         </div>
 
         {/* ── MAIN GRID ── */}
-        <div className="py-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-6
+        <div className="py-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-6
           border-b border-white/[0.06]">
 
           {/* INFO */}
           <div className="col-span-1">
-            <p className="text-white/60 font-semibold uppercase tracking-widest mb-5"
+            <p className="text-white/80 font-semibold uppercase tracking-widest mb-5"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "3px" }}>
               Info
             </p>
@@ -296,7 +322,7 @@ const Footer = () => {
           </div>
 
           {/* WOMEN */}
-          <div className="col-span-1">
+          {/* <div className="col-span-1">
             <p className="text-white/60 font-semibold uppercase tracking-widest mb-5"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "3px" }}>
               Women
@@ -310,10 +336,10 @@ const Footer = () => {
               <FooterLink to="/collection?category=Women&sub=Bottomwear">Full Skirt</FooterLink>
               <FooterLink to="/collection?category=Women&sub=Bottomwear">Bodycon Skirt</FooterLink>
             </ul>
-          </div>
+          </div> */}
 
           {/* MEN */}
-          <div className="col-span-1">
+          {/* <div className="col-span-1">
             <p className="text-white/60 font-semibold uppercase tracking-widest mb-5"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "3px" }}>
               Men
@@ -325,10 +351,10 @@ const Footer = () => {
               <FooterLink to="/collection?category=Men&sub=Topwear">Blazers</FooterLink>
               <FooterLink to="/collection?category=Men&sub=Bottomwear">Leather Shorts</FooterLink>
             </ul>
-          </div>
+          </div> */}
 
           {/* OTHERS */}
-          <div className="col-span-1">
+          {/* <div className="col-span-1">
             <p className="text-white/60 font-semibold uppercase tracking-widest mb-5"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "3px" }}>
               Others
@@ -340,17 +366,61 @@ const Footer = () => {
               <FooterLink to="/collection?category=Others&sub=Desk Mat">Desk Mat</FooterLink>
               <FooterLink to="/collection?category=Others&sub=Chair Cover">Chair Cover</FooterLink>
             </ul>
-          </div>
+          </div> */}
+
+          {categories.map((category) => (
+            <div key={category._id}>
+              <p
+                className="text-white/80 font-semibold uppercase tracking-widest mb-5"
+                style={{
+                  fontFamily: "'Montserrat',sans-serif",
+                  fontSize: "9px",
+                  letterSpacing: "3px"
+                }}
+              >
+                {category.categoryName}
+              </p>
+
+              <ul className="space-y-0.5">
+                {category.subCategories?.map((sub) => (
+                  <FooterLink
+                    key={sub}
+                    to={buildUrl(category.categoryName, sub)}
+                  >
+                    {sub}
+                  </FooterLink>
+                ))}
+              </ul>
+            </div>
+          ))}
 
           {/* NEW ARRIVALS */}
           <div className="col-span-1">
-            <p className="text-white/60 font-semibold uppercase tracking-widest mb-5"
+            <p className="text-white/80 font-semibold uppercase tracking-widest mb-5"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "3px" }}>
               New Arrivals
             </p>
             <ul className="space-y-0.5">
-              <FooterLink to="/collection?category=Men&sub=Topwear">Men's Arrivals</FooterLink>
-              <FooterLink to="/collection?category=Women&sub=Topwear">Women's Arrivals</FooterLink>
+              {/* <FooterLink to="/collection?category=Men&sub=Topwear">Men's Arrivals</FooterLink>
+              <FooterLink to="/collection?category=Women&sub=Topwear">Women's Arrivals</FooterLink> */}
+              {categories.slice(0, 3).map((category) => (
+                category.subCategories?.length > 0 && (
+                  <FooterLink
+                    key={category._id}
+                    to={buildUrl(
+                      category.categoryName,
+                      category.subCategories[0]
+                    )}
+                  >
+                    {/* {category.categoryName}'s Arrivals */}
+                    {category.categoryName === "Men"
+                      ? "Men's Arrivals"
+                      : category.categoryName === "Women"
+                        ? "Women's Arrivals"
+                        : `${category.categoryName} Arrivals`}
+                  </FooterLink>
+                )
+              ))}
             </ul>
 
             {/* Trust badges */}
@@ -367,7 +437,7 @@ const Footer = () => {
                       <path d={icon} />
                     </svg>
                   </div>
-                  <span className="text-white/35"
+                  <span className="text-white/70"
                     style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "11px" }}>
                     {label}
                   </span>
@@ -378,11 +448,11 @@ const Footer = () => {
 
           {/* NEWSLETTER */}
           <div className="col-span-2 sm:col-span-1">
-            <p className="text-white/60 font-semibold uppercase tracking-widest mb-5"
+            <p className="text-white/80 font-semibold uppercase tracking-widest mb-5"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "3px" }}>
-              Newsletter
+              Join Our Community
             </p>
-            <p className="text-white/35 mb-4 leading-relaxed"
+            <p className="text-white/70 mb-4 leading-relaxed"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "12px", lineHeight: "1.7" }}>
               Get latest arrivals, exclusive offers, and leather care tips — straight to your inbox.
             </p>
@@ -392,7 +462,7 @@ const Footer = () => {
                 rounded-lg px-3 py-2.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                   stroke="#4ade80" strokeWidth="2" strokeLinecap="round">
-                  <polyline points="20 6 9 17 4 12"/>
+                  <polyline points="20 6 9 17 4 12" />
                 </svg>
                 <span className="text-green-400"
                   style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "11px" }}>
@@ -406,19 +476,23 @@ const Footer = () => {
                     type="email" name="email"
                     placeholder="your@email.com"
                     required disabled={loading}
-                    className="w-full px-3 py-2.5 rounded-lg text-white/80 placeholder-white/20
+                    className="w-full px-3 py-2.5 rounded-full text-white/80 placeholder-white/40
                       focus:outline-none focus:ring-1 focus:ring-indigo-500/50
                       disabled:opacity-50 transition-all"
-                    style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "12px",
+                    style={{
+                      fontFamily: "'Montserrat',sans-serif", fontSize: "12px",
                       background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.1)" }}
+                      border: "1px solid rgba(255,255,255,0.1)"
+                    }}
                   />
                 </div>
                 <button type="submit" disabled={loading}
-                  className="w-full py-2.5 rounded-lg text-white font-semibold uppercase tracking-widest
+                  className="w-full py-2.5 rounded-full text-white font-semibold uppercase tracking-widest
                     hover:opacity-90 transition-opacity disabled:opacity-50 relative overflow-hidden group"
-                  style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "10px",
-                    letterSpacing: "2px", background: "#6366f1" }}>
+                  style={{
+                    fontFamily: "'Montserrat',sans-serif", fontSize: "10px",
+                    letterSpacing: "2px", background: "#6366f1"
+                  }}>
                   <span className="absolute inset-0 bg-indigo-500 scale-x-0 group-hover:scale-x-100
                     origin-left transition-transform duration-300" />
                   <span className="relative z-10">{loading ? "Sending…" : "Subscribe"}</span>
@@ -431,14 +505,14 @@ const Footer = () => {
 
         {/* ── BOTTOM BAR ── */}
         <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-white/20"
+          <p className="text-white/40"
             style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "10px", letterSpacing: "1px" }}>
-            © 2025 llleatherlovers.com · All Rights Reserved
+            © {new Date().getFullYear()} llleatherlovers.com · All Rights Reserved
           </p>
           <div className="flex items-center gap-4">
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(item => (
               <a key={item} href="#"
-                className="text-white/20 hover:text-white/50 transition-colors"
+                className="text-white/40 hover:text-white/50 transition-colors"
                 style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "10px", letterSpacing: "0.5px" }}>
                 {item}
               </a>

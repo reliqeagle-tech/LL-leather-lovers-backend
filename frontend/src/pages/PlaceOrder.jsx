@@ -1772,14 +1772,14 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 const inputBase = {
   fontFamily: "'Montserrat',sans-serif", fontSize: '12px', padding: '10px 14px',
   background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)',
-  borderRadius: '8px', color: 'rgba(255,255,255,0.8)', width: '100%', outline: 'none', transition: 'all 0.2s',
+  borderRadius: '8px', color: 'rgba(255,255,255,.55)', width: '100%', outline: 'none', transition: 'all 0.2s',
 };
 const focusStyle = e => { e.target.style.border = '1px solid rgba(99,102,241,0.5)'; e.target.style.background = 'rgba(99,102,241,0.05)'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.08)'; };
 const blurStyle = e => { e.target.style.border = '1px solid rgba(255,255,255,0.09)'; e.target.style.background = 'rgba(255,255,255,0.04)'; e.target.style.boxShadow = 'none'; };
 
 const Field = ({ label, ...props }) => (
   <div className="flex flex-col gap-1.5">
-    <label style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>{label}</label>
+    <label style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.70)', textTransform: 'uppercase' }}>{label}</label>
     <input {...props} style={inputBase} onFocus={focusStyle} onBlur={blurStyle} />
   </div>
 );
@@ -1789,7 +1789,7 @@ const PlaceOrder = () => {
   const [isPayPalReady, setIsPayPalReady] = useState(false);
   const [orderDataToPayPal, setOrderDataToPayPal] = useState(null);
   const { navigate, backendUrl, token, cartItems, setCartItems, products, userId } = useContext(ShopContext);
-  const SHIPPING_FEE = 10;
+  const SHIPPING_FEE = 0;
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', street: '', city: '', state: '', zipcode: '', country: '', phone: '' });
   const onChangeHandler = e => setFormData(d => ({ ...d, [e.target.name]: e.target.value }));
 
@@ -1808,31 +1808,70 @@ const PlaceOrder = () => {
     new window.Razorpay(options).open();
   };
 
+  // const buildOrderItems = () => {
+  //   let orderItems = [];
+  //   for (const productId in cartItems) {
+  //     const productInfo = products.find(p => p._id === productId);
+  //     if (!productInfo) continue;
+  //     const originalPrice = Number(productInfo.price);
+  //     if (isNaN(originalPrice) || originalPrice <= 0) { toast.error(`Invalid price: ${productInfo.name}`); return null; }
+  //     const discountedPrice = Number(productInfo.discountPrice) || 0;
+  //     let finalUnitPrice = originalPrice, discountAmount = 0, discountPercent = 0;
+  //     if (discountedPrice > 0 && discountedPrice < originalPrice) {
+  //       finalUnitPrice = discountedPrice; discountAmount = originalPrice - discountedPrice;
+  //       discountPercent = ((discountAmount / originalPrice) * 100).toFixed(2);
+  //     }
+  //     for (const variantKey of Object.keys(cartItems[productId])) {
+  //       const variantData = cartItems[productId][variantKey];
+  //       if (typeof variantData !== 'object') continue;
+  //       const qty = Number(variantData.quantity) || 0;
+  //       const customPrice = Number(variantData.customPrice) || 0;
+  //       if (qty <= 0) continue;
+  //       const [size, color] = variantKey.split('-');
+  //       const itemFinalPrice = customPrice > 0 ? finalUnitPrice + customPrice : finalUnitPrice;
+  //       orderItems.push({
+  //         productId, name: productInfo.name, image: productInfo.image?.[0] || '',
+  //         originalPrice, discountPercent: Number(discountPercent), discountAmount,
+  //         finalPrice: itemFinalPrice, quantity: qty, size, color,
+  //         subtotal: itemFinalPrice * qty, saved: discountAmount * qty
+  //       });
+  //     }
+  //   }
+  //   if (orderItems.length === 0) { toast.error('Your cart is empty'); return null; }
+  //   return orderItems;
+  // };
+
   const buildOrderItems = () => {
     let orderItems = [];
     for (const productId in cartItems) {
       const productInfo = products.find(p => p._id === productId);
       if (!productInfo) continue;
-      const originalPrice = Number(productInfo.price);
-      if (isNaN(originalPrice) || originalPrice <= 0) { toast.error(`Invalid price: ${productInfo.name}`); return null; }
-      const discountedPrice = Number(productInfo.discountPrice) || 0;
-      let finalUnitPrice = originalPrice, discountAmount = 0, discountPercent = 0;
-      if (discountedPrice > 0 && discountedPrice < originalPrice) {
-        finalUnitPrice = discountedPrice; discountAmount = originalPrice - discountedPrice;
-        discountPercent = ((discountAmount / originalPrice) * 100).toFixed(2);
-      }
+
+      const discountPercent = Number(productInfo.discountPrice) || 0;
+
       for (const variantKey of Object.keys(cartItems[productId])) {
         const variantData = cartItems[productId][variantKey];
         if (typeof variantData !== 'object') continue;
         const qty = Number(variantData.quantity) || 0;
         const customPrice = Number(variantData.customPrice) || 0;
         if (qty <= 0) continue;
+
+        const originalPrice = Number(variantData.sizePrice) || Number(productInfo.price);
+        if (isNaN(originalPrice) || originalPrice <= 0) { toast.error(`Invalid price: ${productInfo.name}`); return null; }
+
+        const discountAmount = discountPercent > 0 && discountPercent < 100
+          ? (originalPrice * discountPercent) / 100 : 0;
+        const finalUnitPrice = originalPrice - discountAmount;
+
         const [size, color] = variantKey.split('-');
         const itemFinalPrice = customPrice > 0 ? finalUnitPrice + customPrice : finalUnitPrice;
-        orderItems.push({ productId, name: productInfo.name, image: productInfo.image?.[0] || '',
-          originalPrice, discountPercent: Number(discountPercent), discountAmount,
+
+        orderItems.push({
+          productId, name: productInfo.name, image: productInfo.image?.[0] || '',
+          originalPrice, discountPercent, discountAmount,
           finalPrice: itemFinalPrice, quantity: qty, size, color,
-          subtotal: itemFinalPrice * qty, saved: discountAmount * qty });
+          subtotal: itemFinalPrice * qty, saved: discountAmount * qty
+        });
       }
     }
     if (orderItems.length === 0) { toast.error('Your cart is empty'); return null; }
@@ -1844,9 +1883,11 @@ const PlaceOrder = () => {
     if (!orderItems) return null;
     const subtotal = orderItems.reduce((s, i) => s + i.subtotal, 0);
     const discountTotal = orderItems.reduce((s, i) => s + i.saved, 0);
-    return { userId, address: formData, items: orderItems,
+    return {
+      userId, address: formData, items: orderItems,
       subtotal: Number(subtotal.toFixed(2)), discountTotal: Number(discountTotal.toFixed(2)),
-      shipping: SHIPPING_FEE, finalAmount: Number((subtotal + SHIPPING_FEE).toFixed(2)) };
+      shipping: SHIPPING_FEE, finalAmount: Number((subtotal + SHIPPING_FEE).toFixed(2))
+    };
   };
 
   const onSubmitHandler = async (event) => {
@@ -1974,7 +2015,7 @@ const PlaceOrder = () => {
 
               <div className="mt-4 space-y-1.5">
                 {['🔒 256-bit SSL secured', '📦 Free insured delivery', '↩️ 7-day returns'].map(t => (
-                  <p key={t} className="text-white/20 text-center" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>{t}</p>
+                  <p key={t} className="text-white/70 text-center" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>{t}</p>
                 ))}
               </div>
             </div>

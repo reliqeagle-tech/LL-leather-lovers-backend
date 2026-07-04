@@ -3792,45 +3792,45 @@ const INIT_STD = {
 };
 
 // ✅ FIX 1 — Exactly same as Add.jsx — all 7 categories with correct subcategories
-const SUB_CATEGORIES = {
-    Men: [
-        "Jackets", "Bomber Biker Jacket", "Moto Biker Jacket",
-        "Racing Coat", "Leather Coats", "Men Winter Wear",
-    ],
-    Women: [
-        "Jackets", "Bomber Biker Jacket", "Moto Biker Jacket",
-        "Racing Coat", "Women Winter Wear", "Women Night Dress",
-        "Leather Pencil Skirt", "Leather Full Skirt", "Slim Bodycon Skirt",
-    ],
-    Others: [
-        "Pillow", "Cushion Cover", "Aprons", "Desk Mat", "Chair Cover",
-    ],
-    "Leather Pillow Cover": [
-        "Cylindrical Pillow Cover", "Square Pillow Cover",
-        "Rectangle Pillow Cover", "Round Pillow Cover",
-        "Ear Hole Pillow Cushion Cover",
-    ],
-    "Sofa Headrest": [
-        "Recliner Chair Headrest Cover",
-    ],
-    "Leather Desk Pad": [
-        "Leather Desk Mat",
-    ],
-    "Men Leather Apron": [
-        "Apron",
-    ],
-};
+// const SUB_CATEGORIES = {
+//     Men: [
+//         "Jackets", "Bomber Biker Jacket", "Moto Biker Jacket",
+//         "Racing Coat", "Leather Coats", "Men Winter Wear",
+//     ],
+//     Women: [
+//         "Jackets", "Bomber Biker Jacket", "Moto Biker Jacket",
+//         "Racing Coat", "Women Winter Wear", "Women Night Dress",
+//         "Leather Pencil Skirt", "Leather Full Skirt", "Slim Bodycon Skirt",
+//     ],
+//     Others: [
+//         "Pillow", "Cushion Cover", "Aprons", "Desk Mat", "Chair Cover",
+//     ],
+//     "Leather Pillow Cover": [
+//         "Cylindrical Pillow Cover", "Square Pillow Cover",
+//         "Rectangle Pillow Cover", "Round Pillow Cover",
+//         "Ear Hole Pillow Cushion Cover",
+//     ],
+//     "Sofa Headrest": [
+//         "Recliner Chair Headrest Cover",
+//     ],
+//     "Leather Desk Pad": [
+//         "Leather Desk Mat",
+//     ],
+//     "Men Leather Apron": [
+//         "Apron",
+//     ],
+// };
 
 // ✅ FIX 2 — Default subCategory per category (same as Add.jsx CATEGORY_DEFAULT_SUB)
-const CATEGORY_DEFAULT_SUB = {
-    "Men": "Jackets",
-    "Women": "Jackets",
-    "Others": "Pillow",
-    "Leather Pillow Cover": "Cylindrical Pillow Cover",
-    "Sofa Headrest": "Recliner Chair Headrest Cover",
-    "Leather Desk Pad": "Leather Desk Mat",
-    "Men Leather Apron": "Apron",
-};
+// const CATEGORY_DEFAULT_SUB = {
+//     "Men": "Jackets",
+//     "Women": "Jackets",
+//     "Others": "Pillow",
+//     "Leather Pillow Cover": "Cylindrical Pillow Cover",
+//     "Sofa Headrest": "Recliner Chair Headrest Cover",
+//     "Leather Desk Pad": "Leather Desk Mat",
+//     "Men Leather Apron": "Apron",
+// };
 
 /* ═══════════════════ LIGHTBOX ═══════════════════ */
 const Lightbox = ({ imgs, start, onClose }) => {
@@ -3937,10 +3937,15 @@ const UpdateProduct = ({ token }) => {
     const [detDesc, setDetDesc] = useState("");
     const [price, setPrice] = useState("");
     const [discPrice, setDiscPrice] = useState("");
-    const [category, setCategory] = useState("Men");
+    const [category, setCategory] = useState("");
     // ✅ FIX 3 — Initial subCategory uses default map
-    const [subCategory, setSubCat] = useState(CATEGORY_DEFAULT_SUB["Men"]);
+    const [subCategory, setSubCat] = useState("");
     const [bestseller, setBest] = useState(false);
+    const [sku, setSku] = useState('');
+    const [categories, setCategories] = useState([]);
+
+    /* ── Item Details ── */
+    const [itemDetails, setItemDetails] = useState([{ title: "", value: "" }]);
 
     const [colors, setColors] = useState([]);
     const [newCName, setNewCName] = useState("");
@@ -3966,7 +3971,7 @@ const UpdateProduct = ({ token }) => {
     const existingCount = slots.filter(s => s.existing && !s.newFile).length;
     const newFilesCount = slots.filter(s => s.newFile).length;
     const totalImages = slots.filter(s => s.newFile || s.existing).length;
-    const discount = discPrice && price && +discPrice < +price ? Math.round((1 - discPrice / price) * 100) : null;
+    const discount = discPrice && +discPrice > 0 && +discPrice < 100 ? Math.round(+discPrice) : null;
     const hasSizes = sizeType === "standard" ? enabledSz.length > 0 : inchSizes.length > 0;
     const calcPrice = (d) => d.useCustomPrice && d.customPrice ? parseFloat(d.customPrice) : parseFloat(price || 0) * d.multiplier;
 
@@ -3978,6 +3983,7 @@ const UpdateProduct = ({ token }) => {
                 const res = await axios.post(backendUrl + "/api/product/single", { productId: id });
                 if (res.data.success) {
                     const p = res.data.product;
+                    setSku(p.sku || "");
                     setName(p.name || "");
                     setDesc(p.description || "");
                     setDetDesc(p.detailedDescription || "");
@@ -3986,21 +3992,31 @@ const UpdateProduct = ({ token }) => {
                     setBest(p.bestseller || false);
 
                     // ✅ FIX 4 — Set category, then validate subCategory against full SUB_CATEGORIES map
-                    const cat = p.category || "Men";
-                    setCategory(cat);
-                    const validSubs = SUB_CATEGORIES[cat] || [];
-                    const savedSub = (p.subCategory || "").trim();
-                    // Use saved sub if valid, else fall back to default for that category
-                    setSubCat(
-                        validSubs.some(s => s.toLowerCase() === savedSub.toLowerCase())
-                            ? savedSub
-                            : (CATEGORY_DEFAULT_SUB[cat] || validSubs[0] || "")
-                    );
+                    // const cat = p.category || "Men";
+                    // setCategory(cat);
+                    // const validSubs = SUB_CATEGORIES[cat] || [];
+                    // const savedSub = (p.subCategory || "").trim();
+                    // // Use saved sub if valid, else fall back to default for that category
+                    // setSubCat(
+                    //     validSubs.some(s => s.toLowerCase() === savedSub.toLowerCase())
+                    //         ? savedSub
+                    //         : (CATEGORY_DEFAULT_SUB[cat] || validSubs[0] || "")
+                    // );
+
+                    setCategory(p.category || "");
+                    setSubCat(p.subCategory || '');
 
                     const existingImgs = Array.isArray(p.image) ? p.image.filter(Boolean) : [p.image].filter(Boolean);
                     setSlots(Array(10).fill(null).map((_, i) => ({ existing: existingImgs[i] || null, newFile: null })));
 
                     if (p.color?.length) setColors(p.color.map(c => typeof c === "string" ? { name: c, hex: "#808080" } : { name: c.name || c, hex: c.hex || "#808080" }));
+
+                    /* Item Details */
+                    if (p.itemDetails?.length) {
+                        setItemDetails(p.itemDetails);
+                    } else {
+                        setItemDetails([{ title: "", value: "" }]);
+                    }
 
                     if (p.sizes?.length) {
                         const first = p.sizes[0];
@@ -4032,10 +4048,10 @@ const UpdateProduct = ({ token }) => {
     }, [id]);
 
     // ✅ FIX 5 — handleCategoryChange: auto-set first valid subCategory for new category
-    const handleCategoryChange = (newCat) => {
-        setCategory(newCat);
-        setSubCat(CATEGORY_DEFAULT_SUB[newCat] || SUB_CATEGORIES[newCat]?.[0] || "");
-    };
+    // const handleCategoryChange = (newCat) => {
+    //     setCategory(newCat);
+    //     setSubCat(CATEGORY_DEFAULT_SUB[newCat] || SUB_CATEGORIES[newCat]?.[0] || "");
+    // };
 
     /* ── Progress ── */
     useEffect(() => {
@@ -4049,6 +4065,24 @@ const UpdateProduct = ({ token }) => {
         if (detDesc) s += 10;
         setProgress(Math.min(100, s));
     }, [name, description, price, totalImages, colors, hasSizes, detDesc]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get(
+                    `${backendUrl}/api/category/list`
+                );
+
+                if (res.data.success) {
+                    setCategories(res.data.categories || []);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     /* ── Image handlers ── */
     const setSlotFile = (i, file) => setSlots(prev => { const n = [...prev]; n[i] = { ...n[i], newFile: file }; return n; });
@@ -4091,6 +4125,17 @@ const UpdateProduct = ({ token }) => {
     const edColor = (i, f, v) => { const u = [...colors]; u[i][f] = v; setColors(u); };
     const addPreset = (p) => colors.some(c => c.name.toLowerCase() === p.name.toLowerCase()) ? toast.info(`${p.name} already added`) : (setColors([...colors, p]), toast.success(`${p.name} added!`));
 
+    /* ════════════════════════════════════════════════════════
+      ITEM DETAIL HANDLERS
+   ════════════════════════════════════════════════════════ */
+    const addItemDetail = () => setItemDetails([...itemDetails, { title: "", value: "" }]);
+    const removeItemDetail = (index) => setItemDetails(itemDetails.filter((_, i) => i !== index));
+    const updateItemDetail = (index, field, value) => {
+        const updated = [...itemDetails];
+        updated[index][field] = value;
+        setItemDetails(updated);
+    };
+
     /* ── Size handlers ── */
     const toggleSz = (k) => setEnabledSz(p => p.includes(k) ? p.filter(x => x !== k) : [...p, k]);
     const setSzF = (k, f, v) => setStdSizes(p => ({ ...p, [k]: { ...p[k], [f]: f === "stock" ? parseInt(v) || 0 : f === "multiplier" ? parseFloat(v) || 1 : v } }));
@@ -4110,6 +4155,10 @@ const UpdateProduct = ({ token }) => {
     /* ── Submit ── */
     const onSubmit = async (e) => {
         e?.preventDefault();
+        if (sku.trim() === "")
+            return toast.error("SKU is required");
+        if (!name.trim()) return toast.error("Product name required");
+        if (!description.trim()) return toast.error("Product description required");
         if (!hasSizes) return toast.error("Select at least one size");
         if (colors.length === 0) return toast.error("Add at least one color");
         if (!price || isNaN(+price) || +price <= 0) return toast.error("Valid base price required");
@@ -4119,10 +4168,12 @@ const UpdateProduct = ({ token }) => {
         setSaving(true);
         try {
             const fd = new FormData();
+            fd.append('sku', sku.trim());
             fd.append("productId", id);
             fd.append("name", name.trim());
             fd.append("description", description.trim());
             fd.append("detailedDescription", detDesc);
+            fd.append("itemDetails", JSON.stringify(itemDetails));
             fd.append("price", price);
             fd.append("discountPrice", discPrice || "");
             fd.append("category", category);
@@ -4138,9 +4189,28 @@ const UpdateProduct = ({ token }) => {
 
             slots.forEach((s) => { if (s.newFile) fd.append("images", s.newFile); });
 
-            const res = await axios.post(backendUrl + "/api/product/update", fd, { headers: { token } });
-            if (res.data.success) { toast.success("✅ Product updated!"); navigate(-1); }
-            else toast.error(res.data.message);
+            // const res = await axios.post(backendUrl + "/api/product/update", fd, { headers: { token } });
+            // if (res.data.success) { toast.success("✅ Product updated!"); navigate(-1); }
+            // else toast.error(res.data.message);
+
+            const res = await axios.post(backendUrl + '/api/product/update', fd, { headers: { token } });
+            if (res.data.success) {
+                toast.success('✅ Product updated!');
+                const slugifyPart = (str = '') =>
+                    String(str).toLowerCase().trim()
+                        .replace(/[^\w\s-]/g, '')
+                        .replace(/[\s_]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+
+                const newSlugUrl = `/product/${slugifyPart(category)}/${slugifyPart(subCategory)}/${slugifyPart(name)}/${sku.trim().toUpperCase().toLowerCase()}`;
+
+                console.log('New product URL:', newSlugUrl); // ← test ke liye
+                navigate(-1);
+            } else {
+                toast.error(res.data.message);
+            }
+
+
         } catch { toast.error("Update failed!"); }
         finally { setSaving(false); }
     };
@@ -4195,21 +4265,21 @@ const UpdateProduct = ({ token }) => {
 
                             <Field label="Product Name" required>
                                 <div className="relative">
-                                    <input className={inputCls + (name.length > 90 ? " border-red-400 bg-red-50" : "")} type="text" maxLength={100} placeholder="e.g. Classic Oxford Shirt" value={name} onChange={e => setName(e.target.value)} required />
-                                    <span className={`absolute right-3 bottom-3 text-[10.5px] pointer-events-none ${name.length > 80 ? "text-amber-500" : "text-gray-400"}`}>{name.length}/100</span>
+                                    <input className={inputCls + (name.length > 300 ? " border-red-400 bg-red-50" : "")} type="text" maxLength={300} placeholder="e.g. Classic Oxford Shirt" value={name} onChange={e => setName(e.target.value)} required />
+                                    <span className={`absolute right-3 bottom-3 text-[10.5px] pointer-events-none ${name.length > 270 ? "text-amber-500" : "text-gray-400"}`}>{name.length}/300</span>
                                 </div>
                             </Field>
 
                             <Field label="Short Description" required>
                                 <div className="relative">
-                                    <textarea className={inputCls + " resize-y min-h-[90px] " + (description.length > 280 ? "border-red-400 bg-red-50" : "")} maxLength={300} rows={3} placeholder="Brief description for listings…" value={description} onChange={e => setDesc(e.target.value)} required />
-                                    <span className={`absolute right-3 bottom-3 text-[10.5px] pointer-events-none ${description.length > 240 ? "text-amber-500" : "text-gray-400"}`}>{description.length}/300</span>
+                                    <textarea className={inputCls + " resize-y min-h-[90px] " + (description.length > 480 ? "border-red-400 bg-red-50" : "")} maxLength={500} rows={3} placeholder="Brief description for listings…" value={description} onChange={e => setDesc(e.target.value)} required />
+                                    <span className={`absolute right-3 bottom-3 text-[10.5px] pointer-events-none ${description.length > 480 ? "text-amber-500" : "text-gray-400"}`}>{description.length}/500</span>
                                 </div>
                             </Field>
 
                             {/* ✅ FIX 6 — Category dropdown with all 7 categories (same as Add.jsx) */}
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <Field label="Category">
+                                {/* <Field label="Category">
                                     <select className={selectCls} value={category} onChange={e => handleCategoryChange(e.target.value)}>
                                         <option value="Men">Men</option>
                                         <option value="Women">Women</option>
@@ -4219,19 +4289,67 @@ const UpdateProduct = ({ token }) => {
                                         <option value="Leather Desk Pad">Leather Desk Pad</option>
                                         <option value="Men Leather Apron">Men Leather Apron</option>
                                     </select>
+                                </Field> */}
+                                <Field label="Category">
+                                    <select className={selectCls} value={category}
+                                        // onChange={e => { setCat(e.target.value); setSubCat(CAT_DEFAULT[e.target.value] || SUB_CATEGORIES[e.target.value]?.[0] || ''); }}
+                                        // onChange={e => {
+                                        //     const selected = categories.find(
+                                        //         c => c.categoryName === e.target.value
+                                        //     );
+
+                                        //     setCat(e.target.value);
+
+                                        //     setSubCat(
+                                        //         selected?.subCategories?.[0] || ''
+                                        //     );
+                                        // }}
+                                        onChange={(e) => {
+                                            const newCategory = e.target.value;
+
+                                            setCategory(newCategory);
+
+                                            const selected = categories.find(
+                                                c => c.categoryName === newCategory
+                                            );
+
+                                            setSubCat(selected?.subCategories?.[0] || "");
+                                        }}>
+                                        {/* onFocus={focG} onBlur={blrB()} */}
+                                        {categories.map(cat => (
+                                            <option
+                                                key={cat._id}
+                                                value={cat.categoryName}
+                                            >
+                                                {cat.categoryName}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </Field>
 
                                 {/* ✅ FIX 7 — SubCategory renders dynamically from SUB_CATEGORIES map */}
-                                <Field label="Sub Category">
+                                {/* <Field label="Sub Category">
                                     <select className={selectCls} value={subCategory} onChange={e => setSubCat(e.target.value)}>
                                         {(SUB_CATEGORIES[category] || []).map(sub => (
                                             <option key={sub} value={sub}>{sub}</option>
                                         ))}
                                     </select>
+                                </Field> */}
+                                <Field label="Sub Category">
+                                    <select className={selectCls} value={subCategory} onChange={e => setSubCat(e.target.value)}>
+                                        {/* {(SUB_CATEGORIES[category] || []).map(s => <option key={s} value={s}>{s}</option>)} */}
+                                        {categories
+                                            .find(c => c.categoryName === category)
+                                            ?.subCategories?.map(sub => (
+                                                <option key={sub} value={sub}>
+                                                    {sub}
+                                                </option>
+                                            ))}
+                                    </select>
                                 </Field>
 
                                 <Field label="SKU / Code" hint="Auto-generated if blank">
-                                    <input className={inputCls} type="text" placeholder="Auto-generated" />
+                                    <input onChange={(e) => setSku(e.target.value)} value={sku} className={inputCls} type="text" placeholder="Auto-generated" />
                                 </Field>
                             </div>
 
@@ -4239,6 +4357,66 @@ const UpdateProduct = ({ token }) => {
                                 <Field label="Detailed Description" hint="Shown on product detail page — add specs, care instructions, materials">
                                     <ReactQuill theme="snow" value={detDesc} onChange={setDetDesc} />
                                 </Field>
+                            </div>
+                        </Card>
+
+                        <Card
+                            icon={<TbInfoCircle size={18} />}
+                            title="Item Details"
+                            subtitle="Specifications shown on the product page"
+                        >
+                            <div className="space-y-4">
+
+                                {itemDetails.map((item, index) => (
+
+                                    <div
+                                        key={index}
+                                        className="grid grid-cols-[1fr_2fr_auto] gap-3 items-start"
+                                    >
+
+                                        <input
+                                            type="text"
+                                            placeholder="Title (Material)"
+                                            className={inputCls}
+                                            maxLength={100}
+                                            value={item.title}
+                                            onChange={(e) =>
+                                                updateItemDetail(index, "title", e.target.value)
+                                            }
+                                        />
+
+                                        <textarea
+                                            placeholder="Value (100% Genuine Leather)"
+                                            className={inputCls}
+                                            rows={1}
+                                            maxLength={500}
+                                            value={item.value}
+                                            onChange={(e) =>
+                                                updateItemDetail(index, "value", e.target.value)
+                                            }
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={() => removeItemDetail(index)}
+                                            className="mt-1 w-10 h-10 flex items-center justify-center rounded-xl bg-red-50 border border-red-100 text-red-500 hover:bg-red-100"
+                                        >
+                                            <TbTrash size={16} />
+                                        </button>
+
+                                    </div>
+
+                                ))}
+
+                                <button
+                                    type="button"
+                                    onClick={addItemDetail}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700"
+                                >
+                                    <TbPlus size={16} />
+                                    Add Item Detail
+                                </button>
+
                             </div>
                         </Card>
 
@@ -4384,12 +4562,12 @@ const UpdateProduct = ({ token }) => {
                         {/* ── SIZES ── */}
                         <Card icon={<TbRuler size={18} />} title="Sizes & Inventory" subtitle="Manage sizes, stock & pricing per size"
                             badge={<span className="px-2 py-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold uppercase tracking-wide">Required</span>}>
-                            <Field label="Base Price (₹)" required>
+                            <Field label="Base Price ($)" required>
                                 <input className={inputCls + (price && (isNaN(+price) || +price <= 0) ? " border-red-400 bg-red-50" : "")}
                                     type="number" placeholder="e.g. 499" min="0" step="0.01" value={price} onChange={e => setPrice(e.target.value)} />
                                 <div className="flex items-start gap-2 mt-2 p-3 bg-blue-50 border border-blue-100 rounded-xl text-[12px] text-blue-700">
                                     <TbInfoCircle size={14} className="flex-shrink-0 mt-0.5" />
-                                    <span>Base price × multiplier = size's selling price. Example: XL at 1.2× = ₹{price ? (parseFloat(price) * 1.2).toFixed(2) : "—"}.</span>
+                                    <span>Base price × multiplier = size's selling price. Example: XL at 1.2× = ${price ? (parseFloat(price) * 1.2).toFixed(2) : "—"}.</span>
                                 </div>
                             </Field>
                             <Field label="Size System">
@@ -4419,15 +4597,15 @@ const UpdateProduct = ({ token }) => {
                                                             </label>
                                                             {d.useCustomPrice ? (
                                                                 <div>
-                                                                    <label className="text-[10px] text-gray-400 font-semibold uppercase block mb-1">Price (₹)</label>
+                                                                    <label className="text-[10px] text-gray-400 font-semibold uppercase block mb-1">Price ($)</label>
                                                                     <input type="number" step="0.01" min="0" value={d.customPrice} onChange={e => setSzF(k, "customPrice", e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-[13px] outline-none focus:border-indigo-400 transition-colors" />
-                                                                    <span className="text-[10.5px] text-indigo-600 font-bold mt-1 block">₹ {d.customPrice || "—"}</span>
+                                                                    <span className="text-[10.5px] text-indigo-600 font-bold mt-1 block">$ {d.customPrice || "—"}</span>
                                                                 </div>
                                                             ) : (
                                                                 <div>
                                                                     <label className="text-[10px] text-gray-400 font-semibold uppercase block mb-1">Multiplier ×{d.multiplier}</label>
                                                                     <input type="number" step="0.05" min="0.5" max="3" value={d.multiplier} onChange={e => setSzF(k, "multiplier", e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-[13px] outline-none focus:border-indigo-400 transition-colors" />
-                                                                    <span className="text-[10.5px] text-emerald-600 font-bold mt-1 block">₹ {price ? calcPrice(d).toFixed(2) : "—"}</span>
+                                                                    <span className="text-[10.5px] text-emerald-600 font-bold mt-1 block">$ {price ? calcPrice(d).toFixed(2) : "—"}</span>
                                                                 </div>
                                                             )}
                                                             <div>
@@ -4442,7 +4620,7 @@ const UpdateProduct = ({ token }) => {
                                     </div>
                                     {enabledSz.length > 0 && (
                                         <div className="flex flex-wrap gap-2 mb-4 p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                            {enabledSz.map(k => (<span key={k} className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 text-white rounded-full text-[11.5px] font-semibold">{k} · ₹{price ? calcPrice(stdSizes[k]).toFixed(0) : "—"} · {stdSizes[k].stock}pcs</span>))}
+                                            {enabledSz.map(k => (<span key={k} className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 text-white rounded-full text-[11.5px] font-semibold">{k} · ${price ? calcPrice(stdSizes[k]).toFixed(0) : "—"} · {stdSizes[k].stock}pcs</span>))}
                                         </div>
                                     )}
                                     <div className="flex gap-2 flex-wrap">
@@ -4461,7 +4639,7 @@ const UpdateProduct = ({ token }) => {
                                         <label className="flex items-center gap-1.5 text-[12px] font-medium text-gray-600 cursor-pointer pb-2.5">
                                             <input type="checkbox" checked={niCustom} onChange={e => setNiCustom(e.target.checked)} className="w-4 h-4 rounded accent-indigo-600" /> Custom Price
                                         </label>
-                                        {niCustom ? <Field label="Price (₹)"><input className={inputCls} style={{ width: 90 }} type="number" step="0.01" min="0" value={niPrice} onChange={e => setNiPrice(e.target.value)} /></Field>
+                                        {niCustom ? <Field label="Price ($)"><input className={inputCls} style={{ width: 90 }} type="number" step="0.01" min="0" value={niPrice} onChange={e => setNiPrice(e.target.value)} /></Field>
                                             : <Field label="Multiplier"><input className={inputCls} style={{ width: 80 }} type="number" step="0.1" min="0.5" max="2" value={niMult} onChange={e => setNiMult(parseFloat(e.target.value) || 1)} /></Field>}
                                         <button type="button" onClick={addInch} className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gray-900 text-white text-[13px] font-semibold hover:bg-gray-800 transition-colors"><TbPlus size={14} /> Add</button>
                                     </div>
@@ -4473,10 +4651,10 @@ const UpdateProduct = ({ token }) => {
                                                 <div key={i} className="bg-white border border-gray-100 rounded-xl p-3.5">
                                                     <div className="flex items-center justify-between mb-3"><span className="text-[14px] font-extrabold text-gray-900">{s.size}"</span><button type="button" onClick={() => rmInch(s.size)} className="w-6 h-6 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center text-red-500 hover:bg-red-100"><TbX size={11} /></button></div>
                                                     <label className="flex items-center gap-1.5 text-[11.5px] font-medium text-gray-600 mb-2 cursor-pointer"><input type="checkbox" checked={s.useCustomPrice} onChange={() => edInch(i, "useCustomPrice")} className="w-3.5 h-3.5 rounded accent-indigo-600" /> Custom Price</label>
-                                                    {s.useCustomPrice ? <div className="mb-2"><label className="text-[10px] text-gray-400 font-semibold uppercase block mb-1">Price (₹)</label><input type="number" step="0.01" min="0" value={s.customPrice} onChange={e => edInch(i, "customPrice", e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-[13px] outline-none focus:border-indigo-400" /></div>
+                                                    {s.useCustomPrice ? <div className="mb-2"><label className="text-[10px] text-gray-400 font-semibold uppercase block mb-1">Price ($)</label><input type="number" step="0.01" min="0" value={s.customPrice} onChange={e => edInch(i, "customPrice", e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-[13px] outline-none focus:border-indigo-400" /></div>
                                                         : <div className="mb-2"><label className="text-[10px] text-gray-400 font-semibold uppercase block mb-1">Multiplier</label><input type="number" step="0.1" min="0.5" max="2" value={s.multiplier} onChange={e => edInch(i, "multiplier", e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-[13px] outline-none focus:border-indigo-400" /></div>}
                                                     <div><label className="text-[10px] text-gray-400 font-semibold uppercase block mb-1">Stock</label><input type="number" min="0" value={s.stock} onChange={e => edInch(i, "stock", e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-[13px] outline-none focus:border-indigo-400" /></div>
-                                                    <span className="text-[10.5px] text-emerald-600 font-bold mt-1.5 block">₹ {price && +price > 0 ? ((+price) * s.multiplier).toFixed(2) : "—"}</span>
+                                                    <span className="text-[10.5px] text-emerald-600 font-bold mt-1.5 block">$ {price && +price > 0 ? ((+price) * s.multiplier).toFixed(2) : "—"}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -4519,8 +4697,11 @@ const UpdateProduct = ({ token }) => {
                                 <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center"><TbTag size={16} className="text-emerald-600" /></div>
                                 <p className="text-[13.5px] font-bold text-gray-900">Discount Pricing</p>
                             </div>
-                            <Field label="Sale / Discount Price (₹)" hint="Optional — shown as sale price to customers">
+                            {/* <Field label="Sale / Discount Price ($)" hint="Optional — shown as sale price to customers">
                                 <input className={inputCls} type="number" placeholder="0.00" value={discPrice} onChange={e => setDiscPrice(e.target.value)} />
+                            </Field> */}
+                            <Field label="Discount (%)" hint="Optional — percentage off, e.g. 10 = 10% off">
+                                <input className={inputCls} type="number" placeholder="e.g. 10" min="0" max="99" value={discPrice} onChange={e => setDiscPrice(e.target.value)} />
                             </Field>
                             {discount && (
                                 <div className="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-100 rounded-xl mt-1">
@@ -4537,10 +4718,13 @@ const UpdateProduct = ({ token }) => {
                             </div>
                             <div className="space-y-0">
                                 {[
+                                    ["Sku", sku || <span className="text-gray-300 italic text-[12px]">Not set</span>],
                                     ["Name", name || <span className="text-gray-300 italic text-[12px]">Not set</span>],
                                     ["Category", `${category} › ${subCategory || "—"}`],
-                                    ["Base Price", price ? <span className="font-bold">₹{price}</span> : <span className="text-gray-300">—</span>],
-                                    ["Sale Price", discPrice ? <span className="text-emerald-600 font-bold">₹{discPrice}</span> : <span className="text-gray-300">—</span>],
+                                    ["Base Price", price ? <span className="font-bold">${price}</span> : <span className="text-gray-300">—</span>],
+                                    // ["Sale Price", discPrice ? <span className="text-emerald-600 font-bold">${discPrice}</span> : <span className="text-gray-300">—</span>],
+                                    ["Discount", discount ? <span className="text-emerald-600 font-bold">{discount}% off</span> : <span className="text-gray-300">—</span>],
+                                    ["Final Price", (price && discount) ? <span className="text-emerald-600 font-bold">${(+price - (+price * discount) / 100).toFixed(2)}</span> : <span className="text-gray-300">—</span>],
                                     ["Colors", colors.length > 0 ? <div className="flex gap-1 flex-wrap justify-end">{colors.map((c, i) => <div key={i} title={c.name} className="w-4 h-4 rounded-full border border-black/10" style={{ background: c.hex }} />)}</div> : <span className="text-gray-300">—</span>],
                                     ["Sizes", sizeType === "standard" ? (enabledSz.length ? <span className="font-semibold">{enabledSz.join(", ")}</span> : <span className="text-red-500 font-bold text-[11px]">⚠ Required</span>) : (inchSizes.length ? <span className="font-semibold">{inchSizes.map(s => s.size).join(", ")}</span> : <span className="text-red-500 font-bold text-[11px]">⚠ Required</span>)],
                                     ["Images", <span className={`px-2 py-0.5 rounded-full text-[10.5px] font-bold ${totalImages > 0 ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>{totalImages}/10 · {newFilesCount} new</span>],

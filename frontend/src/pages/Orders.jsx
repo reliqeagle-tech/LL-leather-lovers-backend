@@ -964,9 +964,9 @@ const darkTheme = createTheme({
           fontSize: "9px",
           letterSpacing: "2.5px",
           textTransform: "uppercase",
-          color: "rgba(255,255,255,0.35)",
-          background: "rgba(255,255,255,0.03)",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          color: "rgba(255,255,255,0.82)",
+          background: "rgba(255,255,255,0.04)",
+          borderBottom: "1px solid rgba(255,255,255,0.18)",
         },
       },
     },
@@ -1069,7 +1069,7 @@ const OrderRow = ({ item, index, currency }) => {
               />
             </div>
             <span
-              className="line-clamp-2 text-white/70 group-hover:text-indigo-400 transition-colors duration-200"
+              className="line-clamp-2 text-white/90 group-hover:text-indigo-400 transition-colors duration-200"
               style={{ maxWidth: "140px", fontSize: "11px" }}
             >
               {item.name}
@@ -1078,13 +1078,13 @@ const OrderRow = ({ item, index, currency }) => {
         </TableCell>
 
         <TableCell>
-          <p className="text-white/70 whitespace-nowrap">{item.firstName} {item.lastName}</p>
-          <p className="text-white/30" style={{ fontSize: "10px" }}>{item.email}</p>
+          <p className="text-white/90 whitespace-nowrap">{item.firstName} {item.lastName}</p>
+          <p className="text-white/60" style={{ fontSize: "10px" }}>{item.email}</p>
         </TableCell>
 
         <TableCell>
           <div className="flex flex-col gap-1">
-            <span className="text-white/60">{item.paymentMethod}</span>
+            <span className="text-white/90">{item.paymentMethod}</span>
             <Chip
               label={item.payment ? "Paid" : "Pending"}
               size="small"
@@ -1110,7 +1110,7 @@ const OrderRow = ({ item, index, currency }) => {
         </TableCell>
 
         <TableCell>
-          <span className="text-white/40 whitespace-nowrap" style={{ fontSize: "11px" }}>
+          <span className="text-white/70 whitespace-nowrap" style={{ fontSize: "11px" }}>
             {new Date(item.date).toLocaleDateString("en-US", {
               day: "numeric", month: "short", year: "numeric"
             })}
@@ -1120,21 +1120,21 @@ const OrderRow = ({ item, index, currency }) => {
 
       {/* Expanded details */}
       <TableRow>
-        <TableCell colSpan={8} sx={{ p: 0, borderBottom: open ? "1px solid rgba(99,102,241,0.2)" : "none" }}>
+        <TableCell colSpan={8} sx={{ p: 0, borderBottom: open ? "1px solid rgba(99,102,241,0.6)" : "none" }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{
               m: 2, borderRadius: "10px", overflow: "hidden",
-              border: "1px solid rgba(99,102,241,0.15)",
+              border: "1px solid rgba(99,102,241,0.45)",
               background: "rgba(99,102,241,0.04)",
             }}>
               <Box sx={{
-                px: 3, py: 2, borderBottom: "1px solid rgba(255,255,255,0.06)",
+                px: 3, py: 2, borderBottom: "1px solid rgba(255,255,255,0.30)",
                 display: "flex", alignItems: "center", gap: 1
               }}>
-                <ShoppingBagOutlinedIcon sx={{ fontSize: 14, color: "#818cf8" }} />
+                <ShoppingBagOutlinedIcon sx={{ fontSize: 14, color: "#6f7cf3" }} />
                 <Typography sx={{
                   fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.35)", fontFamily: "'Montserrat',sans-serif", fontWeight: 600
+                  color: "rgba(255,255,255,0.45)", fontFamily: "'Montserrat',sans-serif", fontWeight: 600
                 }}>
                   Order Details
                 </Typography>
@@ -1144,8 +1144,8 @@ const OrderRow = ({ item, index, currency }) => {
 
                 {/* ✅ Clickable product name in expanded panel too */}
                 <div className="rounded-lg p-3 border border-white/[0.06]"
-                  style={{ background: "rgba(255,255,255,0.02)" }}>
-                  <p className="text-white/25 uppercase tracking-widest mb-2"
+                  style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <p className="text-white/90 uppercase tracking-widest mb-2"
                     style={{ fontSize: "8px", fontFamily: "'Montserrat',sans-serif", letterSpacing: "2px" }}>
                     Product
                   </p>
@@ -1168,12 +1168,12 @@ const OrderRow = ({ item, index, currency }) => {
                 </div>
 
                 <div className="rounded-lg p-3 border border-white/[0.06]"
-                  style={{ background: "rgba(255,255,255,0.02)" }}>
-                  <p className="text-white/25 uppercase tracking-widest mb-2"
+                  style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <p className="text-white/90 uppercase tracking-widest mb-2"
                     style={{ fontSize: "8px", fontFamily: "'Montserrat',sans-serif", letterSpacing: "2px" }}>
                     Delivery Address
                   </p>
-                  <p className="text-white/60" style={{ fontSize: "11px", lineHeight: "1.7" }}>
+                  <p className="text-white/70" style={{ fontSize: "11px", lineHeight: "1.7" }}>
                     {item.street}<br />
                     {item.city}, {item.state}<br />
                     {item.country} – {item.zipcode}
@@ -1181,12 +1181,12 @@ const OrderRow = ({ item, index, currency }) => {
                 </div>
 
                 <div className="rounded-lg p-3 border border-white/[0.06]"
-                  style={{ background: "rgba(255,255,255,0.02)" }}>
-                  <p className="text-white/25 uppercase tracking-widest mb-2"
+                  style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <p className="text-white/90 uppercase tracking-widest mb-2"
                     style={{ fontSize: "8px", fontFamily: "'Montserrat',sans-serif", letterSpacing: "2px" }}>
                     Payment Info
                   </p>
-                  <p className="text-white/60" style={{ fontSize: "11px" }}>{item.paymentMethod}</p>
+                  <p className="text-white/70" style={{ fontSize: "11px" }}>{item.paymentMethod}</p>
                   {item.paymentId && (
                     <Tooltip title={item.paymentId} arrow>
                       <p className="text-indigo-400 mt-1 cursor-pointer font-mono" style={{ fontSize: "10px" }}>
@@ -1194,18 +1194,18 @@ const OrderRow = ({ item, index, currency }) => {
                       </p>
                     </Tooltip>
                   )}
-                  <p className="text-white/30 mt-1" style={{ fontSize: "10px" }}>Phone: {item.phone}</p>
+                  <p className="text-white/70 mt-1" style={{ fontSize: "10px" }}>Phone: {item.phone}</p>
                 </div>
 
                 <div className="rounded-lg p-3 border border-white/[0.06]"
-                  style={{ background: "rgba(255,255,255,0.02)" }}>
-                  <p className="text-white/25 uppercase tracking-widest mb-2"
+                  style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <p className="text-white/90 uppercase tracking-widest mb-2"
                     style={{ fontSize: "8px", fontFamily: "'Montserrat',sans-serif", letterSpacing: "2px" }}>
                     Pricing
                   </p>
                   <div className="space-y-1">
                     <div className="flex justify-between">
-                      <span className="text-white/40" style={{ fontSize: "11px" }}>Subtotal</span>
+                      <span className="text-white/70" style={{ fontSize: "11px" }}>Subtotal</span>
                       <span className="text-white/70" style={{ fontSize: "11px" }}>{currency}{item.subtotal?.toFixed(2)}</span>
                     </div>
                     {item.saved > 0 && (
@@ -1337,8 +1337,8 @@ const Orders = () => {
                 </h1>
                 <div className="flex items-center gap-3">
                   {orderData.length > 0 && (
-                    <span className="inline-flex items-center gap-2 border border-white/[0.07] rounded-full px-3 py-1.5"
-                      style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "10px", color: "rgba(255,255,255,0.3)", letterSpacing: "1.5px" }}>
+                    <span className="inline-flex items-center gap-2 border border-white/40 rounded-full px-3 py-1.5"
+                      style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "10px", color: "rgba(255,255,255,0.82)", letterSpacing: "1.5px" }}>
                       <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 inline-block" />
                       {orderData.length} {orderData.length === 1 ? "order" : "orders"}
                     </span>
@@ -1347,9 +1347,10 @@ const Orders = () => {
                     <IconButton onClick={loadOrderData} disabled={loading} size="small">
                       <RefreshIcon sx={{
                         fontSize: 15,
-                        color: loading ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.4)",
+                        color: loading ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.8)",
                         animation: loading ? "spin 1s linear infinite" : "none",
-                      }} />
+                      }}
+                      />
                     </IconButton>
                   </Tooltip>
                 </div>

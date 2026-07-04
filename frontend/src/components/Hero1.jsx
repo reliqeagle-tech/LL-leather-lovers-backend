@@ -159,14 +159,14 @@ const Hero1 = () => {
       {/* ── SECTION ── */}
       <section
         className="hero-wrap relative w-full overflow-hidden bg-black"
-        style={{ height: "100svh", minHeight: "500px" }}
+        style={{ height: "calc(100vh - 68px)" }}
       >
         {/* Background image */}
         <img
           src={assets.ll_lover3}
           alt="LL Leather Lovers – Latest Arrivals"
-          className="hero-bg absolute inset-0 w-full h-full object-cover object-[center_top]
-            sm:object-[60%_top]"
+          className="hero-bg absolute inset-0 w-full h-full object-cover object-[72%_center]
+            sm:object-[75%_top]"
           loading="eager"
         />
 
@@ -184,7 +184,7 @@ const Hero1 = () => {
           hidden sm:block"
           style={{
             background:
-              "linear-gradient(105deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.65) 42%,rgba(0,0,0,.18) 68%,transparent 100%)",
+              "linear-gradient(105deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.55) 38%,rgba(0,0,0,.18) 68%,transparent 100%)",
           }}
         />
         <div
@@ -207,13 +207,13 @@ const Hero1 = () => {
         {/* ── CONTENT ── */}
         <div
           className="absolute inset-0 flex
-          items-center px-[6vw]
+          items-center px-[7vw]
           max-sm:items-end max-sm:pb-[72px]"
         >
           {loaded && (
             <div
               className="anim-fade-up
-              max-w-[560px] text-left
+              max-w-[430px] text-left
               max-sm:max-w-full max-sm:text-center"
             >
               {/* Eyebrow */}
@@ -230,8 +230,8 @@ const Hero1 = () => {
 
               {/* Heading */}
               <h1
-                className="font-playfair font-black text-white leading-[1.04] m-0
-                text-[clamp(40px,5.8vw,80px)] tracking-[-0.01em]
+                className="font-playfair font-black text-white leading-[0.95] m-0
+                text-[clamp(44px,5vw,72px)] tracking-[-0.01em]
                 max-sm:text-[clamp(34px,10vw,50px)]"
               >
                 <span className="text-[#8b85ff] italic font-normal">
@@ -251,17 +251,17 @@ const Hero1 = () => {
 
               {/* Sub */}
               <p
-                className="anim-sub font-playfair text-white/80 leading-[1.65] mb-8
+                className="anim-sub font-playfair text-white/80 leading-[1.55] mb-6
                 text-[clamp(16px,1.9vw,22px)]
                 max-sm:text-[clamp(14px,4vw,18px)] max-sm:mb-6 text-[20px]"
               >
-                Step into a world where <br /> craftsmanship meets attitude. <br />
-                At LL Leather Lovers, every <br /> stitch tells a story of precision, <br />passion, and power.
+                Step into a world where  craftsmanship meets attitude.
+                At LL Leather Lovers, every stitch tells a story of precision, passion, and power.
               </p>
 
               {/* CTA row */}
               <div
-                className="anim-cta flex items-center gap-6
+                className="anim-cta flex items-center gap-8
                 max-sm:flex-col max-sm:items-center max-sm:gap-4"
               >
                 {/* Shop Now */}
@@ -274,7 +274,7 @@ const Hero1 = () => {
                     transition-all duration-300
                     hover:bg-[#7b73ff] hover:-translate-y-0.5
                     hover:shadow-[0_10px_32px_rgba(108,99,255,0.5)]
-                    max-sm:w-full max-sm:text-center max-sm:py-4"
+                    max-sm:w-full max-sm:text-center max-sm:py-4 border border-indigo-400/50"
                 >
                   Shop Now
                 </Link>
@@ -286,7 +286,7 @@ const Hero1 = () => {
                     text-white/60 no-underline
                     text-[11.5px] font-medium uppercase tracking-[2px]"
                 >
-                  View All
+                  EXPLORE COLLECTION
                   <svg
                     className="arrow-icon"
                     width="16"
@@ -311,9 +311,9 @@ const Hero1 = () => {
         {loaded && (
           <div
             className="anim-badge font-montserrat
-            absolute top-9 right-[5vw]
-            text-white/50 border border-white/15
-            px-4 py-2 rounded-full backdrop-blur-md
+            absolute top-9   right-[5vw]
+            text-white/65 border border-white/15
+            px-4 py-2 rounded-full backdrop-blur-lg
             text-[10px] tracking-[2px] uppercase
             max-sm:hidden"
           >
@@ -322,7 +322,7 @@ const Hero1 = () => {
         )}
 
         {/* Scroll indicator */}
-        <div
+        {/* <div
           className="font-montserrat
           absolute bottom-7 left-1/2 -translate-x-1/2
           flex flex-col items-center gap-2
@@ -335,7 +335,7 @@ const Hero1 = () => {
             }}
           />
           <span>Scroll</span>
-        </div>
+        </div> */}
       </section>
     </>
   );

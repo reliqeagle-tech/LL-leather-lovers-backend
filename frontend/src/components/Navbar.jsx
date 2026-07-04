@@ -610,6 +610,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
 import { GoHeartFill } from "react-icons/go";
+import axios from "axios";
 import {
   faMagnifyingGlass,
   faUser,
@@ -723,6 +724,18 @@ const LogoMark = () => (
   </svg>
 );
 
+const corners = [
+  { pos: "top-2 left-2", b: "border-t border-l" },
+  { pos: "top-2 right-2", b: "border-t border-r" },
+  { pos: "bottom-2 left-2", b: "border-b border-l" },
+  { pos: "bottom-2 right-2", b: "border-b border-r" },
+];
+
+const C = {
+  indigo: "#6366f1",
+  navBorder: "rgba(99,102,241,0.25)"
+};
+
 /* ════════════════════════════
    MAIN NAVBAR
 ════════════════════════════ */
@@ -732,6 +745,7 @@ const Navbar = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [mobileAccord, setMobileAccord] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [categories, setCategories] = useState([]);
   const hideTimeoutRef = useRef(null);
 
   const {
@@ -742,15 +756,44 @@ const Navbar = () => {
     token,
     setToken,
     setCartItems,
+    backendUrl,
   } = useContext(ShopContext);
 
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(`${backendUrl}/api/category/list`);
+        if (res.data.success) setCategories(res.data.categories || []);
+      } catch (err) {
+        console.error("Failed to load categories for navbar:", err.message);
+      }
+    };
+    fetchCategories();
+  }, [backendUrl]);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
+
+
+  // Helper: get subcategory string array for a given categoryName
+  const getSubcats = (categoryName) => {
+    const cat = categories.find(c => c.categoryName === categoryName);
+    return cat?.subCategories || [];
+  };
+
+
+  // Helper: turn a string array into [{label, categoryName}]
+  const toItems = (categoryName, subs) => subs.map(s => ({ label: s, categoryName }));
+  const menSubs = toItems("Men", getSubcats("Men"));
+  const womenSubsAll = getSubcats("Women");
+  const womenHalf = Math.ceil(womenSubsAll.length / 2);
+  const womenSubsCol1 = toItems("Women", womenSubsAll.slice(0, womenHalf));
+  const womenSubsCol2 = toItems("Women", womenSubsAll.slice(womenHalf));
 
   useEffect(() => {
     setActiveMenu(null);
@@ -850,55 +893,84 @@ const Navbar = () => {
                 </button>
 
                 {activeMenu === "men" && (
-                  <MegaMenu
-                    showMenu={() => showMenu("men")}
-                    hideMenu={hideMenu}
-                  >
-                    <MegaColumn
-                      title="TOPS"
-                      items={[
-                        {
-                          label: "Jackets",
-                          category: "Topwear",
-                          gender: "Men",
-                        },
-                        { label: "Coats", category: "Topwear", gender: "Men" },
-                      ]}
-                    />
-                    <MegaColumn
-                      title="OTHERS"
-                      items={[
-                        { label: "Pillow", category: "Others", gender: "Men" },
-                        {
-                          label: "Cushion Cover",
-                          category: "Others",
-                          gender: "Men",
-                        },
-                        { label: "Aprons", category: "Others", gender: "Men" },
-                        {
-                          label: "Desk Mat",
-                          category: "Others",
-                          gender: "Men",
-                        },
-                        {
-                          label: "Chair Cover",
-                          category: "Others",
-                          gender: "Men",
-                        },
-                      ]}
-                    />
-                    <div className="flex-shrink-0 w-[200px] xl:w-[230px] self-start">
-                      <div className="relative overflow-hidden rounded-lg">
-                        <img
-                          src={assets.men1}
-                          className="w-full h-[240px] xl:h-[270px] object-cover opacity-85 hover:opacity-100 hover:scale-105 transition-all duration-500"
-                          alt="Men"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        <p className="absolute bottom-3 left-3 text-white text-[10px] tracking-[2px] uppercase">
-                          Men's Edit
-                        </p>
-                      </div>
+                  // <MegaMenu
+                  //   showMenu={() => showMenu("men")}
+                  //   hideMenu={hideMenu}
+                  // >
+                  //   <MegaColumn
+                  //     title="TOPS"
+                  //     items={[
+                  //       {
+                  //         label: "Jackets",
+                  //         category: "Topwear",
+                  //         gender: "Men",
+                  //       },
+                  //       { label: "Coats", category: "Topwear", gender: "Men" },
+                  //     ]}
+                  //   />
+                  //   <MegaColumn
+                  //     title="OTHERS"
+                  //     items={[
+                  //       { label: "Pillow", category: "Others", gender: "Men" },
+                  //       {
+                  //         label: "Cushion Cover",
+                  //         category: "Others",
+                  //         gender: "Men",
+                  //       },
+                  //       { label: "Aprons", category: "Others", gender: "Men" },
+                  //       {
+                  //         label: "Desk Mat",
+                  //         category: "Others",
+                  //         gender: "Men",
+                  //       },
+                  //       {
+                  //         label: "Chair Cover",
+                  //         category: "Others",
+                  //         gender: "Men",
+                  //       },
+                  //     ]}
+                  //   />
+                  //   <div className="flex-shrink-0 w-[200px] xl:w-[230px] self-start">
+                  //     <div className="relative overflow-hidden rounded-lg">
+                  //       <img
+                  //         src={assets.men1}
+                  //         className="w-full h-[240px] xl:h-[270px] object-cover opacity-85 hover:opacity-100 hover:scale-105 transition-all duration-500"
+                  //         alt="Men"
+                  //       />
+                  //       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  //       <p className="absolute bottom-3 left-3 text-white text-[10px] tracking-[2px] uppercase">
+                  //         Men's Edit
+                  //       </p>
+                  //     </div>
+                  //   </div>
+                  // </MegaMenu>
+
+                  <MegaMenu showMenu={() => showMenu("men")} hideMenu={hideMenu}>
+                    <MegaColumn title="Shop By Type" badge="MEN'S COLLECTION" items={menSubs} />
+                    <div style={{ width: 1, alignSelf: "stretch", background: C.navBorder }} />
+                    <div className="ddl-mega-img-wrap" style={{
+                      marginLeft: "auto", flexShrink: 0, width: 170,
+                      position: "relative", overflow: "hidden", borderRadius: 6,
+                      boxShadow: "0 4px 20px rgba(91,91,214,0.12)",
+                    }}>
+                      <img src={assets.men1} alt="Men's Collection" style={{
+                        width: "100%", height: 220, objectFit: "cover", display: "block",
+                        filter: "brightness(1.05) contrast(1.08)", transition: "transform 0.5s",
+                      }}
+                        onMouseEnter={e => e.target.style.transform = "scale(1.05)"}
+                        onMouseLeave={e => e.target.style.transform = "scale(1)"}
+                      />
+                      {corners.map((c, i) => (
+                        <span key={i} className={`absolute w-4 h-4 ${c.pos} ${c.b}`}
+                          style={{ borderColor: C.indigo, opacity: 0.6 }} />
+                      ))}
+                      <div style={{
+                        position: "absolute", bottom: 0, left: 0, right: 0,
+                        padding: "8px 12px", fontSize: 8, fontWeight: 700,
+                        letterSpacing: "0.25em", textTransform: "uppercase",
+                        textAlign: "center", color: "#fff",
+                        background: "linear-gradient(to top,rgba(30,27,75,0.88),transparent)",
+                      }}>Men's Collection</div>
                     </div>
                   </MegaMenu>
                 )}
@@ -921,107 +993,137 @@ const Navbar = () => {
                 </button>
 
                 {activeMenu === "women" && (
-                  <MegaMenu
-                    showMenu={() => showMenu("women")}
-                    hideMenu={hideMenu}
-                  >
-                    <MegaColumn
-                      title="TOPS"
-                      items={[
-                        {
-                          label: "Jackets",
-                          category: "Topwear",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Bomber Biker Jacket",
-                          category: "Topwear",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Moto Biker Jacket",
-                          category: "Topwear",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Racing Coat",
-                          category: "Topwear",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Women Winter Wear",
-                          category: "Topwear",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Women Night Dress",
-                          category: "Topwear",
-                          gender: "Women",
-                        },
-                      ]}
-                    />
-                    <MegaColumn
-                      title="BOTTOMS"
-                      items={[
-                        {
-                          label: "Leather Pencil Skirt",
-                          category: "Bottomwear",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Leather Full Skirt",
-                          category: "Bottomwear",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Slim Bodycon Skirt",
-                          category: "Bottomwear",
-                          gender: "Women",
-                        },
-                      ]}
-                    />
-                    <MegaColumn
-                      title="OTHERS"
-                      items={[
-                        {
-                          label: "Pillow",
-                          category: "Others",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Cushion Cover",
-                          category: "Others",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Aprons",
-                          category: "Others",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Desk Mat",
-                          category: "Others",
-                          gender: "Women",
-                        },
-                        {
-                          label: "Chair Cover",
-                          category: "Others",
-                          gender: "Women",
-                        },
-                      ]}
-                    />
-                    <div className="flex-shrink-0 w-[200px] xl:w-[230px] self-start">
-                      <div className="relative overflow-hidden rounded-lg">
-                        <img
-                          src={assets.women1}
-                          className="w-full h-[240px] xl:h-[270px] object-cover opacity-85 hover:opacity-100 hover:scale-105 transition-all duration-500"
-                          alt="Women"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        <p className="absolute bottom-3 left-3 text-white text-[10px] tracking-[2px] uppercase">
-                          Women's Edit
-                        </p>
-                      </div>
+                  // <MegaMenu
+                  //   showMenu={() => showMenu("women")}
+                  //   hideMenu={hideMenu}
+                  // >
+                  //   <MegaColumn
+                  //     title="TOPS"
+                  //     items={[
+                  //       {
+                  //         label: "Jackets",
+                  //         category: "Topwear",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Bomber Biker Jacket",
+                  //         category: "Topwear",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Moto Biker Jacket",
+                  //         category: "Topwear",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Racing Coat",
+                  //         category: "Topwear",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Women Winter Wear",
+                  //         category: "Topwear",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Women Night Dress",
+                  //         category: "Topwear",
+                  //         gender: "Women",
+                  //       },
+                  //     ]}
+                  //   />
+                  //   <MegaColumn
+                  //     title="BOTTOMS"
+                  //     items={[
+                  //       {
+                  //         label: "Leather Pencil Skirt",
+                  //         category: "Bottomwear",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Leather Full Skirt",
+                  //         category: "Bottomwear",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Slim Bodycon Skirt",
+                  //         category: "Bottomwear",
+                  //         gender: "Women",
+                  //       },
+                  //     ]}
+                  //   />
+                  //   <MegaColumn
+                  //     title="OTHERS"
+                  //     items={[
+                  //       {
+                  //         label: "Pillow",
+                  //         category: "Others",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Cushion Cover",
+                  //         category: "Others",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Aprons",
+                  //         category: "Others",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Desk Mat",
+                  //         category: "Others",
+                  //         gender: "Women",
+                  //       },
+                  //       {
+                  //         label: "Chair Cover",
+                  //         category: "Others",
+                  //         gender: "Women",
+                  //       },
+                  //     ]}
+                  //   />
+                  //   <div className="flex-shrink-0 w-[200px] xl:w-[230px] self-start">
+                  //     <div className="relative overflow-hidden rounded-lg">
+                  //       <img
+                  //         src={assets.women1}
+                  //         className="w-full h-[240px] xl:h-[270px] object-cover opacity-85 hover:opacity-100 hover:scale-105 transition-all duration-500"
+                  //         alt="Women"
+                  //       />
+                  //       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  //       <p className="absolute bottom-3 left-3 text-white text-[10px] tracking-[2px] uppercase">
+                  //         Women's Edit
+                  //       </p>
+                  //     </div>
+                  //   </div>
+                  // </MegaMenu>
+                  <MegaMenu showMenu={() => showMenu("women")} hideMenu={hideMenu}>
+                    <MegaColumn title="Shop By Type" badge="WOMEN'S COLLECTION" items={womenSubsCol1} />
+                    <div style={{ width: 1, alignSelf: "stretch", background: C.navBorder }} />
+                    <MegaColumn title="More Styles" items={womenSubsCol2} />
+                    <div style={{ width: 1, alignSelf: "stretch", background: C.navBorder }} />
+                    <div className="ddl-mega-img-wrap" style={{
+                      marginLeft: "auto", flexShrink: 0, width: 170,
+                      position: "relative", overflow: "hidden", borderRadius: 6,
+                      boxShadow: "0 4px 20px rgba(91,91,214,0.12)",
+                    }}>
+                      <img src={assets.women1} alt="Women's Collection" style={{
+                        width: "100%", height: 220, objectFit: "cover", display: "block",
+                        filter: "brightness(1.05) contrast(1.08)", transition: "transform 0.5s",
+                      }}
+                        onMouseEnter={e => e.target.style.transform = "scale(1.05)"}
+                        onMouseLeave={e => e.target.style.transform = "scale(1)"}
+                      />
+                      {corners.map((c, i) => (
+                        <span key={i} className={`absolute w-4 h-4 ${c.pos} ${c.b}`}
+                          style={{ borderColor: C.indigo, opacity: 0.6 }} />
+                      ))}
+                      <div style={{
+                        position: "absolute", bottom: 0, left: 0, right: 0,
+                        padding: "8px 12px", fontSize: 8, fontWeight: 700,
+                        letterSpacing: "0.25em", textTransform: "uppercase",
+                        textAlign: "center", color: "#fff",
+                        background: "linear-gradient(to top,rgba(30,27,75,0.88),transparent)",
+                      }}>Women's Collection</div>
                     </div>
                   </MegaMenu>
                 )}
@@ -1190,7 +1292,7 @@ const Navbar = () => {
             <nav className="flex-1 overflow-y-auto nav-links">
               <MobileSidebarLink to="/" label="Home" close={closeSidebar} />
 
-              <MobileAccordion
+              {/* <MobileAccordion
                 title="Men"
                 open={mobileAccord === "men"}
                 toggle={() => toggleAccord("men")}
@@ -1217,9 +1319,15 @@ const Navbar = () => {
                   ],
                 }}
                 closeSidebar={closeSidebar}
+              /> */}
+
+              <MobileAccordion title="Men" open={mobileAccord === "men"}
+                toggle={() => setMobileAccord(mobileAccord === "men" ? null : "men")}
+                sections={{ "SHOP MEN'S": menSubs }}
+                closeSidebar={closeSidebar}
               />
 
-              <MobileAccordion
+              {/* <MobileAccordion
                 title="Women"
                 open={mobileAccord === "women"}
                 toggle={() => toggleAccord("women")}
@@ -1285,6 +1393,11 @@ const Navbar = () => {
                     },
                   ],
                 }}
+                closeSidebar={closeSidebar}
+              /> */}
+              <MobileAccordion title="Women" open={mobileAccord === "women"}
+                toggle={() => setMobileAccord(mobileAccord === "women" ? null : "women")}
+                sections={{ "SHOP WOMEN'S": toItems("Women", womenSubsAll) }}
                 closeSidebar={closeSidebar}
               />
 
@@ -1374,8 +1487,29 @@ const MegaMenu = ({ children, showMenu, hideMenu }) => (
   </div>
 );
 
-const MegaColumn = ({ title, items }) => (
+const MegaColumn = ({ title, items, badge }) => (
   <div className="flex-1 min-w-[130px] xl:min-w-[150px]">
+    {badge && (
+      <div className="flex items-center gap-2 mb-3">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+        >
+          <path
+            d="M7 1l1.5 3.1 3.4.5-2.5 2.4.6 3.4L7 9l-3 1.4.6-3.4L2.1 4.6l3.4-.5z"
+            stroke="#818cf8"
+            strokeWidth="1.2"
+            fill="rgba(99,102,241,.12)"
+          />
+        </svg>
+
+        <span className="text-[8px] tracking-[4px] uppercase text-indigo-400 font-semibold">
+          {badge}
+        </span>
+      </div>
+    )}
     <h3
       className="nav-links text-[9px] font-[600] tracking-[3.5px] uppercase text-indigo-400 mb-4 pb-2
       border-b border-white/[0.07] flex items-center gap-2"
@@ -1385,19 +1519,18 @@ const MegaColumn = ({ title, items }) => (
     </h3>
     <ul className="space-y-[10px]">
       {items.map((item, i) => {
-        // const toURL =
-        //   item.category === "Others"
-        //     ? `/collection?category=Others&sub=${encodeURIComponent(item.label)}`
-        //     : `/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.category)}`;
-        const toURL = item.category === "Others"
-          ? `/collection?category=Others&sub=${encodeURIComponent(item.label)}`
-          : `/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.label)}`;
+        // const toURL = item.category === "Others"
+        //   ? `/collection?category=Others&sub=${encodeURIComponent(item.label)}`
+        //   : `/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.label)}`;
+
+        const toURL =
+          `/collection?category=${encodeURIComponent(item.categoryName)}&sub=${encodeURIComponent(item.label)}`;
         return (
           <li key={i}>
             <Link
               to={toURL}
-              className="nav-links text-[12px] text-white/50 hover:text-white tracking-[0.3px]
-                transition-all duration-150 flex items-center gap-2 group"
+              className="nav-links text-[12px] text-white/80 hover:text-indigo-400 tracking-[0.3px]
+                transition-all duration-200 flex items-center gap-2 group"
             >
               <span className="w-0 group-hover:w-[6px] h-[1px] bg-indigo-400 transition-all duration-200 flex-shrink-0" />
               {item.label}
@@ -1456,8 +1589,9 @@ const MobileAccordion = ({ title, open, toggle, sections, closeSidebar }) => (
               {items.map((item, i) => (
                 <li key={i}>
                   <Link
-                    to={`/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.category)}`}
-                    className="flex items-center gap-2 text-[12px] text-white/45 hover:text-white transition-all duration-150 group"
+                    // to={`/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.category)}`}
+                    to={`/collection?category=${encodeURIComponent(item.categoryName)}&sub=${encodeURIComponent(item.label)}`}
+                    className="flex items-center gap-2 text-[12px] text-white/45 hover:text-indigo-400 transition-all duration-200 group"
                     onClick={closeSidebar}
                   >
                     <span

@@ -359,10 +359,10 @@ const Login = () => {
               <p className="text-white font-light mb-1" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '28px' }}>
                 LL <span className="font-normal">Leather</span> <em className="text-indigo-400 italic">Lovers</em>
               </p>
-              <p className="text-white/25 uppercase tracking-widest" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '3px' }}>
+              <p className="text-white/55 uppercase tracking-widest" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '3px' }}>
                 Premium Leather · Est. 2020
               </p>
-              <div className="w-10 h-px mx-auto mt-4" style={{ background: 'linear-gradient(90deg, transparent, #6366f1, transparent)' }} />
+              <div className="w-20 h-px mx-auto mt-4" style={{ background: 'linear-gradient(90deg, transparent, #6366f1, transparent)' }} />
             </div>
 
             {/* Tabs */}
@@ -373,7 +373,7 @@ const Login = () => {
                   style={{
                     fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px',
                     background: currentState === tab ? '#6366f1' : 'transparent',
-                    color: currentState === tab ? '#fff' : 'rgba(255,255,255,0.35)'
+                    color: currentState === tab ? '#fff' : 'rgba(255,255,255,0.55)'
                   }}>
                   {tab}
                 </button>
@@ -385,9 +385,9 @@ const Login = () => {
               {/* Name */}
               {currentState === 'Register' && (
                 <div>
-                  <label style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Full Name</label>
+                  <label style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Full Name</label>
                   <div className="relative">
-                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'rgba(255,255,255,0.55)' }}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
                     </div>
                     <input type="text" placeholder="John Doe" value={name} required onChange={e => setName(e.target.value)} style={inputBase} onFocus={focusStyle} onBlur={blurStyle} />
@@ -397,9 +397,9 @@ const Login = () => {
 
               {/* Email */}
               <div>
-                <label style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Email Address</label>
+                <label style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Email Address</label>
                 <div className="relative">
-                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'rgba(255,255,255,0.55)' }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
                   </div>
                   <input type="email" placeholder="your@email.com" value={email} required onChange={e => setEmail(e.target.value)} style={inputBase} onFocus={focusStyle} onBlur={blurStyle} />
@@ -408,16 +408,16 @@ const Login = () => {
 
               {/* Password */}
               <div>
-                <label style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Password</label>
+                <label style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Password</label>
                 <div className="relative">
-                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'rgba(255,255,255,0.55)' }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                   </div>
                   <input type={showPass ? 'text' : 'password'} placeholder="••••••••" value={password} required onChange={e => setPassword(e.target.value)}
                     style={{ ...inputBase, paddingRight: '42px' }} onFocus={focusStyle} onBlur={blurStyle} />
                   <button type="button" onClick={() => setShowPass(!showPass)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-                    style={{ color: 'rgba(255,255,255,0.25)' }}>
+                    style={{ color: 'rgba(255,255,255,0.55)' }}>
                     {showPass
                       ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" /><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" /><line x1="1" y1="1" x2="23" y2="23" /></svg>
                       : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>}
@@ -427,7 +427,7 @@ const Login = () => {
 
               {currentState === 'Login' && (
                 <div className="text-right">
-                  <button type="button" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>Forgot password?</button>
+                  <button type="button" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.55)' }}>Forgot password?</button>
                 </div>
               )}
 
@@ -441,7 +441,7 @@ const Login = () => {
                 </span>
               </button>
 
-              <p className="text-center pt-1" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>
+              <p className="text-center pt-1" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.55)' }}>
                 {currentState === 'Login' ? "Don't have an account? " : 'Already have an account? '}
                 <button type="button" onClick={() => setCurrentState(currentState === 'Login' ? 'Register' : 'Login')}
                   className="text-indigo-400 hover:text-indigo-300 transition-colors underline">
@@ -451,7 +451,7 @@ const Login = () => {
             </form>
           </div>
         </div>
-        <p className="text-center mt-5" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px', color: 'rgba(255,255,255,0.15)', letterSpacing: '1px' }}>
+        <p className="text-center mt-5" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px', color: 'rgba(255,255,255,0.55)', letterSpacing: '1px' }}>
           🔒 Secure login · LL Leather Lovers · 2020
         </p>
       </div>

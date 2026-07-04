@@ -17,7 +17,7 @@
 //             setVisible(false)
 //         }
 //     },[location])
-    
+
 //   return showSearch && visible ? (
 //     <div className='border-t border-b bg-gray-50 text-center'>
 //       <div className='inline-flex items-center justify-center border border-gray-400 px-5 py-2 my-5 mx-3 rounded-full w-3/4 sm:w-1/2'>
@@ -98,7 +98,7 @@ const SearchBar = () => {
               stroke={focused ? '#6366f1' : 'rgba(255,255,255,0.25)'}
               strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
               className="flex-shrink-0 transition-colors duration-200">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
 
             <input
@@ -128,7 +128,7 @@ const SearchBar = () => {
                 onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
               >
                 <svg width="9" height="9" viewBox="0 0 10 10" fill="none">
-                  <path d="M2 2l6 6M8 2L2 8" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M2 2l6 6M8 2L2 8" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </button>
             )}
@@ -144,7 +144,7 @@ const SearchBar = () => {
               fontWeight: 600,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.3)',
+              color: 'rgba(255,255,255,0.70)',
               border: '1px solid rgba(255,255,255,0.07)',
             }}
             onMouseEnter={e => {
@@ -152,8 +152,8 @@ const SearchBar = () => {
               e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.color = 'rgba(255,255,255,0.3)';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
+              e.currentTarget.style.color = 'rgba(255,255,255,0.70)';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.040)';
             }}
           >
             Cancel

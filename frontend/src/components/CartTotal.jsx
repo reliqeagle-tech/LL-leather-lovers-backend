@@ -96,6 +96,202 @@
 
 
 
+// import React, { useContext, useMemo } from "react";
+// import { ShopContext } from "../context/ShopContext";
+// import Title from "./Title";
+
+// const CartTotal = () => {
+//   const { cartItems, products, delivery_fee, currency } = useContext(ShopContext);
+
+//   // Calculate subtotal and discount correctly for nested cart structure + % discount
+//   const { subtotal, discountSaved } = useMemo(() => {
+//     let subtotalCalc = 0;
+//     let discountCalc = 0;
+
+//     for (const productId in cartItems) {
+//       const product = products.find((p) => p._id === productId);
+//       if (!product) continue;
+
+//       const original = Number(product.price);
+//       const discountPercent = Number(product.discountPrice) || 0; // % stored in backend
+
+//       // Calculate % discount
+//       const discountAmount =
+//         discountPercent > 0 && discountPercent < 100
+//           ? (original * discountPercent) / 100
+//           : 0;
+
+//       const finalPrice = original - discountAmount; // price after discount
+
+//       for (const comboKey in cartItems[productId]) {
+//         const item = cartItems[productId][comboKey];
+//         const qty = item.quantity || 0;
+//         const extra = Number(item.customPrice) || 0;
+
+//         // Subtotal (price after % discount + any custom extra)
+//         subtotalCalc += (finalPrice + extra) * qty;
+
+//         // Discount saved
+//         discountCalc += discountAmount * qty;
+//       }
+//     }
+
+//     return {
+//       subtotal: Number(subtotalCalc.toFixed(2)),
+//       discountSaved: Number(discountCalc.toFixed(2)),
+//     };
+//   }, [cartItems, products]);
+
+//   const total = Number((subtotal + delivery_fee).toFixed(2));
+
+//   return (
+//     <div className="w-full">
+//       <div className="text-xl sm:text-2xl mb-3">
+//         <Title text1={"CART"} text2={"TOTALS"} />
+//       </div>
+
+//       <div className="flex flex-col gap-3 mt-3 p-4 bg-gray-900 rounded-lg border border-gray-800 text-sm sm:text-base">
+
+//         {/* Subtotal */}
+//         <div className="flex justify-between">
+//           <p className="text-gray-300">Subtotal</p>
+//           <p className="font-medium text-gray-200">{currency}{subtotal.toFixed(2)}</p>
+//         </div>
+
+//         <hr className="border-gray-700" />
+
+//         {/* Discount Saved */}
+//         <div className="flex justify-between">
+//           <p className="text-gray-300">You Saved</p>
+//           <p className="font-medium text-orange-500">
+//             {currency}{discountSaved.toFixed(2)}
+//           </p>
+//         </div>
+
+//         <hr className="border-gray-700" />
+
+//         {/* Shipping Fee */}
+//         <div className="flex justify-between">
+//           <p className="text-gray-300">Shipping Fee</p>
+//           <p className="font-medium text-gray-200">{currency}{delivery_fee.toFixed(2)}</p>
+//         </div>
+
+//         <hr className="border-gray-700" />
+
+//         {/* Total */}
+//         <div className="flex justify-between">
+//           <b className="text-white">Total</b>
+//           <b className="text-white">{currency}{total.toFixed(2)}</b>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CartTotal;
+
+
+// import React, { useContext, useMemo } from "react";
+// import { ShopContext } from "../context/ShopContext";
+// import Title from "./Title";
+
+// const CartTotal = () => {
+//   const { cartItems, products, delivery_fee, currency } = useContext(ShopContext);
+
+//   const { itemsTotal, subtotal, discountSaved } = useMemo(() => {
+//     let itemsTotalCalc = 0;
+//     let subtotalCalc = 0;
+//     let discountCalc = 0;
+
+//     for (const productId in cartItems) {
+//       const product = products.find((p) => p._id === productId);
+//       if (!product) continue;
+
+//       const original = Number(product.price);
+//       const discountPercent = Number(product.discountPrice) || 0;
+
+//       const discountAmount =
+//         discountPercent > 0 && discountPercent < 100
+//           ? (original * discountPercent) / 100
+//           : 0;
+
+//       const finalPrice = original - discountAmount;
+
+//       for (const comboKey in cartItems[productId]) {
+//         const item = cartItems[productId][comboKey];
+//         const qty = item.quantity || 0;
+//         const extra = Number(item.customPrice) || 0;
+
+//         itemsTotalCalc += (original + extra) * qty;
+//         subtotalCalc += (finalPrice + extra) * qty;
+//         discountCalc += discountAmount * qty;
+//       }
+//     }
+
+//     return {
+//       itemsTotal: Number(itemsTotalCalc.toFixed(2)),
+//       subtotal: Number(subtotalCalc.toFixed(2)),
+//       discountSaved: Number(discountCalc.toFixed(2)),
+//     };
+//   }, [cartItems, products]);
+
+//   const total = Number((subtotal + delivery_fee).toFixed(2));
+
+//   return (
+//     <div className="w-full">
+//       <div className="text-xl sm:text-2xl mb-3">
+//         <Title text1={"CART"} text2={"TOTALS"} />
+//       </div>
+
+//       <div className="flex flex-col gap-3 mt-3 p-4 bg-gray-900 rounded-lg border border-gray-800 text-sm sm:text-base">
+
+//         {/* Items Total — NEW */}
+//         <div className="flex justify-between">
+//           <p className="text-gray-300">Items Total</p>
+//           <p className="font-medium text-gray-200">{currency}{itemsTotal.toFixed(2)}</p>
+//         </div>
+
+//         <hr className="border-gray-700" />
+
+//         {/* Discount Saved */}
+//         <div className="flex justify-between">
+//           <p className="text-gray-300">Discount</p>
+//           <p className="font-medium text-orange-500">
+//             {discountSaved > 0 ? `−${currency}${discountSaved.toFixed(2)}` : `${currency}0.00`}
+//           </p>
+//         </div>
+
+//         <hr className="border-gray-700" />
+
+//         {/* Subtotal — moved after discount, matches D Dolly Lamb order */}
+//         <div className="flex justify-between">
+//           <p className="text-gray-300">Subtotal</p>
+//           <p className="font-medium text-gray-200">{currency}{subtotal.toFixed(2)}</p>
+//         </div>
+
+//         <hr className="border-gray-700" />
+
+//         {/* Shipping Fee */}
+//         <div className="flex justify-between">
+//           <p className="text-gray-300">Shipping Fee</p>
+//           <p className="font-medium text-gray-200">{currency}{delivery_fee.toFixed(2)}</p>
+//         </div>
+
+//         <hr className="border-gray-700" />
+
+//         {/* Total */}
+//         <div className="flex justify-between">
+//           <b className="text-white">Total</b>
+//           <b className="text-white">{currency}{total.toFixed(2)}</b>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CartTotal;
+
+
 import React, { useContext, useMemo } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
@@ -103,8 +299,8 @@ import Title from "./Title";
 const CartTotal = () => {
   const { cartItems, products, delivery_fee, currency } = useContext(ShopContext);
 
-  // Calculate subtotal and discount correctly for nested cart structure + % discount
-  const { subtotal, discountSaved } = useMemo(() => {
+  const { itemsTotal, subtotal, discountSaved } = useMemo(() => {
+    let itemsTotalCalc = 0;
     let subtotalCalc = 0;
     let discountCalc = 0;
 
@@ -112,31 +308,26 @@ const CartTotal = () => {
       const product = products.find((p) => p._id === productId);
       if (!product) continue;
 
-      const original = Number(product.price);
-      const discountPercent = Number(product.discountPrice) || 0; // % stored in backend
-
-      // Calculate % discount
-      const discountAmount =
-        discountPercent > 0 && discountPercent < 100
-          ? (original * discountPercent) / 100
-          : 0;
-
-      const finalPrice = original - discountAmount; // price after discount
+      const discountPercent = Number(product.discountPrice) || 0;
 
       for (const comboKey in cartItems[productId]) {
         const item = cartItems[productId][comboKey];
         const qty = item.quantity || 0;
         const extra = Number(item.customPrice) || 0;
 
-        // Subtotal (price after % discount + any custom extra)
-        subtotalCalc += (finalPrice + extra) * qty;
+        const original = Number(item.sizePrice) || Number(product.price);   // ✅ size-specific price
+        const discountAmount = discountPercent > 0 && discountPercent < 100
+          ? (original * discountPercent) / 100 : 0;
+        const finalPrice = original - discountAmount;
 
-        // Discount saved
+        itemsTotalCalc += (original + extra) * qty;
+        subtotalCalc += (finalPrice + extra) * qty;
         discountCalc += discountAmount * qty;
       }
     }
 
     return {
+      itemsTotal: Number(itemsTotalCalc.toFixed(2)),
       subtotal: Number(subtotalCalc.toFixed(2)),
       discountSaved: Number(discountCalc.toFixed(2)),
     };
@@ -151,34 +342,28 @@ const CartTotal = () => {
       </div>
 
       <div className="flex flex-col gap-3 mt-3 p-4 bg-gray-900 rounded-lg border border-gray-800 text-sm sm:text-base">
-
-        {/* Subtotal */}
+        <div className="flex justify-between">
+          <p className="text-gray-300">Items Total</p>
+          <p className="font-medium text-gray-200">{currency}{itemsTotal.toFixed(2)}</p>
+        </div>
+        <hr className="border-gray-700" />
+        <div className="flex justify-between">
+          <p className="text-gray-300">Discount</p>
+          <p className="font-medium text-orange-500">
+            {discountSaved > 0 ? `−${currency}${discountSaved.toFixed(2)}` : `${currency}0.00`}
+          </p>
+        </div>
+        <hr className="border-gray-700" />
         <div className="flex justify-between">
           <p className="text-gray-300">Subtotal</p>
           <p className="font-medium text-gray-200">{currency}{subtotal.toFixed(2)}</p>
         </div>
-
         <hr className="border-gray-700" />
-
-        {/* Discount Saved */}
-        <div className="flex justify-between">
-          <p className="text-gray-300">You Saved</p>
-          <p className="font-medium text-orange-500">
-            {currency}{discountSaved.toFixed(2)}
-          </p>
-        </div>
-
-        <hr className="border-gray-700" />
-
-        {/* Shipping Fee */}
         <div className="flex justify-between">
           <p className="text-gray-300">Shipping Fee</p>
           <p className="font-medium text-gray-200">{currency}{delivery_fee.toFixed(2)}</p>
         </div>
-
         <hr className="border-gray-700" />
-
-        {/* Total */}
         <div className="flex justify-between">
           <b className="text-white">Total</b>
           <b className="text-white">{currency}{total.toFixed(2)}</b>

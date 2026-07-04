@@ -88,6 +88,7 @@
 
 // export default CustomCollection;
 
+
 import React, { useRef, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
@@ -151,7 +152,7 @@ const CustomCollection = () => {
         .cc-card {
           position: relative;
           overflow: hidden;
-          border-radius: 12px;
+          border-radius: 18px;
           display: block;
           text-decoration: none;
           background: #0d0d14;
@@ -166,11 +167,11 @@ const CustomCollection = () => {
           display: block;
           transition: transform 0.8s cubic-bezier(.22,1,.36,1),
                       filter 0.5s ease;
-          filter: brightness(0.75);
+          filter: brightness(0.88);
         }
         .cc-card:hover img {
           transform: scale(1.07);
-          filter: brightness(0.55);
+          filter: brightness(0.75);
         }
 
         /* dark gradient overlay — always */
@@ -179,8 +180,8 @@ const CustomCollection = () => {
           position: absolute; inset: 0; z-index: 1;
           background: linear-gradient(
             to top,
-            rgba(0,0,0,0.85) 0%,
-            rgba(0,0,0,0.1) 45%,
+            rgba(0,0,0,0.65) 0%,
+            rgba(0,0,0,0.18) 45%,
             transparent 70%
           );
           transition: opacity 0.4s;
@@ -246,7 +247,7 @@ const CustomCollection = () => {
           color: #fff;
           background: var(--accent);
           padding: 7px 16px;
-          border-radius: 2px;
+          border-radius: 18px;
           margin-top: 10px;
           width: fit-content;
           opacity: 0;
@@ -286,7 +287,7 @@ const CustomCollection = () => {
 
       <section
         ref={sectionRef}
-        className="relative overflow-hidden py-16 sm:py-20 lg:py-24"
+        className="relative overflow-hidden py-16"
         style={{
           background: "linear-gradient(180deg, #111018 0%, #0c0c12 100%)",
         }}
@@ -335,7 +336,7 @@ const CustomCollection = () => {
                   className="cc-serif text-white leading-tight tracking-tight"
                   style={{ fontSize: "clamp(32px,5vw,54px)", fontWeight: 300 }}
                 >
-                  Our{" "}
+                  Explore{" "}
                   <em
                     className="text-indigo-400"
                     style={{ fontStyle: "italic", fontWeight: 300 }}
@@ -346,7 +347,7 @@ const CustomCollection = () => {
               </div>
               <Link
                 to="/collection"
-                className="cc-sans text-white/35 hover:text-white/80 transition-colors no-underline
+                className="cc-sans text-white/60 hover:text-white transition-colors no-underline
                   inline-flex items-center gap-2 pb-1 border-b border-white/10 hover:border-white/30"
                 style={{
                   fontSize: "11px",
@@ -354,7 +355,7 @@ const CustomCollection = () => {
                   textTransform: "uppercase",
                 }}
               >
-                View All
+                View All Categories
                 <svg
                   width="12"
                   height="12"
@@ -373,7 +374,7 @@ const CustomCollection = () => {
 
             {/* divider */}
             <div
-              className="w-16 h-px mt-5"
+              className="w-40 h-px mt-5"
               style={{
                 background: "linear-gradient(90deg, #6366f1, transparent)",
               }}
@@ -430,7 +431,7 @@ const CustomCollection = () => {
                   {/* <span className="cc-sub">Women's Edit</span> */}
                   <span className="cc-label">Explore more</span>
                   <span className="cc-arrow" style={{ "--accent": "#6366f1" }}>
-                    Shop Now
+                    Explore
                     <svg
                       width="12"
                       height="12"
@@ -483,8 +484,8 @@ const CustomCollection = () => {
                 <div className="cc-content">
                   {/* <span className="cc-sub">Men's Edit</span> */}
                   {/* <span className="cc-label">Men</span> */}
-                  <span className="cc-arrow" style={{ "--accent": "#4f46e5" }}>
-                    Shop Now
+                  <span className="cc-arrow" style={{ "--accent": "#6366f1" }}>
+                    Explore
                     <svg
                       width="12"
                       height="12"
@@ -538,7 +539,7 @@ const CustomCollection = () => {
                   {/* <span className="cc-sub">Pillows, Aprons & More</span> */}
                   {/* <span className="cc-label">Others</span> */}
                   <span className="cc-arrow" style={{ "--accent": "#6366f1" }}>
-                    Shop Now
+                    Explore
                     <svg
                       width="12"
                       height="12"

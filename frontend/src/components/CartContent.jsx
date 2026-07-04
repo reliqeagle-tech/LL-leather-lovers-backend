@@ -234,6 +234,27 @@ const CartContent = () => {
   const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
 
+  // useEffect(() => {
+  //   if (products.length > 0 && Object.keys(cartItems).length > 0) {
+  //     const tempData = [];
+  //     for (const items in cartItems) {
+  //       for (const variant in cartItems[items]) {
+  //         const raw = cartItems[items][variant];
+  //         const quantity = typeof raw === 'number' ? raw : (raw?.quantity || 0);
+  //         const customPrice = typeof raw === 'number' ? 0 : (raw?.customPrice || 0);
+  //         if (quantity > 0) {
+  //           const [size, color] = variant.split('-');
+  //           if (!size || !color) continue;
+  //           tempData.push({ _id: items, size, color, quantity, customPrice });
+  //         }
+  //       }
+  //     }
+  //     setCartData(tempData);
+  //   } else {
+  //     setCartData([]);
+  //   }
+  // }, [cartItems, products]);
+
   useEffect(() => {
     if (products.length > 0 && Object.keys(cartItems).length > 0) {
       const tempData = [];
@@ -242,10 +263,11 @@ const CartContent = () => {
           const raw = cartItems[items][variant];
           const quantity = typeof raw === 'number' ? raw : (raw?.quantity || 0);
           const customPrice = typeof raw === 'number' ? 0 : (raw?.customPrice || 0);
+          const sizePrice = typeof raw === 'number' ? null : (raw?.sizePrice || null);   // ✅ sizePrice extract kiya
           if (quantity > 0) {
             const [size, color] = variant.split('-');
             if (!size || !color) continue;
-            tempData.push({ _id: items, size, color, quantity, customPrice });
+            tempData.push({ _id: items, size, color, quantity, customPrice, sizePrice });   // ✅ pass kiya
           }
         }
       }
@@ -294,17 +316,21 @@ const CartContent = () => {
             style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)' }}>
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
               stroke="rgba(99,102,241,0.6)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <path d="M16 10a4 4 0 01-8 0"/>
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
             </svg>
           </div>
-          <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '20px',
-            color: '#fff', fontWeight: 300, marginBottom: '6px' }}>
+          <p style={{
+            fontFamily: "'Cormorant Garamond',serif", fontSize: '20px',
+            color: '#fff', fontWeight: 300, marginBottom: '6px'
+          }}>
             Your cart is empty
           </p>
-          <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px',
-            color: 'rgba(255,255,255,0.3)', marginBottom: '20px' }}>
+          <p style={{
+            fontFamily: "'Montserrat',sans-serif", fontSize: '11px',
+            color: 'rgba(255,255,255,0.3)', marginBottom: '20px'
+          }}>
             Discover our premium leather collection
           </p>
           <button
@@ -330,16 +356,27 @@ const CartContent = () => {
           {/* ── Cart Items ── */}
           <div>
             {cartData.map((item, index) => {
+              // const productData = products.find((p) => p._id === item._id);
+              // if (!productData) return null;
+
+              // const imageSrc = Array.isArray(productData.image)
+              //   ? productData.image[0] : productData.image || assets.placeholder_image;
+
+              // const discountAmount = productData.price - (productData.price * productData.discountPrice / 100);
+              // const unitPrice = discountAmount + item.customPrice;
+              // const lineTotal = unitPrice * item.quantity;
+
               const productData = products.find((p) => p._id === item._id);
               if (!productData) return null;
-
               const imageSrc = Array.isArray(productData.image)
                 ? productData.image[0] : productData.image || assets.placeholder_image;
-
-              const discountAmount = productData.price - (productData.price * productData.discountPrice / 100);
-              const unitPrice = discountAmount + item.customPrice;
+              const original = Number(item.sizePrice) || Number(productData.price);   // ✅ size-specific price use karo
+              const discountPercent = Number(productData.discountPrice) || 0;
+              const discountAmount = discountPercent > 0 && discountPercent < 100
+                ? (original * discountPercent) / 100 : 0;
+              const discountedPrice = original - discountAmount;
+              const unitPrice = discountedPrice + item.customPrice;
               const lineTotal = unitPrice * item.quantity;
-
               return (
                 <div
                   key={`${item._id}-${item.size}-${item.color}-${index}`}
@@ -374,9 +411,9 @@ const CartContent = () => {
                       <button
                         onClick={() => updateQuantity(item._id, item.size, item.color, 0)}
                         className="flex-shrink-0 transition-colors duration-200 mt-0.5"
-                        style={{ color: 'rgba(255,255,255,0.2)' }}
+                        style={{ color: 'rgba(255,255,255,0.70)' }}
                         onMouseEnter={e => e.currentTarget.style.color = '#ef4444'}
-                        onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.2)'}
+                        onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.70)'}
                       >
                         <ImBin className="w-3.5 h-3.5" />
                       </button>
@@ -414,13 +451,17 @@ const CartContent = () => {
                           {currency}{lineTotal.toFixed(2)}
                         </p>
                         {item.customPrice > 0 ? (
-                          <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px',
-                            color: '#c97c3a', marginTop: '2px' }}>
+                          <p style={{
+                            fontFamily: "'Montserrat',sans-serif", fontSize: '10px',
+                            color: '#c97c3a', marginTop: '2px'
+                          }}>
                             Base {currency}{discountAmount.toFixed(2)} + Custom {currency}{item.customPrice.toFixed(2)}
                           </p>
                         ) : (
-                          <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px',
-                            color: 'rgba(255,255,255,0.25)', marginTop: '2px' }}>
+                          <p style={{
+                            fontFamily: "'Montserrat',sans-serif", fontSize: '10px',
+                            color: 'rgba(255,255,255,0.55)', marginTop: '2px'
+                          }}>
                             {currency}{unitPrice.toFixed(2)} each
                           </p>
                         )}

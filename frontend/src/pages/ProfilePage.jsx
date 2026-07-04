@@ -982,13 +982,13 @@ import axios from "axios";
 // ✅ FIX 4 - disabled prop add kiya
 const InputField = ({ label, type = "text", placeholder, value, onChange, icon, disabled }) => (
   <div className="flex flex-col gap-1.5">
-    <label className="text-white/40 font-semibold uppercase tracking-widest"
+    <label className="text-white/50 font-semibold uppercase tracking-widest"
       style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "2px" }}>
       {label}
     </label>
     <div className="relative group">
       {icon && (
-        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25
+        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/50
           group-focus-within:text-indigo-400 transition-colors duration-200 pointer-events-none">
           {icon}
         </div>
@@ -999,7 +999,7 @@ const InputField = ({ label, type = "text", placeholder, value, onChange, icon, 
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className="w-full rounded-lg text-white/80 placeholder-white/20
+        className="w-full rounded-lg text-white/80 placeholder-white/55
           focus:outline-none transition-all duration-200"
         style={{
           fontFamily: "'Montserrat',sans-serif", fontSize: "13px",
@@ -1173,7 +1173,7 @@ const MyAccount = () => {
               )}
 
               <form onSubmit={handleSave} className="space-y-5">
-                <p className="text-white/25 uppercase tracking-widest font-semibold"
+                <p className="text-white/70 uppercase tracking-widest font-semibold"
                   style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "9px", letterSpacing: "3px" }}>
                   Personal Information
                 </p>
@@ -1205,7 +1205,7 @@ const MyAccount = () => {
                   />
                 </div>
 
-                <p style={{ fontSize: "9px", color: "rgba(99,102,241,0.35)", fontStyle: "italic", fontFamily: "'Montserrat',sans-serif" }}>
+                <p style={{ fontSize: "11px", color: "rgba(99,102,241,0.55)", fontStyle: "italic", fontFamily: "'Montserrat',sans-serif" }}>
                   ◆ &nbsp;Email address cannot be changed.
                 </p>
 

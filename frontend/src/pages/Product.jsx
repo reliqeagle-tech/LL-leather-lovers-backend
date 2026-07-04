@@ -3587,6 +3587,7 @@ import Modal from '../components/Modal';
 import JacketLiningSelector from '../components/JacketLiningSelector';
 import { toast } from 'react-toastify';
 import CartDrawer from '../components/CartDrawer';
+import axios from 'axios';
 
 const colorMap = {
   wine: '#722F37', red: '#FF0000', black: '#000000', olive: '#808000', green: '#008000',
@@ -3663,7 +3664,7 @@ const ProductPageStyles = () => (
     .desc-prose p { margin-bottom: 1.2em; }
     .desc-prose h2,.desc-prose h3 { color: #c7c9ff; font-family: 'Cormorant Garamond',serif; font-weight: 400; margin: 1.6em 0 .6em; }
     .desc-prose ul { list-style: none; padding: 0; }
-    .desc-prose ul li { padding-left: 1.4em; position: relative; margin-bottom: .55em; color: rgba(255,255,255,.45); }
+    .desc-prose ul li { padding-left: 1.4em; position: relative; margin-bottom: .55em; color: rgba(255,255,255,.70); }
     .desc-prose ul li::before { content: ''; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#818cf8); }
 
     @keyframes ringIn { from{stroke-dashoffset:220} to{stroke-dashoffset:var(--offset)} }
@@ -3840,7 +3841,7 @@ const RatingRing = ({ avg, total }) => {
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: '#fff', lineHeight: 1 }}>{avg.toFixed(1)}</span>
-          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.3)', letterSpacing: 1 }}>/ 5.0</span>
+          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.70)', letterSpacing: 1 }}>/ 5.0</span>
         </div>
       </div>
       <div className="flex gap-0.5">
@@ -3850,7 +3851,7 @@ const RatingRing = ({ avg, total }) => {
           </svg>
         ))}
       </div>
-      <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.3)' }}>
+      <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.70)' }}>
         {total} {total === 1 ? 'review' : 'reviews'}
       </span>
     </div>
@@ -3867,7 +3868,7 @@ const StarBars = ({ reviews }) => {
     <div className="flex flex-col gap-2 flex-1" style={{ minWidth: 180 }}>
       {counts.map(({ star, count }) => (
         <div key={star} className="flex items-center gap-2.5">
-          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.4)', width: 8, textAlign: 'right' }}>{star}</span>
+          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.70)', width: 8, textAlign: 'right' }}>{star}</span>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
           </svg>
@@ -3878,7 +3879,7 @@ const StarBars = ({ reviews }) => {
                 background: star >= 4 ? 'linear-gradient(90deg,#6366f1,#818cf8)' : star === 3 ? '#f59e0b' : '#f87171'
               }} />
           </div>
-          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.25)', width: 14, textAlign: 'right' }}>{count}</span>
+          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.70)', width: 14, textAlign: 'right' }}>{count}</span>
         </div>
       ))}
     </div>
@@ -3889,7 +3890,7 @@ const StarBars = ({ reviews }) => {
    MAIN COMPONENT
 ══════════════════════════════════════════════════════════════════ */
 const Product = () => {
-  const { productId } = useParams();
+  const { productId, category, subCategory, ProductName, sku } = useParams();
   const {
     products, currency, addToCart, submitReview, getProductReviews,
     token, backendUrl, deleteReview, userId, wishlist,
@@ -3916,23 +3917,74 @@ const Product = () => {
   const [addonCost, setAddonCost] = useState(0);
 
   const displayPrice = basePrice + addonCost;
-  const isWishlisted = Array.isArray(wishlist) ? wishlist.some(w => w.productId === productId) : false;
+  const isWishlisted = Array.isArray(wishlist) ? wishlist.some(w => w.productId === productData?._id) : false;
 
-  const fetchProductData = async () => {
-    const item = await getSingleProduct(productId);
-    if (item) {
-      setProductData(item);
-      setImage(item.image[0]);
-      setSelectedIndex(0);
-      setBasePrice(item.price);
-      setAddonCost(0);
-    }
-  };
+  // const fetchProductData = async () => {
+  //   const item = await getSingleProduct(productId);
+  //   if (item) {
+  //     setProductData(item);
+  //     setImage(item.image[0]);
+  //     setSelectedIndex(0);
+  //     setBasePrice(item.price);
+  //     setAddonCost(0);
+  //   }
+  // };
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      // Slug-based route
+      // if (sku) {
+      //   const res = await axios.get(
+      //     `${backendUrl}/api/product/${category}/${subCategory}/${name}/${sku}`
+      //   );
+      //   setProductData(res.data.product);
+      // }
+      if (sku) {
+        const res = await axios.get(
+          `${backendUrl}/api/product/sku/${sku}`
+        );
+
+        if (res.data.success) {
+          setProductData(res.data.product);
+          setImage(res.data.product.image?.[0] || "");
+          setBasePrice(res.data.product.price);
+          setAddonCost(0);
+        }
+      }
+      // Old ID-based route (backward compatible)
+      else if (productId) {
+        const res = await axios.post(
+          `${backendUrl}/api/product/single`,
+          { productId }
+        );
+        setProductData(res.data.product);
+        setImage(res.data.product.image?.[0] || "");
+        setBasePrice(res.data.product.price);
+        setAddonCost(0);
+      }
+    };
+    fetchProduct();
+  }, [sku]);
+
+  // const loadReviews = async () => {
+  //   const data = await getProductReviews(productId);
+  //   setReviews(data);
+  // };
 
   const loadReviews = async () => {
-    const data = await getProductReviews(productId);
+    if (!productData?._id) return;
+    const data = await getProductReviews(productData._id);
     setReviews(data);
   };
+  useEffect(() => {
+    if (productData?._id) loadReviews();
+  }, [productData?._id]);
+
+  useEffect(() => {
+    if (productData?.image?.length) {
+      setImage(productData.image[0]);
+    }
+  }, [productData]);
 
   const handleSizeSelect = (sizeObj) => {
     if (!sizeObj) return;
@@ -3948,7 +4000,7 @@ const Product = () => {
 
   const handleAddToCart = () => {
     if (!size || !selectedColor) { toast.error('Please select a size and color.'); return; }
-    addToCart(productData._id, size, selectedColor, addonCost);
+    addToCart(productData._id, size, selectedColor, addonCost, basePrice);
     setIsButtonDisabled(true);
     setTimeout(() => { toast.success('Product added to cart!'); setIsButtonDisabled(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }, 2000);
   };
@@ -3956,11 +4008,11 @@ const Product = () => {
   const handleReviewSubmit = async () => {
     if (!token) return toast.error('Please login first');
     if (!rating || !comment.trim()) return toast.error('Please add rating and comment');
-    const ok = await submitReview(productId, rating, comment);
+    const ok = await submitReview(productData._id, rating, comment);
     if (ok) { setComment(''); setRating(5); loadReviews(); }
   };
 
-  useEffect(() => { fetchProductData(); }, [productId, products]);
+  // useEffect(() => { fetchProductData(); }, [productId, products]);
   useEffect(() => { if (productId) loadReviews(); }, [productId]);
   useEffect(() => {
     if (productData?.color?.length) {
@@ -4018,7 +4070,7 @@ const Product = () => {
                 }}>
                 <img src={image} alt={productData.name} className="main-img"
                   style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 16, display: 'block' }} />
-                <button onClick={() => toggleWishlistItem(productId)}
+                <button onClick={() => toggleWishlistItem(productData._id)}
                   className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center"
                   style={{
                     background: isWishlisted ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.85)',
@@ -4046,7 +4098,7 @@ const Product = () => {
                 style={{ background: '#fff', border: '1px solid rgba(255,255,255,0.06)', width: '100%', aspectRatio: '1/1', maxHeight: '80vw' }}>
                 <img src={image} alt={productData.name}
                   style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 12, display: 'block' }} />
-                <button onClick={() => toggleWishlistItem(productId)}
+                <button onClick={() => toggleWishlistItem(productData._id)}
                   className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center"
                   style={{
                     background: isWishlisted ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.85)',
@@ -4098,7 +4150,7 @@ const Product = () => {
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z" />
                 </svg>
               ))}
-              <span className="text-white/35 ml-1" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>
+              <span className="text-white/70 ml-1" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>
                 ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
               </span>
             </div>
@@ -4156,7 +4208,7 @@ const Product = () => {
               )}
             </div>
 
-            <p className="text-white/50 leading-relaxed mb-7"
+            <p className="text-white/60 leading-relaxed mb-7"
               style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '13px', lineHeight: '1.8' }}>
               {productData.description}
             </p>
@@ -4164,7 +4216,7 @@ const Product = () => {
             {/* COLOUR — round swatches */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
-                <p className="text-white/40 font-semibold uppercase tracking-widest"
+                <p className="text-white/70 font-semibold uppercase tracking-widest"
                   style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px' }}>Colour</p>
                 <span className="text-white/70 capitalize"
                   style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>— {selectedColor}</span>
@@ -4187,7 +4239,7 @@ const Product = () => {
                       }} />
                   );
                 }) : (
-                  <p className="text-white/30" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>No colors available</p>
+                  <p className="text-white/60" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>No colors available</p>
                 )}
               </div>
             </div>
@@ -4195,7 +4247,7 @@ const Product = () => {
             {/* SIZE */}
             <div className="mb-7">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-white/40 font-semibold uppercase tracking-widest"
+                <p className="text-white/70 font-semibold uppercase tracking-widest"
                   style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px' }}>Select Size</p>
                 <button onClick={() => setShowModal(true)}
                   className="text-indigo-400 hover:text-indigo-300 transition-colors"
@@ -4222,11 +4274,11 @@ const Product = () => {
                         cursor: oos ? 'not-allowed' : 'pointer'
                       }}>
                       <span className="text-white font-semibold" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>{lbl}</span>
-                      <span className="text-white/40" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>{currency}{sp.toFixed(2)}</span>
+                      <span className="text-white/70" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '10px' }}>{currency}{sp.toFixed(2)}</span>
                     </button>
                   );
                 }) : (
-                  <p className="text-white/30" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>No sizes available</p>
+                  <p className="text-white/60" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>No sizes available</p>
                 )}
               </div>
               {size && sizeStock <= 0 && <p className="text-red-400 mt-2" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>⚠️ This size is out of stock</p>}
@@ -4234,7 +4286,7 @@ const Product = () => {
             </div>
 
             {/* MADE TO MEASURE */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <button onClick={() => setMakeMeasure(!makeMeasure)}
                 className="w-full rounded-xl py-3 transition-all duration-200 font-semibold uppercase tracking-widest flex items-center justify-center gap-2"
                 style={{
@@ -4260,7 +4312,7 @@ const Product = () => {
                   <p className="text-white/50" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>Measurements can be added on the Cart page</p>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* ADD TO CART — original indigo gradient */}
             <button onClick={() => { handleAddToCart(); setDrawerOpen(true); }}
@@ -4285,26 +4337,128 @@ const Product = () => {
             </button>
 
             <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={() => setDrawerOpen(!drawerOpen)} />
-            <JacketLiningSelector basePrice={basePrice} onPriceChange={(c) => setAddonCost(c)} />
+            {/* <JacketLiningSelector basePrice={basePrice} onPriceChange={(c) => setAddonCost(c)} /> */}
+            {
+              productData.itemDetails?.some(item => item.title || item.value) && (
+
+                <div
+                  style={{
+                    marginTop: 4,
+                    marginBottom: 24,
+                    background: "rgba(255,255,255,0.02)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
+
+                  {/* Header */}
+
+                  <div
+                    style={{
+                      padding: "10px 22px",
+                      background: "rgba(99,102,241,0.08)",
+                      borderBottom: "1px solid rgba(255,255,255,0.08)",
+                    }}
+                  >
+                    <h2
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 500,
+                        color: "#ffffff",
+                        letterSpacing: "2px",
+                        textTransform: "uppercase",
+                        fontFamily: "'Montserrat',sans-serif",
+                      }}
+                    >
+                      Product Specifications
+                    </h2>
+                  </div>
+
+                  {/* Specification Rows */}
+
+                  {productData.itemDetails.map((item, index) => (
+
+                    item.title || item.value ? (
+
+                      <div
+                        key={index}
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "250px 1fr",
+                          alignItems: "center",
+                          padding: "10px 22px",
+                          background:
+                            index % 2 === 0
+                              ? "rgba(255,255,255,.015)"
+                              : "transparent",
+
+                          borderBottom:
+                            index !== productData.itemDetails.length - 1
+                              ? "1px solid rgba(255,255,255,.06)"
+                              : "none",
+                        }}
+                      >
+
+                        {/* Left */}
+
+                        <p
+                          style={{
+                            fontFamily: "'Montserrat',sans-serif",
+                            fontSize: 12,
+                            fontWeight: 500,
+                            color: "rgba(255,255,255,.90)",
+                            letterSpacing: ".05em",
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {item.title}
+                        </p>
+
+                        {/* Right */}
+
+                        <p
+                          style={{
+                            fontFamily: "'Montserrat',sans-serif",
+                            fontSize: 12,
+                            color: "rgba(255,255,255,.70)",
+                            lineHeight: 1.8,
+                          }}
+                        >
+                          {item.value}
+                        </p>
+
+                      </div>
+
+                    ) : null
+
+                  ))}
+
+                </div>
+
+              )
+            }
+
 
             {/* POLICY — original indigo icons */}
             <div className="mt-6 space-y-2.5 pb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               {[
                 { icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z', text: '100% original, premium materials' },
-                { icon: 'M9 12l2 2 4-4', text: 'Secure cash on delivery + multiple payment methods' },
+                { icon: 'M4 12l6 6L20 6', text: 'Secure cash on delivery + multiple payment methods' },
                 { icon: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8 M3 3v5h5', text: 'Simple 7-day return or exchange policy' },
               ].map(({ icon, text }) => (
                 <div key={text} className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)' }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(99,102,241,0.8)" strokeWidth="1.5" strokeLinecap="round">
+                    style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.50)' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(99,102,241,.90)" strokeWidth="2" strokeLinecap="round">
                       <path d={icon} />
                     </svg>
                   </div>
-                  <span className="text-white/35" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>{text}</span>
+                  <span className="text-white/70" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px' }}>{text}</span>
                 </div>
               ))}
-              <p className="text-white/30 leading-relaxed" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', lineHeight: '1.8' }}>
+              <p className="text-white/60 leading-relaxed" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '11px', lineHeight: '1.8' }}>
                 {shownContent}
               </p>
               <button onClick={() => setIsExpanded(p => !p)}
@@ -4324,7 +4478,7 @@ const Product = () => {
                 className={`ptab-btn px-8 py-4 font-semibold uppercase tracking-widest transition-colors duration-200 ${activeTab === tab ? 'ptab-active' : ''}`}
                 style={{
                   fontFamily: "'Montserrat',sans-serif", fontSize: 10, letterSpacing: '2.5px',
-                  color: activeTab === tab ? '#fff' : 'rgba(255,255,255,0.28)', background: 'none', border: 'none', cursor: 'pointer'
+                  color: activeTab === tab ? '#fff' : 'rgba(255,255,255,0.50)', background: 'none', border: 'none', cursor: 'pointer'
                 }}>
                 {tab === 'reviews' ? `Reviews (${reviews.length})` : 'Description'}
               </button>
@@ -4334,13 +4488,26 @@ const Product = () => {
           {activeTab === 'description' && (
             <div className="pt-10 pb-4">
               <div className="flex items-center gap-4 mb-8">
-                <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg,rgba(99,102,241,.3),transparent)' }} />
-                <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 13, color: 'rgba(99,102,241,.6)', letterSpacing: '4px', textTransform: 'uppercase' }}>Product Details</span>
-                <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg,transparent,rgba(99,102,241,.3))' }} />
+                <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg,rgba(99,102,241,.70),transparent)' }} />
+                {/* <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 13, color: 'rgba(120,125,241,.90)', letterSpacing: '4px', textTransform: 'uppercase' }}>Product Details</span> */}
+                <span
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: "18px",        // 13 → 18
+                    fontWeight: 600,         // thoda bold
+                    color: "#8b93ff",        // brighter indigo
+                    letterSpacing: "6px",    // 4 → 6
+                    textTransform: "uppercase",
+                    lineHeight: 1,
+                  }}
+                >
+                  Product Details
+                </span>
+                <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg,transparent,rgba(99,102,241,.70))' }} />
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
-                  <div className="desc-prose" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 13, lineHeight: 2, color: 'rgba(255,255,255,.45)' }}
+                  <div className="desc-prose" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 14, fontWeight: 300, lineHeight: 1.8, color: 'rgba(255,255,255,.45)' }}
                     dangerouslySetInnerHTML={{ __html: productData.detailedDescription }} />
                 </div>
               </div>
@@ -4357,7 +4524,7 @@ const Product = () => {
                   <StarBars reviews={reviews} />
                   <div className="w-px self-stretch hidden lg:block" style={{ background: 'rgba(255,255,255,0.07)' }} />
                   <div className="flex flex-col gap-2">
-                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.25)', letterSpacing: '2px', textTransform: 'uppercase' }}>Top sentiments</span>
+                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.70)', letterSpacing: '2px', textTransform: 'uppercase' }}>Top sentiments</span>
                     {['Premium quality', 'Great fit', 'Fast delivery'].map(s => (
                       <span key={s} className="rounded-full px-3 py-1.5 flex items-center gap-1.5"
                         style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.5)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
@@ -4379,7 +4546,7 @@ const Product = () => {
                   </div>
                   <div className="p-6 space-y-6">
                     <div>
-                      <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.25)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 12 }}>Your Rating</p>
+                      <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.70)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 12 }}>Your Rating</p>
                       <div className="flex gap-3 flex-wrap">
                         {[5, 4, 3, 2, 1].map(r => {
                           const active = Number(rating) === r;
@@ -4388,10 +4555,25 @@ const Product = () => {
                               className="star-pick flex items-center gap-2 rounded-xl px-4 py-2.5 transition-all duration-200"
                               style={{
                                 fontFamily: "'Montserrat',sans-serif", fontSize: 12,
-                                background: active ? 'rgba(245,158,11,0.1)' : 'rgba(255,255,255,0.03)',
-                                border: active ? '1px solid rgba(245,158,11,0.45)' : '1px solid rgba(255,255,255,0.08)',
-                                color: active ? '#f59e0b' : 'rgba(255,255,255,.3)',
-                                boxShadow: active ? '0 0 16px rgba(245,158,11,0.2)' : 'none', cursor: 'pointer'
+                                // background: active ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.03)',
+                                // border: active ? '1px solid rgba(245,158,11,0.45)' : '1px solid rgba(255,255,255,0.08)',
+                                // color: active ? '#f59e0b' : 'rgba(255,255,255,.3)',
+                                // boxShadow: active ? '0 0 16px rgba(245,158,11,0.2)' : 'none', cursor: 'pointer'
+                                background: active
+                                  ? 'rgba(251,191,36,0.28)'
+                                  : 'rgba(255,255,255,0.04)',
+
+                                border: active
+                                  ? '1px solid #fbbf24'
+                                  : '1px solid rgba(255,255,255,0.10)',
+
+                                color: active
+                                  ? '#facc15'
+                                  : 'rgba(255,255,255,.35)',
+
+                                boxShadow: active
+                                  ? '0 0 20px rgba(251,191,36,.55)'
+                                  : 'none',
                               }}>
                               <span style={{ fontSize: 14 }}>{'★'.repeat(r)}</span>
                               <span style={{ fontSize: 11 }}>{r}.0</span>
@@ -4401,7 +4583,7 @@ const Product = () => {
                       </div>
                     </div>
                     <div>
-                      <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.25)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 10 }}>Your Review</p>
+                      <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.70)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 10 }}>Your Review</p>
                       <div className="relative">
                         <textarea className="rev-textarea w-full rounded-xl resize-none transition-all duration-200"
                           value={comment} onChange={e => setComment(e.target.value)}
@@ -4411,7 +4593,7 @@ const Product = () => {
                             padding: '14px 16px', background: 'rgba(255,255,255,0.04)',
                             border: '1px solid rgba(255,255,255,0.09)', color: 'rgba(255,255,255,.65)', width: '100%'
                           }} />
-                        <span className="absolute bottom-3 right-4" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.2)' }}>
+                        <span className="absolute bottom-3 right-4" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.40)' }}>
                           {comment.length}/500
                         </span>
                       </div>
@@ -4426,7 +4608,7 @@ const Product = () => {
                           Submit Review
                         </span>
                       </button>
-                      <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.2)' }}>Your review is public</span>
+                      <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 12, color: 'rgba(255,255,255,.70)' }}>Your review is public</span>
                     </div>
                   </div>
                 </div>
@@ -4435,23 +4617,23 @@ const Product = () => {
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(99,102,241,.5)" strokeWidth="1.2" strokeLinecap="round" className="mx-auto mb-3">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                   </svg>
-                  <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 12, color: 'rgba(255,255,255,.35)' }}>Sign in to share your experience</p>
+                  <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 12, color: 'rgba(255,255,255,.70)' }}>Sign in to share your experience</p>
                 </div>
               )}
 
               {reviews.length === 0 ? (
-                <div className="rounded-2xl p-12 text-center" style={{ background: 'rgba(255,255,255,0.015)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div className="text-4xl mb-3" style={{ opacity: .18 }}>✦</div>
-                  <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 20, color: 'rgba(255,255,255,.3)', fontWeight: 300 }}>No reviews yet</p>
-                  <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 11, color: 'rgba(255,255,255,.2)', marginTop: 6 }}>Be the first to share your thoughts</p>
+                <div className="rounded-2xl p-12 text-center" style={{ background: 'rgba(255,255,255,0.035)', border: '1px solid rgba(255,255,255,0.070)' }}>
+                  <div className="text-4xl mb-3 text-indigo-500">✦</div>
+                  <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 20, color: 'rgba(255,255,255,.40)', fontWeight: 300 }}>No reviews yet</p>
+                  <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 11, color: 'rgba(255,255,255,.40)', marginTop: 6 }}>Be the first to share your thoughts</p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between pb-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.25)', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.70)', letterSpacing: '2px', textTransform: 'uppercase' }}>
                       {reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'}
                     </span>
-                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.2)', letterSpacing: '1px' }}>Most recent</span>
+                    <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 9, color: 'rgba(255,255,255,.70)', letterSpacing: '1px' }}>Most recent</span>
                   </div>
                   {reviews.map((rev, idx) => {
                     const init = (rev.user?.name || 'U')[0].toUpperCase();
@@ -4459,7 +4641,7 @@ const Product = () => {
                     const col = cols[idx % cols.length];
                     return (
                       <div key={rev._id} className="rev-card rounded-2xl p-5"
-                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                        style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.06)' }}>
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold flex-shrink-0"
@@ -4490,32 +4672,82 @@ const Product = () => {
                             </div>
                           </div>
                           <div className="flex items-center gap-3 shrink-0">
-                            <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.2)' }}>
+                            <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.70)' }}>
                               {new Date(rev.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
                             {rev.user?._id === userId && (
-                              <button onClick={async () => { const ok = await deleteReview(rev._id); if (ok) loadReviews(); }}
-                                className="flex items-center gap-1 rounded-lg px-2.5 py-1 transition-all duration-150"
-                                style={{
-                                  fontFamily: "'Montserrat',sans-serif", fontSize: 9, letterSpacing: '1px',
-                                  color: 'rgba(248,113,113,.6)', background: 'rgba(248,113,113,0.07)', border: '1px solid rgba(248,113,113,0.15)', textTransform: 'uppercase', cursor: 'pointer'
+                              // <button onClick={async () => { const ok = await deleteReview(rev._id); if (ok) loadReviews(); }}
+                              //   className="flex items-center gap-1 rounded-lg px-2.5 py-1 transition-all duration-150"
+                              //   style={{
+                              //     fontFamily: "'Montserrat',sans-serif", fontSize: 9, letterSpacing: '1px',
+                              //     color: 'rgba(248,113,113,.6)', background: 'rgba(248,113,113,0.07)', border: '1px solid rgba(248,113,113,0.15)', textTransform: 'uppercase', cursor: 'pointer'
+                              //   }}
+                              //   onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.background = 'rgba(248,113,113,0.1)'; }}
+                              //   onMouseLeave={e => { e.currentTarget.style.color = 'rgba(248,113,113,.6)'; e.currentTarget.style.background = 'rgba(248,113,113,0.07)'; }}>
+                              //   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                              //     <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6 M14 11v6" />
+                              //   </svg>
+                              //   Delete
+                              // </button>
+                              <button
+                                onClick={async () => {
+                                  const ok = await deleteReview(rev._id);
+                                  if (ok) loadReviews();
                                 }}
-                                onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.background = 'rgba(248,113,113,0.12)'; }}
-                                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(248,113,113,.6)'; e.currentTarget.style.background = 'rgba(248,113,113,0.07)'; }}>
-                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                  <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6 M14 11v6" />
+                                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 transition-all duration-200"
+                                style={{
+                                  fontFamily: "'Montserrat',sans-serif",
+                                  fontSize: 10,
+                                  fontWeight: 600,
+                                  letterSpacing: "1px",
+                                  color: "#f87171",
+                                  background: "rgba(248,113,113,0.15)",
+                                  border: "1px solid rgba(248,113,113,0.35)",
+                                  textTransform: "uppercase",
+                                  cursor: "pointer",
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.color = "#ffffff";
+                                  e.currentTarget.style.background = "#ef4444";
+                                  e.currentTarget.style.borderColor = "#ef4444";
+                                  e.currentTarget.style.boxShadow =
+                                    "0 0 16px rgba(239,68,68,.45)";
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.color = "#f87171";
+                                  e.currentTarget.style.background =
+                                    "rgba(248,113,113,0.15)";
+                                  e.currentTarget.style.borderColor =
+                                    "rgba(248,113,113,0.35)";
+                                  e.currentTarget.style.boxShadow = "none";
+                                }}
+                              >
+                                <svg
+                                  width="11"
+                                  height="11"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polyline points="3 6 5 6 21 6" />
+                                  <path d="M19 6l-1 14H6L5 6" />
+                                  <path d="M10 11v6 M14 11v6" />
                                 </svg>
+
                                 Delete
                               </button>
                             )}
                           </div>
                         </div>
                         <p className="mt-4 leading-relaxed"
-                          style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 12, lineHeight: 1.8, color: 'rgba(255,255,255,.45)', paddingLeft: 52 }}>
+                          style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 12, lineHeight: 1.8, color: 'rgba(255,255,255,.70)', paddingLeft: 52 }}>
                           {rev.comment}
                         </p>
                         <div className="flex items-center gap-3 mt-4" style={{ paddingLeft: 52 }}>
-                          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.2)' }}>Helpful?</span>
+                          <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 10, color: 'rgba(255,255,255,.70)' }}>Helpful?</span>
                           {['👍', '👎'].map(e => (
                             <button key={e} className="rounded-lg px-2.5 py-1 transition-colors"
                               style={{ fontSize: 11, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', cursor: 'pointer' }}
@@ -4555,6 +4787,855 @@ const Product = () => {
 
 export default Product;
 
+
+
+
+
+// import { useContext, useEffect, useState, useRef } from 'react';
+// import { useParams } from 'react-router-dom';
+// import { createPortal } from 'react-dom';
+// import { ShopContext } from '../context/ShopContext';
+// import { FaInfoCircle, FaCrown, FaChevronUp, FaChevronDown, FaRuler } from 'react-icons/fa';
+// import { MdVerified, MdLocalShipping, MdLoop } from 'react-icons/md';
+// import { HiSparkles } from 'react-icons/hi';
+// import RelatedProducts from '../components/RelatedProducts';
+// import Modal from '../components/Modal';
+// import { toast } from 'react-toastify';
+// import { FaRegStar, FaStar, FaHeart, FaRegHeart } from 'react-icons/fa';
+// import { BsShieldCheck, BsBagCheck } from 'react-icons/bs';
+// import CartDrawer from '../components/CartDrawer';
+// import axios from 'axios';
+// import { Helmet } from 'react-helmet-async';
+
+// /*
+//   ═══════════════════════════════════════════════
+//   LL LEATHER LOVERS — Product.jsx (dark indigo theme)
+//   Ported from D Dolly Lamb's light-mode Product.jsx,
+//   with these corrections:
+
+//   ✅ DISCOUNT FIX — LLeather Lovers' discountPrice field
+//      stores the FINAL RUPEE AMOUNT in the DB (e.g. 950
+//      means ₹950), not a percentage like D Dolly Lamb's
+//      schema. All discount math below derives the % badge
+//      from price vs discountPrice instead of assuming
+//      discountPrice itself is already a percent.
+
+//   ✅ basePrice/displayPrice now always initializes from
+//      productData.price as soon as the product loads,
+//      instead of staying at 0 until a size is clicked.
+//   ═══════════════════════════════════════════════
+// */
+
+// const C = {
+//   bgPage: '#08080f',
+//   bgCard: '#0e0e1c',
+//   bgCardHover: '#13132a',
+//   bgInput: '#0b0b16',
+//   accent: '#6366F1',
+//   accentMid: '#818CF8',
+//   accentDk: '#4338CA',
+//   gold: '#D4A853',
+//   textNav: '#FFFFFF',
+//   textBody: 'rgba(255,255,255,0.6)',
+//   textMuted: 'rgba(255,255,255,0.4)',
+//   textDim: 'rgba(255,255,255,0.25)',
+//   border: 'rgba(99,102,241,0.15)',
+//   borderMd: 'rgba(99,102,241,0.22)',
+//   borderBright: 'rgba(99,102,241,0.4)',
+// };
+
+// const colorMap = {
+//   wine: '#722F37', red: '#FF0000', black: '#000000', olive: '#808000',
+//   green: '#008000', cognac: '#D2691E', white: '#FFFFFF', yellow: '#FFFF00',
+//   gray: '#808080', rose: '#FF007F', tobacco: '#A0522D', navy: '#000080',
+//   beige: '#F5F5DC', blue: '#0000FF', brown: '#8B4513',
+//   'antique brown': '#8A5A44', 'dark gray': '#404040', 'dark-gray': '#404040',
+//   'dark-wine': '#453333', 'tobacco-dark': '#6e351a',
+// };
+
+// const Product = () => {
+//   const { productId, category, subCategory, productName, sku } = useParams();
+//   const { products, currency, addToCart } = useContext(ShopContext);
+//   const { wishlist, toggleWishlistItem, backendUrl } = useContext(ShopContext);
+//   const { submitReview, getProductReviews, token, deleteReview, userId } = useContext(ShopContext);
+
+//   const [productData, setProductData] = useState(null);
+//   const [image, setImage] = useState('');
+//   const [selectedIndex, setSelectedIndex] = useState(0);
+//   const [size, setSize] = useState('');
+//   const [selectedColor, setSelectedColor] = useState('');
+//   const [showModal, setShowModal] = useState(false);
+//   const [activeTab, setActiveTab] = useState('description');
+//   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+//   const [drawerOpen, setDrawerOpen] = useState(false);
+//   const [displayPrice, setDisplayPrice] = useState(0);
+//   const [reviews, setReviews] = useState([]);
+//   const [rating, setRating] = useState(5);
+//   const [comment, setComment] = useState('');
+//   const [sizeMultiplier, setSizeMultiplier] = useState(1);
+//   const [sizeStock, setSizeStock] = useState(0);
+//   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+//   const [isZooming, setIsZooming] = useState(false);
+
+//   const thumbListRef = useRef(null);
+//   const mainImgRef = useRef(null);
+
+//   const isWishlisted = Array.isArray(wishlist) && productData
+//     ? wishlist.some(item => item.productId === productData._id) : false;
+
+//   useEffect(() => {
+//     const fetchProduct = async () => {
+//       if (sku) {
+//         const res = await axios.get(`${backendUrl}/api/product/sku/${sku}`);
+//         if (res.data.success) {
+//           setProductData(res.data.product);
+//           setImage(res.data.product.image?.[0] || "");
+//         }
+//       } else if (productId) {
+//         const res = await axios.post(`${backendUrl}/api/product/single`, { productId });
+//         setProductData(res.data.product);
+//       }
+//     };
+//     fetchProduct();
+//   }, [sku]);
+
+//   const loadReviews = async () => {
+//     if (!productData?._id) return;
+//     const data = await getProductReviews(productData._id);
+//     setReviews(data);
+//   };
+//   useEffect(() => {
+//     if (productData?._id) loadReviews();
+//   }, [productData?._id]);
+
+//   useEffect(() => {
+//     if (productData?.image?.length) {
+//       setImage(productData.image[0]);
+//     }
+//   }, [productData]);
+
+//   const openCartDrawer = () => setDrawerOpen(true);
+//   const closeCartDrawer = () => setDrawerOpen(false);
+
+//   const handleSizeSelect = (sizeObj) => {
+//     if (!sizeObj) return;
+//     if (typeof sizeObj === 'string') {
+//       setSize(sizeObj); setSizeMultiplier(1); setSizeStock(0);
+//       setDisplayPrice(productData.price);
+//     } else if (typeof sizeObj === 'object' && sizeObj.size) {
+//       setSize(sizeObj.size);
+//       setSizeMultiplier(sizeObj.priceMultiplier || 1);
+//       setSizeStock(sizeObj.stock || 0);
+//       if (sizeObj.useCustomPrice && sizeObj.customPrice > 0) {
+//         setDisplayPrice(sizeObj.customPrice);
+//       } else {
+//         setDisplayPrice(productData.price * (sizeObj.priceMultiplier || 1));
+//       }
+//     }
+//   };
+
+//   const scrollThumbs = (dir) => {
+//     if (!thumbListRef.current) return;
+//     const isMobile = window.innerWidth < 768;
+//     thumbListRef.current.scrollBy({
+//       top: isMobile ? 0 : dir * 110,
+//       left: isMobile ? dir * 90 : 0,
+//       behavior: 'smooth',
+//     });
+//   };
+
+//   const handleMouseMove = (e) => {
+//     if (!mainImgRef.current) return;
+//     const rect = mainImgRef.current.getBoundingClientRect();
+//     const x = ((e.clientX - rect.left) / rect.width) * 100;
+//     const y = ((e.clientY - rect.top) / rect.height) * 100;
+//     setZoomPos({ x, y });
+//   };
+
+//   useEffect(() => {
+//     if (productData?.color?.length > 0) {
+//       const firstColor = productData.color[0];
+//       setSelectedColor(typeof firstColor === 'string' ? firstColor : firstColor?.name || '');
+//     } else {
+//       setSelectedColor('');
+//     }
+//   }, [productData]);
+
+//   // ✅ FIX — always initialize displayPrice from productData.price
+//   // as soon as the product loads, instead of leaving it at 0 until
+//   // the user manually clicks a size. This was the root cause of the
+//   // "$0.00" price bug seen on freshly bulk-uploaded products.
+//   useEffect(() => {
+//     if (productData?.price !== undefined) {
+//       setDisplayPrice(productData.price);
+//     }
+//   }, [productData]);
+
+//   useEffect(() => {
+//     if (!productData?.price) return;
+//     const selectedSizeObj = productData.sizes?.find(s => s.size === size);
+//     if (selectedSizeObj?.useCustomPrice && selectedSizeObj?.customPrice > 0) {
+//       setDisplayPrice(selectedSizeObj.customPrice);
+//     } else {
+//       setDisplayPrice(productData.price * (sizeMultiplier || 1));
+//     }
+//   }, [sizeMultiplier, productData?.price, size]);
+
+//   const handleAddToCart = () => {
+//     if (!size || !selectedColor) { toast.error('Please select a size and color.'); return; }
+//     const customPrice = displayPrice - productData.price;
+//     addToCart(productData._id, size, selectedColor, customPrice);
+//     setIsButtonDisabled(true);
+//     openCartDrawer();
+//     setTimeout(() => { toast.success('Added to cart!'); setIsButtonDisabled(false); }, 2000);
+//   };
+
+//   const handleReviewSubmit = async () => {
+//     if (!token) return toast.error('Please login first');
+//     if (!rating || !comment.trim()) return toast.error('Please add rating and comment');
+//     const success = await submitReview(productData._id, rating, comment);
+//     if (success) { setComment(''); setRating(5); loadReviews(); }
+//   };
+
+//   /* ── Loading State ── */
+//   if (!productData) return (
+//     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: C.bgPage, flexDirection: 'column', gap: 20 }}>
+//       <div style={{ width: 48, height: 48, position: 'relative' }}>
+//         <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: `2px solid ${C.border}` }} />
+//         <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: `2px solid transparent`, borderTopColor: C.accent, animation: 'spin 1s linear infinite' }} />
+//       </div>
+//       <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: 11, letterSpacing: '.22em', color: C.textDim, textTransform: 'uppercase', fontWeight: 600 }}>Loading</span>
+//       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+//     </div>
+//   );
+
+//   const productUrl = `https://llleatherlovers.com/product/${category}/${subCategory}/${productName}/${sku}`;
+
+//   const avgRating = reviews.length > 0 ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
+//   const roundedRating = Math.round(avgRating);
+
+//   /* ══════════════════════════════════════════════════════════════
+//      ✅ DISCOUNT FIX — discountPrice is the FINAL rupee price here,
+//      not a percentage. D Dolly Lamb's original formula was:
+//        displayPrice - (displayPrice * productData.discountPrice / 100)
+//      which silently produced wildly wrong (often negative) prices
+//      once the backend started storing the final rupee amount.
+//   ══════════════════════════════════════════════════════════════ */
+//   const hasDiscount = productData.discountPrice > 0 && productData.discountActive && productData.discountPrice < displayPrice;
+//   const discountedPrice = hasDiscount ? productData.discountPrice : null;
+//   const discountPercent = hasDiscount
+//     ? Math.round(((displayPrice - productData.discountPrice) / displayPrice) * 100)
+//     : 0;
+
+//   const customBreakdown = displayPrice > productData.price
+//     ? `+${currency}${(displayPrice - productData.price).toFixed(2)} customization` : '';
+
+//   const css = `
+//     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+//     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+//     .pp { font-family:'Montserrat',sans-serif; background:${C.bgPage}; min-height:100vh; color:${C.textBody}; }
+//     .pp-serif { font-family:'Montserrat',sans-serif; }
+
+//     .pp-crumb {
+//       padding:11px 36px; font-size:10px; font-weight:600;
+//       letter-spacing:.25em; text-transform:uppercase; color:${C.textDim};
+//       border-bottom:1px solid ${C.border}; display:flex; align-items:center; gap:5px;
+//       background:${C.bgCard};
+//     }
+//     .pp-crumb-dot { width:3px; height:3px; border-radius:50%; background:${C.textDim}; flex-shrink:0; }
+//     .pp-crumb-name { color:${C.textBody}; font-weight:400; letter-spacing:.06em; text-transform:none; font-size:12px; }
+
+//     .pp-thumb-col { display:flex; flex-direction:column; align-items:center; width:64px; flex-shrink:0; gap:6px; }
+//     .pp-thumb-scroll { display:flex; flex-direction:column; gap:6px; overflow-y:scroll; max-height:380px; scrollbar-width:none; -ms-overflow-style:none; width:100%; }
+//     .pp-thumb-scroll::-webkit-scrollbar { display:none; }
+//     .pp-arr { width:100%; height:24px; background:transparent; border:1px solid ${C.border}; border-radius:5px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:${C.textDim}; transition:all .2s; flex-shrink:0; }
+//     .pp-arr:hover { border-color:${C.accent}; color:${C.accent}; background:rgba(99,102,241,0.1); }
+//     .pp-thumb-item { width:100%; aspect-ratio:1/1; border-radius:8px; overflow:hidden; cursor:pointer; border:1.5px solid ${C.border}; background:#FFFFFF; flex-shrink:0; transition:all .3s; opacity:0.7; }
+//     .pp-thumb-item:hover { opacity:0.9; border-color:${C.accentMid}; }
+//     .pp-thumb-item.active { opacity:1; border-color:${C.accent}; box-shadow:0 0 0 2px rgba(99,102,241,0.25); }
+//     .pp-thumb-item img { width:100%; height:100%; object-fit:cover; display:block; }
+
+//     .pp-main-wrap { flex:1; position:relative; border-radius:14px; overflow:hidden; background:#FFFFFF; border:1.5px solid ${C.border}; cursor:crosshair; box-shadow:0 4px 24px rgba(99,102,241,0.15); }
+//     .pp-main-wrap img { width:100%; height:100%; object-fit:contain; display:block; transition:transform .1s ease; }
+//     .pp-main-wrap.zooming img { transform:scale(2.2); transform-origin:var(--zx,50%) var(--zy,50%); }
+
+//     .pp-corner { position:absolute; width:20px; height:20px; pointer-events:none; }
+//     .pp-corner-tl { top:12px; left:12px; border-top:1.5px solid ${C.accentMid}; border-left:1.5px solid ${C.accentMid}; opacity:0.5; }
+//     .pp-corner-tr { top:12px; right:12px; border-top:1.5px solid ${C.accentMid}; border-right:1.5px solid ${C.accentMid}; opacity:0.5; }
+//     .pp-corner-bl { bottom:12px; left:12px; border-bottom:1.5px solid ${C.accentMid}; border-left:1.5px solid ${C.accentMid}; opacity:0.5; }
+//     .pp-corner-br { bottom:12px; right:12px; border-bottom:1.5px solid ${C.accentMid}; border-right:1.5px solid ${C.accentMid}; opacity:0.5; }
+
+//     .pp-img-wish { position:absolute; top:12px; right:12px; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.92); border:1.5px solid ${C.border}; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .25s; z-index:10; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+//     .pp-img-wish:hover { border-color:${C.accent}; background:rgba(99,102,241,0.1); }
+//     .pp-img-wish.active { border-color:${C.accent}; background:rgba(99,102,241,0.12); }
+
+//     .pp-counter { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.1); border-radius:99px; padding:5px 16px; font-size:10px; font-weight:700; color:rgba(255,255,255,0.7); backdrop-filter:blur(8px); letter-spacing:.14em; display:flex; align-items:center; gap:8px; }
+//     .pp-counter-dot { width:4px; height:4px; border-radius:50%; background:${C.accentMid}; }
+
+//     .pp-badge-indigo { background:linear-gradient(135deg,${C.accentDk},${C.accent}); color:#fff; border-radius:20px; padding:4px 14px; font-size:9px; font-weight:700; letter-spacing:.2em; display:inline-flex; align-items:center; gap:5px; text-transform:uppercase; box-shadow:0 2px 8px rgba(99,102,241,0.35); }
+//     .pp-badge-sale { background:linear-gradient(135deg,#059669,#10B981); color:#fff; border-radius:20px; padding:4px 14px; font-size:9px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; box-shadow:0 2px 8px rgba(16,185,129,0.3); }
+
+//     .pp-divider { display:flex; align-items:center; gap:12px; margin:18px 0; }
+//     .pp-divider-line { flex:1; height:1px; background:${C.border}; }
+//     .pp-divider-diamond { width:5px; height:5px; background:${C.accentMid}; transform:rotate(45deg); flex-shrink:0; opacity:0.6; }
+
+//     .pp-pricebox { padding:14px 0; margin-bottom:14px; border-bottom:1px solid ${C.border}; }
+
+//     .pp-clr { border-radius:50%; cursor:pointer; transition:all .25s; border:2px solid transparent; flex-shrink:0; width:24px; height:24px; position:relative; }
+//     .pp-clr::after { content:''; position:absolute; inset:-4px; border-radius:50%; border:2px solid transparent; transition:border-color .25s; }
+//     .pp-clr:hover { transform:scale(1.1); }
+//     .pp-clr.active::after { border-color:${C.accent}; }
+
+//     .pp-size { border:1.5px solid ${C.border}; border-radius:10px; background:${C.bgCard}; display:flex; flex-direction:column; align-items:center; padding:8px 14px; min-width:52px; cursor:pointer; transition:all .2s; position:relative; overflow:hidden; }
+//     .pp-size:hover { border-color:${C.accentMid}; background:${C.bgCardHover}; }
+//     .pp-size.active { border-color:${C.accent}; background:rgba(99,102,241,0.12); box-shadow:0 0 0 3px rgba(99,102,241,0.18); }
+//     .pp-size-lbl { font-weight:600; font-size:12px; color:${C.textNav}; }
+//     .pp-size-price { font-size:10px; color:${C.textDim}; font-weight:400; margin-top:2px; }
+//     .pp-size.active .pp-size-lbl { color:${C.accentMid}; }
+//     .pp-size.active .pp-size-price { color:${C.accent}; }
+
+//     .pp-cart { width:100%; color:#fff; font-weight:700; font-size:11px; letter-spacing:.22em; border:none; border-radius:10px; padding:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(110deg,${C.accentDk} 0%,${C.accent} 45%,${C.accentMid} 65%,${C.accent} 100%); background-size:200% 200%; background-position:0% 50%; transition:all .4s ease; position:relative; overflow:hidden; font-family:'Montserrat',sans-serif; text-transform:uppercase; box-shadow:0 6px 24px rgba(99,102,241,0.4); }
+//     .pp-cart::before { content:''; position:absolute; top:-50%; left:-60%; width:30%; height:200%; background:rgba(255,255,255,.15); transform:skewX(-20deg); transition:left .6s ease; }
+//     .pp-cart:hover::before { left:120%; }
+//     .pp-cart:hover { background-position:100% 50%; box-shadow:0 10px 36px rgba(99,102,241,0.5); transform:translateY(-1px); }
+//     .pp-cart:disabled { background:${C.border}; color:${C.textDim}; border:1px solid ${C.border}; box-shadow:none; transform:none; cursor:not-allowed; }
+
+//     .pp-policy { display:flex; align-items:center; gap:14px; padding:10px 0; border-bottom:1px solid ${C.border}; font-size:12px; color:${C.textMuted}; letter-spacing:.02em; }
+//     .pp-policy:last-child { border-bottom:none; }
+//     .pp-policy-icon { width:32px; height:32px; border-radius:8px; background:rgba(99,102,241,0.1); border:1px solid ${C.border}; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+//     .pp-slabel { font-size:10px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:${C.textDim}; }
+
+//     .pp-bar-track { flex:1; height:5px; background:${C.border}; border-radius:99px; overflow:hidden; }
+//     .pp-bar-fill { height:100%; background:linear-gradient(90deg,${C.accentDk},${C.accent}); border-radius:99px; transition:width .7s ease; }
+
+//     .pp-rsum { background:${C.bgCard}; border:1.5px solid ${C.borderMd}; border-radius:16px; padding:26px; margin-bottom:24px; position:relative; overflow:hidden; }
+//     .pp-rsum::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,${C.accent},transparent); }
+
+//     .pp-submit-btn { margin-top:14px; background:linear-gradient(110deg,${C.accentDk},${C.accent}); color:#fff; border-radius:8px; padding:12px 28px; font-size:10px; font-weight:800; letter-spacing:.2em; border:none; cursor:pointer; font-family:'Montserrat',sans-serif; transition:all .25s; text-transform:uppercase; box-shadow:0 4px 16px rgba(99,102,241,0.35); }
+//     .pp-submit-btn:hover { box-shadow:0 6px 24px rgba(99,102,241,0.5); transform:translateY(-1px); }
+
+//     .pp-rinput { width:100%; border:1.5px solid ${C.border}; border-radius:10px; padding:14px 16px; font-size:13px; color:${C.textNav}; resize:vertical; font-family:'Montserrat',sans-serif; background:${C.bgInput}; outline:none; transition:border-color .25s, box-shadow .25s; line-height:1.7; }
+//     .pp-rinput:focus { border-color:${C.accent}; box-shadow:0 0 0 3px rgba(99,102,241,0.18); }
+//     .pp-rinput::placeholder { color:${C.textDim}; }
+
+//     .pp-rev-card { background:${C.bgCard}; border:1.5px solid ${C.border}; border-radius:14px; padding:22px; margin-bottom:12px; transition:border-color .2s, box-shadow .2s; }
+//     .pp-rev-card:hover { border-color:${C.accentMid}; box-shadow:0 4px 16px rgba(99,102,241,0.12); }
+
+//     .pp-avatar { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,${C.accentDk},${C.accent}); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0; box-shadow:0 0 0 2px rgba(99,102,241,0.2); }
+
+//     .desc-html { color:${C.textBody}; line-height:2; font-size:14px; letter-spacing:.02em; font-family:'Montserrat',sans-serif; }
+//     .desc-html strong, .desc-html b { color:${C.textNav}; font-weight:600; }
+//     .desc-html p { margin-bottom:1rem; }
+//     .desc-html ul { list-style:none; padding:0; margin-bottom:1rem; }
+//     .desc-html ul li { padding-left:1.5rem; position:relative; margin-bottom:.5rem; }
+//     .desc-html ul li::before { content:'◆'; position:absolute; left:0; font-size:7px; top:6px; color:${C.accentMid}; }
+//     .desc-html h2,.desc-html h3 { color:${C.textNav}; font-family:'Montserrat',sans-serif; font-weight:600; margin-bottom:.75rem; margin-top:1.5rem; }
+
+//     .feat-card { transition:border-color .3s, background .3s, box-shadow .3s; }
+//     .feat-card:hover { border-color:${C.accentMid} !important; background:${C.bgCardHover} !important; box-shadow:0 8px 24px rgba(99,102,241,0.15) !important; }
+
+//     .pp-gallery-col { display:flex; gap:12px; flex:0 0 auto; width:min(480px,100%); align-self:flex-start; }
+//     @media (min-width:768px) { .pp-gallery-col { position:sticky; top:88px; } }
+
+//     @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+//     .pp-fadein { animation:fadeUp .45s ease both; }
+//     .tab-content { animation:fadeUp .35s ease both; }
+
+//     @media (max-width:767px) {
+//       .pp-crumb { padding:10px 16px; font-size:9px; }
+//       .pp-crumb-name { display:none; }
+//       .pp-page-inner { padding:16px 16px 60px !important; }
+//       .pp-two-col { flex-direction:column !important; gap:0 !important; }
+//       .pp-gallery-col { width:100% !important; position:static !important; margin-bottom:20px; flex-direction:column !important; gap:10px !important; }
+//       .pp-thumb-col { order:2; width:100%; flex-direction:row; align-items:center; gap:6px; }
+//       .pp-thumb-scroll { flex-direction:row !important; overflow-x:auto !important; overflow-y:hidden !important; max-height:none !important; gap:8px; }
+//       .pp-thumb-item { width:70px !important; height:70px !important; flex-shrink:0; }
+//       .pp-arr { width:20px; height:40px; }
+//       .pp-arr svg { transform:rotate(-90deg); }
+//       .pp-info-panel { width:100% !important; min-width:0 !important; padding:0 !important; }
+//       .pp-size { padding:7px 10px !important; min-width:46px !important; }
+//       .pp-cart { padding:14px !important; }
+//       .pp-rsum { padding:16px !important; }
+//     }
+
+//     .pp *::-webkit-scrollbar { width:3px; height:3px; }
+//     .pp *::-webkit-scrollbar-thumb { background:rgba(99,102,241,0.25); border-radius:99px; }
+//     .pp *::-webkit-scrollbar-thumb:hover { background:rgba(99,102,241,0.45); }
+//   `;
+
+//   return (
+//     <>
+//       <Helmet>
+//         <title>{productData.name} | LL Leather Lovers</title>
+//         <meta
+//           name="description"
+//           content={productData.description?.replace(/<[^>]*>/g, '').substring(0, 160)}
+//         />
+//         <link rel="canonical" href={productUrl} />
+
+//         <meta property="og:type" content="product" />
+//         <meta property="og:title" content={productData.name} />
+//         <meta
+//           property="og:description"
+//           content={productData.description?.replace(/<[^>]*>/g, '').substring(0, 160)}
+//         />
+//         <meta property="og:image" content={productData.image?.[0]} />
+//         <meta property="og:url" content={productUrl} />
+
+//         <script type="application/ld+json">
+//           {JSON.stringify({
+//             "@context": "https://schema.org",
+//             "@type": "Product",
+//             name: productData.name,
+//             image: productData.image,
+//             sku: productData.sku,
+//             description: productData.description,
+//             offers: {
+//               "@type": "Offer",
+//               price: hasDiscount ? discountedPrice : displayPrice,
+//               priceCurrency: "INR",
+//               availability: "https://schema.org/InStock"
+//             }
+//           })}
+//         </script>
+//       </Helmet>
+//       <style>{css}</style>
+
+//       {createPortal(
+//         <CartDrawer drawerOpen={drawerOpen} toggleCartDrawer={closeCartDrawer} />,
+//         document.body
+//       )}
+
+//       <div className="pp">
+
+//         {/* Breadcrumb */}
+//         <div className="pp-crumb">
+//           <span>{productData.category?.toUpperCase()}</span>
+//           {productData.subCategory && (
+//             <><span>&nbsp;/</span><span>{productData.subCategory?.toUpperCase()}</span></>
+//           )}
+//           <span>&nbsp;/</span>
+//           <span className="pp-crumb-name">
+//             {productData.name?.substring(0, 55)}{productData.name?.length > 55 ? '…' : ''}
+//           </span>
+//         </div>
+
+//         <div className="pp-page-inner" style={{ padding: '28px 36px 80px', maxWidth: 1440, margin: '0 auto' }}>
+//           <div className="pp-two-col" style={{ display: 'flex', gap: 32, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+
+//             {/* ── Gallery ── */}
+//             <div className="pp-gallery-col">
+//               <div className="pp-thumb-col">
+//                 <button className="pp-arr" onClick={() => scrollThumbs(-1)}><FaChevronUp size={9} /></button>
+//                 <div className="pp-thumb-scroll" ref={thumbListRef}>
+//                   {productData.image.map((item, index) => (
+//                     <div key={index} className={`pp-thumb-item${index === selectedIndex ? ' active' : ''}`}
+//                       onClick={() => { setImage(item); setSelectedIndex(index); }}>
+//                       <img src={item} alt={`View ${index + 1}`} />
+//                     </div>
+//                   ))}
+//                 </div>
+//                 <button className="pp-arr" onClick={() => scrollThumbs(1)}><FaChevronDown size={9} /></button>
+//               </div>
+
+//               <div className={`pp-main-wrap${isZooming ? ' zooming' : ''} contain p-4`}
+//                 style={{ aspectRatio: '1/1', flex: 1, '--zx': `${zoomPos.x}%`, '--zy': `${zoomPos.y}%` }}
+//                 ref={mainImgRef} onMouseMove={handleMouseMove}
+//                 onMouseEnter={() => setIsZooming(true)}
+//                 onMouseLeave={() => setIsZooming(false)}>
+//                 <img src={image} alt={productData.name} />
+//                 <div className="pp-corner pp-corner-tl" /><div className="pp-corner pp-corner-tr" />
+//                 <div className="pp-corner pp-corner-bl" /><div className="pp-corner pp-corner-br" />
+//                 <button className={`pp-img-wish${isWishlisted ? ' active' : ''}`}
+//                   onClick={() => toggleWishlistItem(productData._id)}>
+//                   {isWishlisted
+//                     ? <FaHeart size={14} style={{ color: C.accent }} />
+//                     : <FaRegHeart size={14} style={{ color: C.accentMid }} />}
+//                 </button>
+//                 <div className="pp-counter">
+//                   <span style={{ color: C.accentMid, fontWeight: 700 }}>{String(selectedIndex + 1).padStart(2, '0')}</span>
+//                   <div className="pp-counter-dot" />
+//                   <span>{String(productData.image.length).padStart(2, '0')}</span>
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* ── Info Panel ── */}
+//             <div className="pp-info-panel pp-fadein" style={{ flex: '1 1 300px', minWidth: 0, paddingRight: 8 }}>
+
+//               <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.26em', color: C.accentMid, marginBottom: 10, textTransform: 'uppercase' }}>
+//                 {productData.category}&nbsp;/&nbsp;{productData.subCategory}
+//               </p>
+
+//               <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap', marginBottom: 12 }}>
+//                 <span className="pp-badge-indigo"><FaCrown size={8} />&nbsp;Premium Collection</span>
+//                 {hasDiscount && <span className="pp-badge-sale">{discountPercent}% Off</span>}
+//               </div>
+
+//               <h1 className="pp-serif lg:w-[90%]" style={{
+//                 fontSize: 'clamp(16px,1.6vw,22px)', fontWeight: 700,
+//                 color: C.textNav, lineHeight: 1.4, marginBottom: 10,
+//               }}>{productData.name}</h1>
+
+//               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+//                 <div style={{ display: 'flex', gap: 2 }}>
+//                   {[...Array(5)].map((_, i) => (
+//                     <span key={i} style={{ color: i < roundedRating ? C.gold : 'rgba(255,255,255,0.15)', fontSize: 13 }}>
+//                       {i < roundedRating ? <FaStar /> : <FaRegStar />}
+//                     </span>
+//                   ))}
+//                 </div>
+//                 <span style={{ fontSize: 11, color: C.textMuted, fontWeight: 500 }}>
+//                   {avgRating > 0 ? avgRating.toFixed(1) : '—'}&ensp;·&ensp;{reviews.length} reviews
+//                 </span>
+//               </div>
+
+//               <div className="pp-divider" style={{ margin: '14px 0' }}>
+//                 <div className="pp-divider-line" /><div className="pp-divider-diamond" /><div className="pp-divider-line" />
+//               </div>
+
+//               {/* ✅ PRICE — using discountPrice directly as the final amount */}
+//               <div className="pp-pricebox">
+//                 {hasDiscount ? (
+//                   <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
+//                     <span className="pp-serif" style={{ fontSize: 38, fontWeight: 700, color: '#fff', lineHeight: 1 }}>
+//                       {currency}{discountedPrice.toFixed(2)}
+//                     </span>
+//                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, paddingBottom: 4 }}>
+//                       <span style={{ fontSize: 15, color: C.textDim, textDecoration: 'line-through' }}>{currency}{displayPrice.toFixed(2)}</span>
+//                       <span style={{ background: 'linear-gradient(135deg,#059669,#10B981)', color: '#fff', borderRadius: 20, padding: '2px 10px', fontSize: 9, fontWeight: 800, letterSpacing: '.16em', textTransform: 'uppercase' }}>
+//                         Save {currency}{(displayPrice - discountedPrice).toFixed(2)}
+//                       </span>
+//                     </div>
+//                   </div>
+//                 ) : (
+//                   <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10 }}>
+//                     <span className="pp-serif" style={{ fontSize: 38, fontWeight: 700, color: '#fff', lineHeight: 1 }}>
+//                       {currency}{displayPrice.toFixed(2)}
+//                     </span>
+//                     {customBreakdown && <span style={{ fontSize: 11, color: C.textDim, paddingBottom: 4 }}>{customBreakdown}</span>}
+//                   </div>
+//                 )}
+//                 <p style={{ fontSize: 11, color: C.textMuted, marginTop: 8 }}>
+//                   All taxes included&ensp;·&ensp;Free shipping above {currency}1000
+//                 </p>
+//               </div>
+
+//               <p className="lg:w-[90%]" style={{ color: C.textBody, lineHeight: 1.85, fontSize: 13, letterSpacing: '.02em' }}>
+//                 {productData.description}
+//               </p>
+
+//               <div className="pp-divider" style={{ margin: '16px 0' }}>
+//                 <div className="pp-divider-line" /><div className="pp-divider-diamond" /><div className="pp-divider-line" />
+//               </div>
+
+//               {/* Color selector */}
+//               <div style={{ marginBottom: 16 }}>
+//                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+//                   <span className="pp-slabel">Colour</span>
+//                   <span style={{ fontSize: 11, color: C.textNav, fontWeight: 600, textTransform: 'capitalize' }}>
+//                     — {selectedColor}
+//                   </span>
+//                 </div>
+//                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+//                   {productData.color?.map((colorObj, index) => {
+//                     let colorName, colorHex;
+//                     if (typeof colorObj === 'string') {
+//                       colorName = colorObj;
+//                       colorHex = colorMap[colorObj.toLowerCase()] || null;
+//                     } else if (colorObj?.name) {
+//                       colorName = colorObj.name;
+//                       const hex = colorObj.hex;
+//                       colorHex = (hex && hex.trim() !== '') ? hex : null;
+//                     } else {
+//                       colorName = 'Unknown';
+//                       colorHex = null;
+//                     }
+
+//                     return colorHex ? (
+//                       <button key={index}
+//                         className={`pp-clr${selectedColor === colorName ? ' active' : ''}`}
+//                         onClick={() => setSelectedColor(colorName)}
+//                         style={{
+//                           background: colorHex,
+//                           outline: colorHex === '#FFFFFF' ? `1.5px solid ${C.border}` : 'none'
+//                         }}
+//                         title={colorName}
+//                       />
+//                     ) : null;
+//                   })}
+//                 </div>
+//               </div>
+
+//               {/* Size selector */}
+//               <div style={{ marginBottom: 16 }}>
+//                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+//                   <span className="pp-slabel">Select Size</span>
+//                   <button onClick={() => setShowModal(true)}
+//                     style={{ fontSize: 10, color: C.accentMid, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Montserrat',sans-serif", display: 'flex', alignItems: 'center', gap: 5 }}>
+//                     <FaRuler size={10} /> Size Guide
+//                   </button>
+//                   {showModal && <Modal onclose={() => setShowModal(false)} />}
+//                 </div>
+//                 <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
+//                   {productData.sizes?.length > 0 ? productData.sizes.map((sizeObj, index) => {
+//                     const sizeLabel = typeof sizeObj === 'object' ? (sizeObj?.size ?? `Size ${index + 1}`) : String(sizeObj);
+//                     const multiplier = sizeObj?.priceMultiplier || 1;
+//                     return (
+//                       <button key={index} type="button" className={`pp-size${size === sizeLabel ? ' active' : ''}`}
+//                         onClick={() => handleSizeSelect(sizeObj)}>
+//                         <span className="pp-size-lbl">{sizeLabel}</span>
+//                         <span className="pp-size-price">
+//                           {currency}{(sizeObj?.useCustomPrice && sizeObj?.customPrice > 0
+//                             ? sizeObj.customPrice : productData.price * multiplier).toFixed(2)}
+//                         </span>
+//                       </button>
+//                     );
+//                   }) : <p style={{ fontSize: 13, color: C.textMuted }}>No sizes available</p>}
+//                 </div>
+//                 {size && sizeStock > 0 && sizeStock < 5 && (
+//                   <div style={{ marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(249,115,22,0.25)', borderRadius: 8, padding: '5px 12px' }}>
+//                     <span style={{ fontSize: 11 }}>🔥</span>
+//                     <span style={{ fontSize: 11, color: '#FB923C', fontWeight: 600 }}>Only {sizeStock} left in this size</span>
+//                   </div>
+//                 )}
+//               </div>
+
+//               {/* CTA */}
+//               <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+//                 <button className="pp-cart" onClick={handleAddToCart}
+//                   disabled={isButtonDisabled || !size || !selectedColor}>
+//                   <BsBagCheck size={16} />
+//                   {isButtonDisabled ? 'Adding to Cart…' : 'Add to Cart'}
+//                 </button>
+//               </div>
+
+//               {productData.itemDetails?.some(item => item.title || item.value) && (
+//                 <div style={{ marginTop: 22, background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 12, overflow: 'hidden' }}>
+//                   <div style={{ padding: '14px 18px', borderBottom: `1px solid ${C.border}`, background: 'rgba(99,102,241,0.06)' }}>
+//                     <h2 style={{ fontSize: 13, fontWeight: 700, color: C.textNav, letterSpacing: '.08em', textTransform: 'uppercase', fontFamily: "'Montserrat',sans-serif" }}>
+//                       Product Specifications
+//                     </h2>
+//                   </div>
+//                   {productData.itemDetails.map((item, index) => (
+//                     item.title || item.value ? (
+//                       <div key={index} style={{
+//                         display: 'grid', gridTemplateColumns: '40% 50%', gap: 2, padding: '10px 18px',
+//                         borderBottom: index !== productData.itemDetails.length - 1 ? `1px solid ${C.border}` : 'none',
+//                         alignItems: 'center'
+//                       }}>
+//                         <p style={{ fontWeight: 600, color: C.textBody, fontSize: 13, letterSpacing: '.03em', lineHeight: 1.4 }}>{item.title}</p>
+//                         <p style={{ color: C.textMuted, fontSize: 12, lineHeight: 1.6, letterSpacing: '.02em' }}>{item.value}</p>
+//                       </div>
+//                     ) : null
+//                   ))}
+//                 </div>
+//               )}
+
+//               {/* Policies */}
+//               <div style={{ paddingTop: 8 }} />
+//               {[
+//                 { icon: <BsShieldCheck size={14} style={{ color: C.accentMid }} />, text: '100% original, premium materials' },
+//                 { icon: <MdLocalShipping size={14} style={{ color: C.accentMid }} />, text: 'Secure cash on delivery + multiple payment methods' },
+//                 { icon: <MdLoop size={14} style={{ color: C.accentMid }} />, text: 'Simple 7-day return or exchange policy' },
+//               ].map((p, i) => (
+//                 <div key={i} className="pp-policy">
+//                   <div className="pp-policy-icon">{p.icon}</div>
+//                   <span>{p.text}</span>
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+
+//           {/* ── TABS ── */}
+//           <div style={{ marginTop: 80 }}>
+//             <div style={{ display: 'flex', borderBottom: `1.5px solid ${C.border}`, marginBottom: 40, overflowX: 'auto' }}>
+//               {['description', 'reviews'].map(tab => (
+//                 <button key={tab} onClick={() => setActiveTab(tab)} style={{
+//                   position: 'relative', padding: '13px 32px',
+//                   fontFamily: "'Montserrat',sans-serif",
+//                   fontSize: 10, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase',
+//                   background: 'none', border: 'none',
+//                   borderBottom: activeTab === tab ? `2px solid ${C.accent}` : '2px solid transparent',
+//                   marginBottom: -1.5, cursor: 'pointer',
+//                   color: activeTab === tab ? C.accentMid : C.textDim,
+//                   transition: 'color .25s, border-color .25s', whiteSpace: 'nowrap',
+//                 }}>
+//                   {tab === 'reviews' ? `Reviews (${reviews.length})` : 'Description'}
+//                 </button>
+//               ))}
+//             </div>
+
+//             {/* Description Tab */}
+//             {activeTab === 'description' && (
+//               <div className="tab-content" style={{ maxWidth: 900 }}>
+//                 <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 36 }}>
+//                   <div style={{ flex: 1, height: 1, background: `linear-gradient(90deg, transparent, ${C.accentMid})`, opacity: 0.4 }} />
+//                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+//                     <div style={{ width: 5, height: 5, background: C.accentMid, transform: 'rotate(45deg)', opacity: 0.6 }} />
+//                     <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase', color: C.accentMid, fontFamily: "'Montserrat',sans-serif" }}>Product Details</span>
+//                     <div style={{ width: 5, height: 5, background: C.accentMid, transform: 'rotate(45deg)', opacity: 0.6 }} />
+//                   </div>
+//                   <div style={{ flex: 1, height: 1, background: `linear-gradient(90deg, ${C.accentMid}, transparent)`, opacity: 0.4 }} />
+//                 </div>
+
+//                 <div style={{ position: 'relative', borderRadius: 16, padding: 32, marginBottom: 24, background: C.bgCard, border: `1.5px solid ${C.border}` }}>
+//                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${C.accent}, transparent)`, borderRadius: '16px 16px 0 0' }} />
+//                   <div className="desc-html" dangerouslySetInnerHTML={{ __html: productData.detailedDescription }} />
+//                 </div>
+
+//                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 14, marginBottom: 24 }}>
+//                   {[
+//                     { symbol: '✦', label: 'Premium Craft', desc: 'Handcrafted by artisans using heritage leatherworking techniques passed through generations.' },
+//                     { symbol: '◈', label: 'Finest Materials', desc: "Sourced exclusively from the world's most prestigious and ethically certified tanneries." },
+//                     { symbol: '❋', label: 'Bespoke Finish', desc: 'Each piece hand-finished to exacting luxury standards with precision hand stitching.' },
+//                   ].map((feat, i) => (
+//                     <div key={i} className="feat-card" style={{ position: 'relative', borderRadius: 14, padding: 22, background: C.bgCard, border: `1.5px solid ${C.border}` }}>
+//                       <div style={{ width: 42, height: 42, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, background: 'rgba(99,102,241,0.1)', border: `1px solid ${C.border}`, color: C.accentMid, fontSize: 16 }}>{feat.symbol}</div>
+//                       <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.textNav, fontFamily: "'Montserrat',sans-serif", marginBottom: 8 }}>{feat.label}</p>
+//                       <p style={{ fontSize: 12, lineHeight: 1.75, color: C.textMuted, fontFamily: "'Montserrat',sans-serif" }}>{feat.desc}</p>
+//                     </div>
+//                   ))}
+//                 </div>
+
+//                 <div style={{ borderRadius: 12, padding: '14px 20px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px 20px', background: C.bgCard, border: `1.5px solid ${C.border}` }}>
+//                   <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: C.accentMid, fontFamily: "'Montserrat',sans-serif", flexShrink: 0 }}>Care Guide</span>
+//                   <div style={{ width: 1, height: 16, background: C.border, flexShrink: 0 }} />
+//                   {[{ symbol: '🌿', label: 'Dry Clean Only' }, { symbol: '💧', label: 'Avoid Moisture' }, { symbol: '☀️', label: 'No Direct Sunlight' }, { symbol: '🗄️', label: 'Store in Dust Bag' }].map((care, i) => (
+//                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+//                       <span style={{ fontSize: 14 }}>{care.symbol}</span>
+//                       <span style={{ fontSize: 11, color: C.textMuted, fontFamily: "'Montserrat',sans-serif" }}>{care.label}</span>
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+//             )}
+
+//             {/* Reviews Tab */}
+//             {activeTab === 'reviews' && (
+//               <div className="tab-content" style={{ maxWidth: 700 }}>
+//                 {reviews.length > 0 && (
+//                   <div className="pp-rsum" style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+//                     <div style={{ textAlign: 'center', flexShrink: 0 }}>
+//                       <div className="pp-serif" style={{ fontSize: 64, fontWeight: 700, color: '#fff', lineHeight: 1 }}>
+//                         {avgRating.toFixed(1)}
+//                       </div>
+//                       <div style={{ display: 'flex', justifyContent: 'center', gap: 3, margin: '6px 0' }}>
+//                         {[...Array(5)].map((_, i) => (
+//                           <span key={i} style={{ color: i < roundedRating ? C.gold : 'rgba(255,255,255,0.15)', fontSize: 12 }}>
+//                             {i < roundedRating ? <FaStar /> : <FaRegStar />}
+//                           </span>
+//                         ))}
+//                       </div>
+//                       <p style={{ fontSize: 10, color: C.textDim, letterSpacing: '.1em', fontWeight: 600 }}>{reviews.length} Reviews</p>
+//                     </div>
+//                     <div style={{ flex: 1 }}>
+//                       {[5, 4, 3, 2, 1].map(star => {
+//                         const count = reviews.filter(r => Math.round(r.rating) === star).length;
+//                         const pct = reviews.length ? (count / reviews.length) * 100 : 0;
+//                         return (
+//                           <div key={star} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+//                             <span style={{ fontSize: 10, color: C.textDim, width: 8, textAlign: 'right', fontWeight: 600 }}>{star}</span>
+//                             <FaStar size={8} style={{ color: C.gold, flexShrink: 0 }} />
+//                             <div className="pp-bar-track"><div className="pp-bar-fill" style={{ width: `${pct}%` }} /></div>
+//                             <span style={{ fontSize: 10, color: C.textDim, width: 18, textAlign: 'right' }}>{count}</span>
+//                           </div>
+//                         );
+//                       })}
+//                     </div>
+//                   </div>
+//                 )}
+
+//                 {token ? (
+//                   <div style={{ marginBottom: 24, padding: 28, borderRadius: 14, border: `1.5px solid ${C.border}`, background: C.bgCard, position: 'relative', overflow: 'hidden' }}>
+//                     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${C.accent}, transparent)` }} />
+//                     <h3 className="pp-serif" style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 18 }}>Write a Review</h3>
+//                     <div style={{ display: 'flex', gap: 6, marginBottom: 18 }}>
+//                       {[1, 2, 3, 4, 5].map(s => (
+//                         <span key={s} onClick={() => setRating(s)}
+//                           style={{ fontSize: 28, cursor: 'pointer', color: s <= rating ? C.gold : 'rgba(255,255,255,0.15)', transition: 'transform .15s', display: 'inline-block' }}
+//                           onMouseOver={e => e.currentTarget.style.transform = 'scale(1.25)'}
+//                           onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
+//                           {s <= rating ? <FaStar /> : <FaRegStar />}
+//                         </span>
+//                       ))}
+//                     </div>
+//                     <textarea className="pp-rinput" placeholder="Share your experience with this product…"
+//                       value={comment} onChange={e => setComment(e.target.value)} rows={4} />
+//                     <button className="pp-submit-btn" onClick={handleReviewSubmit}>Submit Review</button>
+//                   </div>
+//                 ) : (
+//                   <div style={{ padding: 20, borderRadius: 12, background: C.bgCard, border: `1.5px dashed ${C.border}`, textAlign: 'center', marginBottom: 20, color: C.textMuted, fontSize: 13 }}>
+//                     Please&nbsp;<span style={{ color: C.accentMid, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 3 }}>sign in</span>&nbsp;to write a review.
+//                   </div>
+//                 )}
+
+//                 {reviews.length === 0 ? (
+//                   <div style={{ textAlign: 'center', padding: '40px 0' }}>
+//                     <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(99,102,241,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+//                       <FaRegStar size={24} style={{ color: C.accentMid, opacity: 0.5 }} />
+//                     </div>
+//                     <div className="pp-serif" style={{ fontSize: 18, color: C.textDim, marginBottom: 8, fontWeight: 600 }}>No reviews yet</div>
+//                     <p style={{ fontSize: 12, color: C.textDim, letterSpacing: '.06em' }}>Be the first to share your experience</p>
+//                   </div>
+//                 ) : reviews.map(rev => (
+//                   <div key={rev._id} className="pp-rev-card">
+//                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+//                       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+//                         <div className="pp-avatar">{(rev.user?.name || 'U')[0].toUpperCase()}</div>
+//                         <div>
+//                           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+//                             <span style={{ fontWeight: 700, fontSize: 13, color: '#fff' }}>{rev.user?.name || 'Customer'}</span>
+//                             <MdVerified size={12} style={{ color: '#10B981' }} />
+//                           </div>
+//                           <div style={{ display: 'flex', gap: 2, marginTop: 4 }}>
+//                             {[...Array(5)].map((_, i) => (
+//                               <span key={i} style={{ color: i < rev.rating ? C.gold : 'rgba(255,255,255,0.15)', fontSize: 10 }}>
+//                                 {i < rev.rating ? <FaStar /> : <FaRegStar />}
+//                               </span>
+//                             ))}
+//                           </div>
+//                         </div>
+//                       </div>
+//                       <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+//                         <span style={{ fontSize: 10, color: C.textDim, fontWeight: 500 }}>
+//                           {new Date(rev.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+//                         </span>
+//                         {rev.user?._id === userId && (
+//                           <button onClick={async () => { const ok = await deleteReview(rev._id); if (ok) loadReviews(); }}
+//                             style={{ fontSize: 10, color: '#F87171', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+//                             Delete
+//                           </button>
+//                         )}
+//                       </div>
+//                     </div>
+//                     <p style={{ fontSize: 13, color: C.textBody, lineHeight: 1.8, marginTop: 14 }}>{rev.comment}</p>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </div>
+
+//           {/* Related Products */}
+//           <div style={{ marginTop: 100 }}>
+//             <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 40 }}>
+//               <div style={{ flex: 1, height: 1, background: `linear-gradient(90deg, transparent, ${C.border})` }} />
+//               <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase', color: C.accentMid, fontFamily: "'Montserrat',sans-serif", whiteSpace: 'nowrap' }}>
+//                 ◆ YOU MAY ALSO LIKE ◆
+//               </span>
+//               <div style={{ flex: 1, height: 1, background: `linear-gradient(90deg, ${C.border}, transparent)` }} />
+//             </div>
+//             <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Product;
 
 
 

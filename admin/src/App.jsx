@@ -407,7 +407,7 @@ import { IoIosClose } from "react-icons/io";
 import Slide from '@mui/material/Slide';
 import HomeSliderBanners from './Pages/HomeSliderBanners/HomeSliderBanners'
 import AddHomeSlide from './Pages/HomeSliderBanners/AddHomeSlide'
-import CategoryList from './Pages/Category/CategoryList'
+// import CategoryList from './Pages/Category/CategoryList'
 import AddCategory from './Pages/Category/AddCategory'
 import SubCategoryList from './Pages/Category/SubCategoryList'
 import AddSubCategory from './Pages/Category/AddSubCategory'
@@ -425,6 +425,8 @@ import Analytics from './Pages/Analytics/Analytics'
 import Reports from './Pages/Reports/Reports'
 import { ThemeProvider } from './Context/ThemeContext'
 import Review from './Pages/Review/Review'
+import CategoryManagement from './Pages/Category/CategoryManagement'
+import BulkUpload from './Pages/Products/BulkAddProduct'
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 export const currency = '$'
@@ -537,6 +539,14 @@ const App = () => {
       )
     },
     {
+      path: "/bulk-upload",
+      element: (
+        <Layout isSidebarOpen={isSidebarOpen} pt='pt-20'>
+          <BulkUpload token={token} />
+        </Layout>
+      )
+    },
+    {
       path: "/homeSlider/list",
       element: (
         <Layout isSidebarOpen={isSidebarOpen}>
@@ -545,10 +555,10 @@ const App = () => {
       )
     },
     {
-      path: "/category/list",
+      path: "/category-management",
       element: (
         <Layout isSidebarOpen={isSidebarOpen}>
-          <CategoryList />
+          <CategoryManagement token={token} />
         </Layout>
       )
     },

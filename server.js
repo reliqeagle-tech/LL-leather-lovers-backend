@@ -75,6 +75,7 @@ import cartRouter from './routes/cartRoute.js'
 import orderRouter from './routes/orderRoute.js'
 import reviewRouter from './routes/reviewRoute.js'
 import bannerRouter from './routes/bannerRoute.js';
+import categoryRouter from './routes/categoryRoute.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -108,13 +109,14 @@ app.use(cors({
 }));
 
 // api endpoints
-app.use('/api/user',userRouter)
-app.use('/api/product',productRouter)
-app.use('/api/cart',cartRouter)
-app.use('/api/order',orderRouter)
-app.use('/api/review',reviewRouter)
-app.use('/api/wishlist',wishlistRouter)
+app.use('/api/user', userRouter)
+app.use('/api/product', productRouter)
+app.use('/api/cart', cartRouter)
+app.use('/api/order', orderRouter)
+app.use('/api/review', reviewRouter)
+app.use('/api/wishlist', wishlistRouter)
 app.use("/api/banner", bannerRouter);
+app.use("/api/category", categoryRouter);
 
 if (process.env.NODE_ENV === 'production') {
   // Serve admin panel for admin subdomain
@@ -140,8 +142,18 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.get('/',(req,res)=>{
-    res.send("API Working")
+app.get('/', (req, res) => {
+  res.send("API Working")
 })
 
-app.listen(port, ()=> console.log('Server started on PORT : '+ port))
+app.listen(port, () => console.log('Server started on PORT : ' + port))
+
+process.on("uncaughtException", (err) => {
+  console.error("UNCAUGHT EXCEPTION");
+  console.error(err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("UNHANDLED REJECTION");
+  console.error(err);
+});

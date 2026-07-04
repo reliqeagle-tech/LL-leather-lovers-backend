@@ -557,7 +557,7 @@ const CustomLeather = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
             {/* ── LEFT — TEXT ── */}
-            <div className="lg:w-[45%] flex flex-col justify-center">
+            <div className="lg:w-[48%] flex flex-col justify-center">
               {/* Eyebrow */}
               <p
                 className="cl-sans mb-4 inline-flex items-center gap-2"
@@ -614,10 +614,10 @@ const CustomLeather = () => {
                   craftsmanship — built for comfort, durability, and effortless
                   style.
                 </p>
-                <p>
+                {/* <p>
                   No shortcuts. No compromises. Just authentic leather wear made
                   for real individuality.
-                </p>
+                </p> */}
               </div>
 
               {/* Stats row */}
@@ -625,7 +625,7 @@ const CustomLeather = () => {
                 {[
                   { end: 500, suffix: '+', label: "Products" },
                   { end: 100, suffix: '%', label: "Genuine Leather" },
-                  { end: 5, suffix: '★', label: "Rated" },
+                  { end: 15, suffix: '+', label: "Years" },
                 ].map(({ end, suffix, label }) => (
                   <div key={label} className="text-center">
                     <p
@@ -653,7 +653,7 @@ const CustomLeather = () => {
                 <Link
                   to="/collection"
                   className="cl-btn cl-sans inline-flex items-center gap-3 no-underline
-                    text-white border rounded-sm px-8 py-3.5"
+                    text-white border rounded-full px-5 py-3.5 hover:border-none"
                   style={{
                     fontSize: "11px",
                     fontWeight: 600,
@@ -662,7 +662,7 @@ const CustomLeather = () => {
                     borderColor: "rgba(99,102,241,0.5)",
                   }}
                 >
-                  <span>Shop Now</span>
+                  <span>Explore Collection</span>
                   <svg
                     width="14"
                     height="14"
@@ -688,7 +688,7 @@ const CustomLeather = () => {
                     textTransform: "uppercase",
                   }}
                 >
-                  Our Story
+                  Learn more
                   <svg
                     width="12"
                     height="12"
@@ -707,7 +707,7 @@ const CustomLeather = () => {
             </div>
 
             {/* ── RIGHT — IMAGE ── */}
-            <div className="lg:w-[55%] relative flex items-center justify-center">
+            <div className="lg:w-[52%] relative flex items-center justify-center">
               {/* Decorative frame behind image */}
               <div
                 className="absolute top-4 left-4 right-[-16px] bottom-[-16px] rounded-2xl pointer-events-none"
@@ -741,7 +741,7 @@ const CustomLeather = () => {
 
               {/* Floating label badge */}
               <div
-                className="cl-sans absolute bottom-6 left-0 z-20 bg-white/95 backdrop-blur-sm
+                className="cl-sans absolute bottom-[30px] left-0 z-20 bg-white/95 backdrop-blur-sm
                   rounded-lg px-4 py-3 shadow-2xl"
                 style={{ transform: "translateX(-10%)" }}
               >
