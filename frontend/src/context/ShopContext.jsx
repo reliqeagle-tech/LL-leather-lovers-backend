@@ -700,7 +700,7 @@ const ShopContextProvider = (props) => {
             if (res.data.success) return res.data.reviews;
             return [];
         } catch {
-            toast.error("Failed to load reviews");
+            // toast.error("Failed to load reviews");
             return [];
         }
     };
