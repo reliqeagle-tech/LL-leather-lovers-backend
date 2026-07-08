@@ -51,6 +51,7 @@ import verify from './verify.png'
 import verify1 from './verify1.png'
 import verify2 from './verify2.png'
 import profileImg from './profileImg.jpg'
+import profileImg1 from './profileImg1.png'
 import dashboard from './dashboard.png'
 import login_bg from './login_bg-image.png'
 // import upload_area from './upload_area.png'
@@ -109,6 +110,7 @@ export const assets = {
     verify1,
     verify2,
     profileImg,
+    profileImg1,
     dashboard,
     login_bg,
     logo_3

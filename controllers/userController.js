@@ -637,10 +637,10 @@ const adminLogin = async (req, res) => {
     const { email, password } = req.body
 
     // 👇 Add this to check what env is loading
-    console.log("ENV EMAIL:", process.env.ADMIN_EMAIL);
-    console.log("ENV PASS:", process.env.ADMIN_PASSWORD);
-    console.log("REQ EMAIL:", email);
-    console.log("REQ PASS:", password);
+    // console.log("ENV EMAIL:", process.env.ADMIN_EMAIL);
+    // console.log("ENV PASS:", process.env.ADMIN_PASSWORD);
+    // console.log("REQ EMAIL:", email);
+    // console.log("REQ PASS:", password);
 
     if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
       const token = jwt.sign(email + password, process.env.JWT_SECRET);

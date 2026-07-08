@@ -441,10 +441,10 @@ const BulkUpload = ({ token }) => {
                 </div>
             )}
 
-            <div className="p-6 max-w-[1200px] mx-auto grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-5 items-start">
+            <div className="p-6 max-w-[1200px] mx-auto grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_300px] gap-5 items-start">
 
                 {/* ══ MAIN COLUMN ══ */}
-                <div>
+                <div >
 
                     {/* ── MODE SELECTOR ── */}
                     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-5">
@@ -580,7 +580,7 @@ const BulkUpload = ({ token }) => {
                             </div>
 
                             {previewOpen && (
-                                <div className="overflow-x-auto w-full">
+                                <div className="overflow-x-auto ">
                                     <table className="w-full border-collapse" style={{ minWidth: 900 }}>
                                         <thead>
                                             <tr className="bg-gray-50 border-b border-gray-100">
