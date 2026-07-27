@@ -15,7 +15,7 @@ const tiles = [
     body: "Our leather workers bring decades of experience to every seam, buckle, and edge finish. Each piece leaves our workshop as a small work of art — made to last a lifetime.",
   },
   {
-    image: assets.Trust1,
+    image: assets.Trust3,
     tag: "03 — Direct",
     title: "Workshop to Your Wardrobe",
     body: "No middlemen. No retail markup. We ship straight from our workshop — so you pay for the leather, not the distribution chain. Real value, honest pricing.",
@@ -44,7 +44,6 @@ const TrustWorthy = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
         .tw-serif { font-family: 'Cormorant Garamond', serif; }
         .tw-sans  { font-family: 'Montserrat', sans-serif; }
 

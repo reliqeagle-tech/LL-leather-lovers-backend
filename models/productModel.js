@@ -209,6 +209,18 @@ const productSchema = new mongoose.Schema({
     bestseller: { type: Boolean, default: false, index: true },
     date: { type: Date, default: Date.now, required: true },
     isDeleted: { type: Boolean, default: false },
+    averageRating: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5
+    },
+
+    reviewCount: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
 
 }, {
     timestamps: true

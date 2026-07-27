@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
 
 const Hero1 = () => {
-  const [loaded, setLoaded] = useState(false);
+  // const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    const t = setTimeout(() => setLoaded(true), 80);
-    return () => clearTimeout(t);
-  }, []);
+  // useEffect(() => {
+  //   const t = setTimeout(() => setLoaded(true), 80);
+  //   return () => clearTimeout(t);
+  // }, []);
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
-
         .font-playfair   { font-family: 'Playfair Display', serif; }
         .font-montserrat { font-family: 'Montserrat', sans-serif; }
 
@@ -79,11 +77,13 @@ const Hero1 = () => {
       >
         {/* Background image */}
         <img
-          src={assets.ll_lover3}
+
+          src='/ll_lover3.webp'
           alt="LL Leather Lovers – Latest Arrivals"
           className="hero-bg absolute inset-0 w-full h-full object-cover object-[72%_center]
             sm:object-[75%_top]"
           loading="eager"
+          fetchPriority="high"
         />
 
         {/* Overlay – top */}
@@ -126,116 +126,115 @@ const Hero1 = () => {
           items-center px-[7vw]
           max-sm:items-end max-sm:pb-[72px]"
         >
-          {loaded && (
-            <div
-              className="anim-fade-up
+
+          <div
+            className="anim-fade-up
               max-w-[430px] text-left
               max-sm:max-w-full max-sm:text-center"
-            >
-              {/* Eyebrow */}
-              <div
-                className="anim-slide-left font-montserrat
+          >
+            {/* Eyebrow */}
+            <div
+              className="anim-slide-left font-montserrat
                 flex items-center gap-[10px] mb-[18px]
                 text-[#8b85ff] uppercase tracking-[4px]
                 text-[10px] md:text-[12px] font-semibold
                 max-sm:justify-center"
-              >
-                <span className="block w-8 h-[1.5px] bg-[#6C63FF] flex-shrink-0 max-sm:hidden" />
-                New Collection 2026
-              </div>
+            >
+              <span className="block w-8 h-[1.5px] bg-[#6C63FF] flex-shrink-0 max-sm:hidden" />
+              New Collection 2026
+            </div>
 
-              {/* Heading */}
-              <h1
-                className="font-playfair font-black text-white leading-[0.95] m-0
+            {/* Heading */}
+            <h1
+              className="font-playfair font-black text-white leading-[0.95] m-0
                 text-[clamp(44px,5vw,72px)] tracking-[-0.01em]
                 max-sm:text-[clamp(34px,10vw,50px)]"
-              >
-                <span className="text-[#8b85ff] italic font-normal">
-                  Latest
-                </span>
-                <br />
-                Arrivals
-              </h1>
+            >
+              <span className="text-[#8b85ff] italic font-normal">
+                Latest
+              </span>
+              <br />
+              Arrivals
+            </h1>
 
-              {/* Accent line */}
-              <div
-                className="anim-line h-[2px] my-5 max-sm:mx-auto"
-                style={{
-                  background: "linear-gradient(90deg,#6C63FF,transparent)",
-                }}
-              />
+            {/* Accent line */}
+            <div
+              className="anim-line h-[2px] my-5 max-sm:mx-auto"
+              style={{
+                background: "linear-gradient(90deg,#6C63FF,transparent)",
+              }}
+            />
 
-              {/* Sub */}
-              <p
-                className="anim-sub font-playfair text-white/80 leading-[1.55] mb-6
+            {/* Sub */}
+            <p
+              className="anim-sub font-playfair text-white/80 leading-[1.55] mb-6
                 text-[clamp(16px,1.9vw,22px)]
                 max-sm:text-[clamp(14px,4vw,18px)] max-sm:mb-6 text-[20px]"
-              >
-                Step into a world where  craftsmanship meets attitude.
-                At LL Leather Lovers, every stitch tells a story of precision, passion, and power.
-              </p>
+            >
+              Step into a world where  craftsmanship meets attitude.
+              At LL Leather Lovers, every stitch tells a story of precision, passion, and power.
+            </p>
 
-              {/* CTA row */}
-              <div
-                className="anim-cta flex items-center gap-8
+            {/* CTA row */}
+            <div
+              className="anim-cta flex items-center gap-8
                 max-sm:flex-col max-sm:items-center max-sm:gap-4"
-              >
-                {/* Shop Now */}
-                <Link
-                  to="/collection"
-                  className="font-montserrat inline-block
-                    text-white bg-[#6C63FF] no-underline
+            >
+              {/* Shop Now */}
+              <Link
+                to="/collection"
+                className="font-montserrat inline-block
+                    text-white bg-[#4F46E5] no-underline
                     px-9 py-[15px] rounded-lg
                     text-[11.5px] font-semibold uppercase tracking-[2.5px]
                     transition-all duration-300
-                    hover:bg-[#7b73ff] hover:-translate-y-0.5
+                    hover:bg-[#4338CA] hover:-translate-y-0.5
                     hover:shadow-[0_10px_32px_rgba(108,99,255,0.5)]
-                    max-sm:w-full max-sm:text-center max-sm:py-4 border border-indigo-400/50"
-                >
-                  Shop Now
-                </Link>
+                    max-sm:w-full max-sm:text-center max-sm:py-4 border border-indigo-700"
+              >
+                Shop Now
+              </Link>
 
-                {/* View All — arrow animates on hover */}
-                <Link
-                  to="/collection"
-                  className="view-all font-montserrat inline-flex items-center gap-2
-                    text-white/60 no-underline
+              {/* View All — arrow animates on hover */}
+              <Link
+                to="/collection"
+                className="view-all font-montserrat inline-flex items-center gap-2
+                    text-white/80 no-underline
                     text-[11.5px] font-medium uppercase tracking-[2px]"
+              >
+                EXPLORE COLLECTION
+                <svg
+                  className="arrow-icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  EXPLORE COLLECTION
-                  <svg
-                    className="arrow-icon"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </Link>
-              </div>
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </Link>
             </div>
-          )}
+          </div>
+
         </div>
 
         {/* Badge — desktop only */}
-        {loaded && (
-          <div
-            className="anim-badge font-montserrat
+
+        <div
+          className="anim-badge font-montserrat
             absolute top-9   right-[5vw]
             text-white/65 border border-white/15
             px-4 py-2 rounded-full backdrop-blur-lg
             text-[10px] tracking-[2px] uppercase
             max-sm:hidden"
-          >
-            ✦ Premium Leather
-          </div>
-        )}
+        >
+          ✦ Premium Leather
+        </div>
 
         {/* Scroll indicator */}
         {/* <div

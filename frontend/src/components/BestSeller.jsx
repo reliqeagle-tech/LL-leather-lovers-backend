@@ -26,7 +26,6 @@ const BestSeller = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
         @keyframes bsReveal {
           from { opacity:0; transform:translateY(22px); }

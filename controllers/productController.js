@@ -2720,7 +2720,7 @@ const addProduct = async (req, res) => {
 ══════════════════════════════════════════════════════════════ */
 const listProducts = async (req, res) => {
   try {
-    const products = await productModel.find({})
+    const products = await productModel.find({}).lean();
     res.json({ success: true, products })
   } catch (error) {
     console.error(error)

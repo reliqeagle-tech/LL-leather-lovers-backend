@@ -47,7 +47,6 @@ const CustomCollection = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,500&family=Montserrat:wght@300;400;500;600&display=swap');
         .cc-serif { font-family: 'Cormorant Garamond', serif; }
         .cc-sans  { font-family: 'Montserrat', sans-serif; }
 

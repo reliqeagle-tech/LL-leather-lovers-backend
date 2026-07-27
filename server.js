@@ -76,6 +76,7 @@ import orderRouter from './routes/orderRoute.js'
 import reviewRouter from './routes/reviewRoute.js'
 import bannerRouter from './routes/bannerRoute.js';
 import categoryRouter from './routes/categoryRoute.js';
+import sitemapRouter from "./routes/sitemapRoute.js";
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -96,6 +97,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:5175",
+  "http://localhost:4173",
   "https://llleatherlovers.com",
   "https://www.llleatherlovers.com",
   "https://admin.llleatherlovers.com",
@@ -117,6 +119,7 @@ app.use('/api/review', reviewRouter)
 app.use('/api/wishlist', wishlistRouter)
 app.use("/api/banner", bannerRouter);
 app.use("/api/category", categoryRouter);
+app.use("/", sitemapRouter);
 
 if (process.env.NODE_ENV === 'production') {
   // Serve admin panel for admin subdomain

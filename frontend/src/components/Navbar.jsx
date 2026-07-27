@@ -6,7 +6,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
 import { GoHeartFill } from "react-icons/go";
-import axios from "axios";
+// import axios from "axios";
 import {
   faMagnifyingGlass,
   faUser,
@@ -15,8 +15,6 @@ import {
 
 const NavStyles = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap');
-
     .nav-brand  { font-family: 'Cormorant Garamond', serif; }
     .nav-links  { font-family: 'Montserrat', sans-serif; }
 
@@ -141,7 +139,7 @@ const Navbar = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [mobileAccord, setMobileAccord] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const hideTimeoutRef = useRef(null);
 
   const {
@@ -153,21 +151,22 @@ const Navbar = () => {
     setToken,
     setCartItems,
     backendUrl,
+    categories,
   } = useContext(ShopContext);
 
   const location = useLocation();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await axios.get(`${backendUrl}/api/category/list`);
-        if (res.data.success) setCategories(res.data.categories || []);
-      } catch (err) {
-        console.error("Failed to load categories for navbar:", err.message);
-      }
-    };
-    fetchCategories();
-  }, [backendUrl]);
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const res = await axios.get(`${backendUrl}/api/category/list`);
+  //       if (res.data.success) setCategories(res.data.categories || []);
+  //     } catch (err) {
+  //       console.error("Failed to load categories for navbar:", err.message);
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, [backendUrl]);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
@@ -253,7 +252,7 @@ const Navbar = () => {
                   <span className="text-indigo-400">LL</span>
                   <span className="text-white/90"> Leather</span>
                 </span>
-                <span className="nav-brand text-[10px] sm:text-[11px] tracking-[3px] text-white/40 uppercase font-normal">
+                <span className="nav-brand text-[10px] sm:text-[11px] tracking-[3px] text-white/70 uppercase font-normal">
                   Lovers
                 </span>
               </div>
@@ -582,7 +581,7 @@ const Navbar = () => {
                           key={label}
                           onClick={action}
                           className="w-full text-left px-4 py-3 text-[11px] tracking-[1px] uppercase
-                            text-white/55 hover:text-white hover:bg-indigo-500/10 transition-colors nav-links"
+                            text-white/80 hover:text-white hover:bg-indigo-500/10 transition-colors nav-links"
                         >
                           {label}
                         </button>
@@ -595,6 +594,8 @@ const Navbar = () => {
               {/* Wishlist */}
               <Link
                 to="/wishlist"
+                aria-label="Wishlist"
+                title="Wishlist"
                 className="relative icon-btn text-white/75 p-1"
               >
                 <GoHeartFill className="text-[19px]" />
@@ -610,15 +611,16 @@ const Navbar = () => {
               </Link>
 
               {/* Cart */}
-              <Link to="/cart" className="relative icon-btn text-white/75 p-1">
+              <Link to="/cart" aria-label="Shopping Cart" title="Shopping Cart" className="relative icon-btn text-white/75 p-1">
                 <FontAwesomeIcon icon={faBagShopping} className="text-[19px]" />
-                {getCartCount() > 0 && (
+                {getCartCount > 0 && (
                   <span
                     className="absolute -top-1.5 -right-1.5 bg-indigo-500 text-white text-[9px]
                     w-[16px] h-[16px] rounded-full flex items-center justify-center font-bold leading-none
                     shadow-lg shadow-indigo-900/50"
                   >
-                    {getCartCount()}
+                    {/* {getCartCount()} */}
+                    {getCartCount}
                   </span>
                 )}
               </Link>
@@ -671,14 +673,15 @@ const Navbar = () => {
                   <span className="nav-brand text-[17px] font-semibold text-white">
                     <span className="text-indigo-400">LL</span> Leather
                   </span>
-                  <span className="nav-brand text-[9px] tracking-[3px] text-white/35 uppercase">
+                  <span className="nav-brand text-[9px] tracking-[3px] text-white/70 uppercase">
                     Lovers
                   </span>
                 </div>
               </div>
               <button
                 onClick={closeSidebar}
-                className="text-white/40 hover:text-white transition-colors p-1"
+                aria-label="Close menu"
+                className="text-white/70 hover:text-white transition-colors p-1"
               >
                 <HiX className="text-[20px]" />
               </button>
@@ -851,7 +854,7 @@ const Navbar = () => {
             {/* Sidebar footer */}
             <div className="px-5 py-4 border-t border-indigo-600/30 flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-indigo-400" />
-              <p className="text-white/25 text-[10px] tracking-[2px] uppercase nav-links">
+              <p className="text-white/60 text-[10px] tracking-[2px] uppercase nav-links">
                 Premium Leather Since 2020
               </p>
             </div>
@@ -987,7 +990,7 @@ const MobileAccordion = ({ title, open, toggle, sections, closeSidebar }) => (
                   <Link
                     // to={`/collection?category=${encodeURIComponent(item.gender)}&sub=${encodeURIComponent(item.category)}`}
                     to={`/collection?category=${encodeURIComponent(item.categoryName)}&sub=${encodeURIComponent(item.label)}`}
-                    className="flex items-center gap-2 text-[12px] text-white/45 hover:text-indigo-400 transition-all duration-200 group"
+                    className="flex items-center gap-2 text-[12px] text-white/70 hover:text-indigo-400 transition-all duration-200 group"
                     onClick={closeSidebar}
                   >
                     <span

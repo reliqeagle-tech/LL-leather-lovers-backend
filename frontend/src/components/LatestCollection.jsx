@@ -38,7 +38,6 @@ const LatestCollection = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
         .lc-serif { font-family: 'Cormorant Garamond', serif; }
         .lc-sans  { font-family: 'Montserrat', sans-serif; }
 
@@ -200,6 +199,8 @@ const LatestCollection = () => {
                     category={item.category}
                     subCategory={item.subCategory}
                     sku={item.sku}
+                    averageRating={item.averageRating}
+                    reviewCount={item.reviewCount}
                   />
                 </div>
               </div>

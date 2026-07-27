@@ -3,6 +3,7 @@ import { ShopContext } from '../context/ShopContext';
 import { assets } from '../assets/assets';
 import CartTotal from '../components/CartTotal';
 import { Link } from 'react-router-dom';
+import { getOptimizedImage } from '../utils/cloudinary';
 
 const Cart = () => {
   const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
@@ -106,7 +107,7 @@ const Cart = () => {
                 <div key={`${item._id}-${item.size}-${item.color}-${index}`}
                   className="rounded-xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] hover:border-indigo-500/20 transition-all duration-300 p-4 flex items-center gap-4">
                   <Link to={`/product/${item._id}`} className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-white border border-gray-100">
-                    <img src={imageSrc} alt={productData.name} className="w-full h-full object-contain p-1" onError={e => { e.target.src = assets.placeholder_image; }} />
+                    <img src={getOptimizedImage(imageSrc, 120)} alt={productData.name} className="w-full h-full object-contain p-1" onError={e => { e.target.src = assets.placeholder_image; }} />
                   </Link>
                   <div className="flex-1 min-w-0">
                     <Link to={`/product/${item._id}`} className="no-underline">

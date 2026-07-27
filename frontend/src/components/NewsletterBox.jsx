@@ -36,7 +36,6 @@ const NewsletterBox = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
         .nl-serif { font-family: 'Cormorant Garamond', serif; }
         .nl-sans  { font-family: 'Montserrat', sans-serif; }
 

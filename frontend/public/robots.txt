@@ -1,0 +1,18 @@
+User-agent: *
+
+# Allow important pages
+Allow: /
+
+# Block private pages
+Disallow: /login
+Disallow: /register
+Disallow: /cart
+Disallow: /wishlist
+Disallow: /my-orders
+Disallow: /profile
+Disallow: /dashboard
+Disallow: /place-order
+Disallow: /checkout
+
+# Sitemap
+Sitemap: https://llleatherlovers.com/sitemap.xml

@@ -45,7 +45,6 @@ const CustomLeather = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
         .cl-serif { font-family: 'Cormorant Garamond', serif; }
         .cl-sans  { font-family: 'Montserrat', sans-serif; }
 
@@ -278,7 +277,7 @@ const CustomLeather = () => {
                     textTransform: "uppercase",
                   }}
                 >
-                  Learn more
+                  About LL Leather Lovers
                   <svg
                     width="12"
                     height="12"
@@ -317,9 +316,24 @@ const CustomLeather = () => {
                 <div className="absolute bottom-0 right-0 w-px h-full bg-indigo-500/40" />
               </div>
 
+              {/* <img
+                src={assets.customLeatherImg}
+                alt="Premium Leather Collection"
+                className="cl-img relative z-10 w-full rounded-xl"
+                style={{
+                  maxHeight: "520px",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
+                }}
+              /> */}
               <img
                 src={assets.customLeatherImg}
                 alt="Premium Leather Collection"
+                width={800}
+                height={520}
+                loading="lazy"
+                decoding="async"
                 className="cl-img relative z-10 w-full rounded-xl"
                 style={{
                   maxHeight: "520px",

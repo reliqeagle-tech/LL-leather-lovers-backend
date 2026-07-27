@@ -4,7 +4,8 @@ import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { PayPalButtons } from "@paypal/react-paypal-js";
+import { loadScript } from "../utils/loadScript.js";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const inputBase = {
   fontFamily: "'Montserrat',sans-serif", fontSize: '12px', padding: '10px 14px',
@@ -25,12 +26,19 @@ const PlaceOrder = () => {
   const [method, setMethod] = useState("razorpay");
   const [isPayPalReady, setIsPayPalReady] = useState(false);
   const [orderDataToPayPal, setOrderDataToPayPal] = useState(null);
+  const [{ isResolved }, paypalDispatch] = usePayPalScriptReducer();
+
   const { navigate, backendUrl, token, cartItems, setCartItems, products, userId } = useContext(ShopContext);
   const SHIPPING_FEE = 0;
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', street: '', city: '', state: '', zipcode: '', country: '', phone: '' });
   const onChangeHandler = e => setFormData(d => ({ ...d, [e.target.name]: e.target.value }));
 
-  const initPay = (order) => {
+  const initPay = async (order) => {
+    const ok = await loadScript('https://checkout.razorpay.com/v1/checkout.js', 'razorpay-sdk');
+    if (!ok || !window.Razorpay) {
+      toast.error('Payment gateway failed to load. Please try again.');
+      return;
+    }
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID, amount: order.amount, currency: order.currency,
       name: 'Order Payment', description: 'Order Payment', order_id: order.id, receipt: order.receipt,
@@ -146,7 +154,7 @@ const PlaceOrder = () => {
       }
       if (method === 'razorpay') {
         const res = await axios.post(`${backendUrl}/api/order/razorpay`, orderData, config);
-        if (res.data.success) initPay(res.data.order);
+        if (res.data.success) await initPay(res.data.order);
         else toast.error(res.data.message);
       }
       if (method === 'paypal') {
@@ -212,7 +220,12 @@ const PlaceOrder = () => {
                   { id: 'razorpay', logo: assets.razorpay_logo, cls: 'h-4 mx-2' },
                   { id: 'paypal', logo: assets.paypalLogo, cls: 'w-16' },
                 ].map(({ id, logo, cls }) => (
-                  <button key={id} type="button" onClick={() => { setMethod(id); setIsPayPalReady(false); }}
+                  <button key={id} type="button" onClick={() => {
+                    setMethod(id); setIsPayPalReady(false);
+                    if (id === 'paypal' && !isResolved) {
+                      paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+                    }
+                  }}
                     className="w-full flex items-center gap-3 rounded-xl px-4 py-3 border transition-all duration-200"
                     style={{ background: method === id ? 'rgba(99,102,241,0.08)' : 'rgba(255,255,255,0.02)', border: method === id ? '1px solid rgba(99,102,241,0.4)' : '1px solid rgba(255,255,255,0.07)' }}>
                     <div className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center shrink-0 ${method === id ? 'border-indigo-400' : 'border-white/20'}`}>

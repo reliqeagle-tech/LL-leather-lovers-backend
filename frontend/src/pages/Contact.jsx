@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import NewsletterBox from "../components/NewsletterBox";
+import { Helmet } from "react-helmet-async";
 
 const useReveal = () => {
   const [visible, setVisible] = useState(false);
@@ -75,6 +76,88 @@ const Contact = () => {
 
   return (
     <div style={{ background: "linear-gradient(180deg, #08080f 0%, #0b0b14 100%)" }} className="min-h-screen">
+
+      <Helmet>
+        <title>Contact Us | LL Leather Lovers</title>
+        <meta name="description" content="Contact LL Leather Lovers for premium leather jackets, pillow covers, desk pads, aprons, bespoke orders and customer support." />
+        <link rel="canonical" href="https://llleatherlovers.com/contact" />
+        <meta name="robots" content="index, follow" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Contact Us | LL Leather Lovers" />
+        <meta property="og:description" content="Contact LL Leather Lovers for premium leather jackets, pillow covers, desk pads, aprons, bespoke orders and customer support." />
+        <meta property="og:url" content="https://llleatherlovers.com/contact" />
+        <meta property="og:image" content="https://llleatherlovers.com/ll_leatherlovers_title.webp" />
+        <meta property="og:site_name" content="LL Leather Lovers" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Us | LL Leather Lovers" />
+        <meta name="twitter:description" content="Contact LL Leather Lovers for premium leather jackets, pillow covers, desk pads, aprons, bespoke orders and customer support." />
+        <meta name="twitter:image" content="https://llleatherlovers.com/ll_leatherlovers_title.webp" />
+
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "LL Leather Lovers",
+            "url": "https://llleatherlovers.com",
+            "logo": "https://llleatherlovers.com/ll_leatherlovers_title.webp",
+
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress":
+                "Reliq Eagle, 511, Maranpur, Opposite Shiv Mandir, Gaya Bypass Road",
+              "addressLocality": "Gaya",
+              "addressRegion": "Bihar",
+              "postalCode": "823001",
+              "addressCountry": "IN"
+            },
+
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "telephone": "+91-9088110999",
+                "contactType": "customer support",
+                "email": "info@llleatherlovers.com",
+                "availableLanguage": [
+                  "English",
+                  "Hindi"
+                ]
+              }
+            ]
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://llleatherlovers.com"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Contact",
+                "item": "https://llleatherlovers.com/contact"
+              }
+            ]
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            "name": "Contact Us | LL Leather Lovers",
+            "url": "https://llleatherlovers.com/contact",
+            "description":
+              "Contact LL Leather Lovers for premium leather jackets, pillow covers, desk pads, aprons, bespoke orders and customer support."
+          })}
+        </script>
+      </Helmet>
 
       {/* ══ HERO ══ */}
       <section ref={heroRef} className="relative overflow-hidden py-10">

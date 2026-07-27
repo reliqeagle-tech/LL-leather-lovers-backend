@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import { generateSeoUrlParts } from "../utils/slugify";
+import { getOptimizedImage } from "../utils/cloudinary";
 
-const ProductItem = ({ id, image, name, price, discountPrice, category, subCategory, sku }) => {
-  const { currency, getProductReviews } = useContext(ShopContext);
-  const [reviews, setReviews] = useState([]);
-  const [avgRating, setAvgRating] = useState(0);
+const ProductItem = ({ id, image, name, price, discountPrice, category, subCategory, sku, averageRating = 0, reviewCount = 0, }) => {
+  const { currency } = useContext(ShopContext);
+  // const [reviews, setReviews] = useState([]);
+  // const [avgRating, setAvgRating] = useState(0);
 
   const getProductUrl = () => {
 
@@ -36,15 +37,16 @@ const ProductItem = ({ id, image, name, price, discountPrice, category, subCateg
     return `/product/${categorySlug}/${subCategorySlug}/${productSlug}/${skuSlug}`;
   };
 
-  useEffect(() => {
-    (async () => {
-      const data = await getProductReviews(id);
-      setReviews(data || []);
-      if (data?.length) {
-        setAvgRating(data.reduce((s, r) => s + r.rating, 0) / data.length);
-      }
-    })();
-  }, [id]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const data = await getProductReviews(id);
+  //     setReviews(data || []);
+  //     if (data?.length) {
+  //       setAvgRating(data.reduce((s, r) => s + r.rating, 0) / data.length);
+  //     }
+  //   })();
+  // }, [id]);
+
 
   // ── Price logic ────────────────────────────────────────────────
   const percentOff = Number(discountPrice) || 0;
@@ -108,7 +110,8 @@ const ProductItem = ({ id, image, name, price, discountPrice, category, subCateg
       }}>
         {/* Image — contain so full product is always visible */}
         <img
-          src={image[0]}
+          // src={image[0]}
+          src={getOptimizedImage(image[0], 180)}
           alt={name}
           className="ll-product-img"
           style={{
@@ -218,8 +221,8 @@ const ProductItem = ({ id, image, name, price, discountPrice, category, subCateg
 
         {/* Rating row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: '10px' }}>
-          <Stars rating={avgRating} />
-          {reviews.length > 0 ? (
+          {/* <Stars rating={avgRating} /> */}
+          {/* {reviews.length > 0 ? (
             <>
               <span style={{
                 fontFamily: "'Montserrat',sans-serif",
@@ -242,6 +245,16 @@ const ProductItem = ({ id, image, name, price, discountPrice, category, subCateg
             }}>
               No reviews yet
             </span>
+          )} */}
+          <Stars rating={averageRating} />
+
+          {reviewCount > 0 ? (
+            <>
+              <span>{averageRating.toFixed(1)}</span>
+              <span>({reviewCount})</span>
+            </>
+          ) : (
+            <span>No reviews yet</span>
           )}
         </div>
 

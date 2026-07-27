@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { useEffect } from 'react';
+import { ShopContext } from '../context/ShopContext';
+// import axios from 'axios';
+// import { useEffect } from 'react';
 
 const buildUrl = (categoryName, subCategory) =>
   `/collection?category=${encodeURIComponent(categoryName)}&sub=${encodeURIComponent(subCategory)}`;
@@ -22,7 +23,9 @@ const Footer = () => {
   const backendUrl = isDevelopment ? import.meta.env.VITE_BACKEND_URL_D : import.meta.env.VITE_BACKEND_URL;
   const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
+
+  const { categories } = useContext(ShopContext);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -48,23 +51,23 @@ const Footer = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await axios.get(
-          `${backendUrl}/api/category/list`
-        );
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         `${backendUrl}/api/category/list`
+  //       );
 
-        if (res.data.success) {
-          setCategories(res.data.categories || []);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //       if (res.data.success) {
+  //         setCategories(res.data.categories || []);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    fetchCategories();
-  }, [backendUrl]);
+  //   fetchCategories();
+  // }, [backendUrl]);
 
   return (
     <footer style={{ background: "linear-gradient(180deg, #09090f 0%, #060610 100%)" }}
@@ -307,7 +310,7 @@ const Footer = () => {
                     type="email" name="email"
                     placeholder="your@email.com"
                     required disabled={loading}
-                    className="w-full px-3 py-2.5 rounded-full text-white/80 placeholder-white/40
+                    className="w-full px-3 py-2.5 rounded-full text-white/80 placeholder-white/60
                       focus:outline-none focus:ring-1 focus:ring-indigo-500/50
                       disabled:opacity-50 transition-all"
                     style={{
@@ -322,9 +325,9 @@ const Footer = () => {
                     hover:opacity-90 transition-opacity disabled:opacity-50 relative overflow-hidden group"
                   style={{
                     fontFamily: "'Montserrat',sans-serif", fontSize: "10px",
-                    letterSpacing: "2px", background: "#6366f1"
+                    letterSpacing: "2px", background: "#4338CA"
                   }}>
-                  <span className="absolute inset-0 bg-indigo-500 scale-x-0 group-hover:scale-x-100
+                  <span className="absolute inset-0 bg-indigo-700 scale-x-0 group-hover:scale-x-100
                     origin-left transition-transform duration-300" />
                   <span className="relative z-10">{loading ? "Sending…" : "Subscribe"}</span>
                 </button>
@@ -341,11 +344,16 @@ const Footer = () => {
             © {new Date().getFullYear()} llleatherlovers.com · All Rights Reserved
           </p>
           <div className="flex items-center gap-4">
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(item => (
-              <a key={item} href="#"
+            {[
+              // "Privacy Policy", "Terms of Service", "Cookie Policy"
+              { label: "Privacy Policy", to: "/privacy-policy" },
+              { label: "Terms of Use", to: "/terms-and-conditions" },
+              { label: "Cookies", to: "/cookies-policy" },
+            ].map(item => (
+              <a key={item.label} href={item.to}
                 className="text-white/40 hover:text-white/50 transition-colors"
                 style={{ fontFamily: "'Montserrat',sans-serif", fontSize: "10px", letterSpacing: "0.5px" }}>
-                {item}
+                {item.label}
               </a>
             ))}
           </div>

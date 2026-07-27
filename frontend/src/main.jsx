@@ -27,17 +27,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   // <BrowserRouter>
   <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
     <HelmetProvider>
-    <PayPalScriptProvider
-      options={{
-        "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
-        currency: "USD",
-        intent: "capture"
-      }}
-    >
-      <ShopContextProvider>
-        <App />
-      </ShopContextProvider>
-    </PayPalScriptProvider>
+      <PayPalScriptProvider
+        options={{
+          "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
+          currency: "USD",
+          intent: "capture"
+        }}
+        deferLoading={true}
+      >
+        <ShopContextProvider>
+          <App />
+        </ShopContextProvider>
+      </PayPalScriptProvider>
     </HelmetProvider>
   </BrowserRouter>
 );

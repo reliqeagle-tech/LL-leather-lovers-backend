@@ -3,7 +3,7 @@ import { ShopContext } from '../context/ShopContext';
 import { useSearchParams } from "react-router-dom";
 import ProductItem from '../components/ProductItem';
 import { Helmet } from 'react-helmet-async';
-import axios from 'axios';
+// import axios from 'axios';
 
 /* ══════════════════════════════════════════════════════════════
    LLeather Lovers — Collection.jsx
@@ -24,7 +24,7 @@ import axios from 'axios';
 ══════════════════════════════════════════════════════════════ */
 
 const Collection = () => {
-  const { products, search, showSearch, backendUrl } = useContext(ShopContext);
+  const { products, search, showSearch, backendUrl, categories, categoriesLoading, getCategories } = useContext(ShopContext);
 
   // ── Filter state ──
   const [showFilter, setShowFilter] = useState(false);
@@ -45,30 +45,30 @@ const Collection = () => {
   const productsPerPage = 12;
 
   // ── Categories state ──
-  const [categories, setCategories] = useState([]);
-  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  // const [categories, setCategories] = useState([]);
+  // const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [categoriesError, setCategoriesError] = useState(false); // ✅ error state
 
   const [searchParams] = useSearchParams();
 
   // ── Fetch categories from backend ──
-  const getCategories = useCallback(async () => {
-    setCategoriesLoading(true);
-    setCategoriesError(false);
-    try {
-      const response = await axios.get(backendUrl + '/api/category/list');
-      if (response.data.success) {
-        setCategories(response.data.categories);
-      }
-    } catch (error) {
-      console.error('Failed to load categories:', error.message);
-      setCategoriesError(true);
-    } finally {
-      setCategoriesLoading(false);
-    }
-  }, [backendUrl]);
+  // const getCategories = useCallback(async () => {
+  //   setCategoriesLoading(true);
+  //   setCategoriesError(false);
+  //   try {
+  //     const response = await axios.get(backendUrl + '/api/category/list');
+  //     if (response.data.success) {
+  //       setCategories(response.data.categories);
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to load categories:', error.message);
+  //     setCategoriesError(true);
+  //   } finally {
+  //     setCategoriesLoading(false);
+  //   }
+  // }, [backendUrl]);
 
-  useEffect(() => { getCategories(); }, [getCategories]);
+  // useEffect(() => { getCategories(); }, [getCategories]);
 
   // ── URL param pre-select ──
   useEffect(() => {
@@ -431,17 +431,127 @@ const Collection = () => {
   // ══════════════════════════════════════════════════════════════
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <title>Collection — LLeather Lovers</title>
         <meta
           name="description"
           content="Shop premium leather jackets, bomber jackets, biker jackets, and accessories at LLeather Lovers. Handcrafted quality leather products."
         />
         <link rel="canonical" href="https://llleatherlovers.com/collection" />
+      </Helmet> */}
+
+      <Helmet>
+        <title>Leather Jackets Collection | LL Leather Lovers</title>
+
+        <meta
+          name="description"
+          content="Explore handcrafted leather pillow covers, bomber jackets, biker jackets, aprons, desk pads, recliner slipcovers and premium lambskin leather products from LL Leather Lovers."
+        />
+
+        <meta
+          name="keywords"
+          content="Leather Jackets, Bomber Jackets, Biker Jackets, Leather Coats,leather pillow covers, bomber jackets, biker jackets, aprons, desk pads, recliner slipcovers, Men's Leather Jackets, Women's Leather Jackets, LL Leather Lovers"
+        />
+
+        <meta name="robots" content="index, follow" />
+
+        <link
+          rel="canonical"
+          href="https://llleatherlovers.com/collection"
+        />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Leather Jackets Collection | LL Leather Lovers"
+        />
+        <meta
+          property="og:description"
+          content="Explore handcrafted premium leather jackets, biker jackets, bomber jackets and luxury leather apparel."
+        />
+        <meta
+          property="og:url"
+          content="https://llleatherlovers.com/collection"
+        />
+        <meta
+          property="og:image"
+          content="https://llleatherlovers.com/ll_leatherlovers_title.webp"
+        />
+        <meta
+          property="og:image:alt"
+          content="LL Leather Lovers Collection"
+        />
+        <meta
+          property="og:site_name"
+          content="LL Leather Lovers"
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Leather Jackets Collection | LL Leather Lovers"
+        />
+        <meta
+          name="twitter:description"
+          content="Shop handcrafted premium leather jackets, bomber jackets and biker jackets."
+        />
+        <meta
+          name="twitter:image"
+          content="https://llleatherlovers.com/ll_leatherlovers_title.webp"
+        />
+
+        {/* Collection Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "LL Leather Lovers Collection",
+            url: "https://llleatherlovers.com/collection",
+            description:
+              "Browse premium handcrafted leather jackets, bomber jackets, biker jackets and leather apparel from LL Leather Lovers."
+          })}
+        </script>
+
+        {/* Breadcrumb */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://llleatherlovers.com"
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Collection",
+                item: "https://llleatherlovers.com/collection"
+              }
+            ]
+          })}
+        </script>
+
+        {/* ItemList */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            itemListElement: filterProducts.map((p, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              url: `https://llleatherlovers.com/product/${p.category}/${p.subCategory}/${p.slug}`,
+              name: p.name
+            }))
+          })}
+        </script>
       </Helmet>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
         /* ── Checkbox ── */
         .col-check {

@@ -411,7 +411,7 @@
 
 
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -439,6 +439,8 @@ const ShopContextProvider = (props) => {
     const [userId, setUserId] = useState(null);
     const [wishlist, setWishlist] = useState([]);
     const [banners, setBanners] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -455,6 +457,22 @@ const ShopContextProvider = (props) => {
             return null;
         }
     };
+
+    const getCategories = async () => {
+        setCategoriesLoading(true);
+        try {
+            const res = await axios.get(`${backendUrl}/api/category/list`);
+            if (res.data.success) setCategories(res.data.categories);
+        } catch (err) {
+            console.error("Failed to load categories:", err.message);
+        } finally {
+            setCategoriesLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getCategories();
+    }, []);
 
     const fetchBanners = async () => {
         try {
@@ -760,7 +778,7 @@ const ShopContextProvider = (props) => {
 
     /* ────────────────────────────── UTILITY FUNCTIONS ────────────────────────────── */
 
-    const getCartCount = () => {
+    const getCartCount = useMemo(() => {
         let total = 0;
         for (const id in cartItems) {
             for (const combo in cartItems[id]) {
@@ -768,7 +786,7 @@ const ShopContextProvider = (props) => {
             }
         }
         return total;
-    };
+    }, [cartItems]);
 
     // const getCartAmount = () => {
     //     let total = 0;
@@ -892,14 +910,49 @@ const ShopContextProvider = (props) => {
 
     /* ────────────────────────────── CONTEXT VALUE ────────────────────────────── */
 
-    const value = {
+    // const value = {
+    //     products,
+    //     currency,
+    //     delivery_fee,
+    //     search,
+    //     setSearch,
+    //     showSearch,
+    //     setShowSearch,
+    //     cartItems,
+    //     addToCart,
+    //     setCartItems,
+    //     getCartCount,
+    //     updateQuantity,
+    //     getCartAmount,
+    //     getCartDiscount,
+    //     getCartDetails,
+    //     navigate,
+    //     backendUrl,
+    //     token,
+    //     setToken,
+    //     userId,
+    //     // Review functions – now included!
+    //     submitReview,
+    //     getProductReviews,
+    //     deleteReview,
+    //     wishlist,
+    //     toggleWishlistItem,
+    //     fetchWishlist,
+    //     getSingleProduct,
+    //     fetchBanners,
+    //     banners,
+    // };
+
+    const value = useMemo(() => ({
         products,
         currency,
         delivery_fee,
+
         search,
         setSearch,
         showSearch,
         setShowSearch,
+
         cartItems,
         addToCart,
         setCartItems,
@@ -908,22 +961,45 @@ const ShopContextProvider = (props) => {
         getCartAmount,
         getCartDiscount,
         getCartDetails,
+
         navigate,
         backendUrl,
+
         token,
         setToken,
         userId,
-        // Review functions – now included!
+
         submitReview,
         getProductReviews,
         deleteReview,
+
         wishlist,
         toggleWishlistItem,
         fetchWishlist,
+
         getSingleProduct,
+
         fetchBanners,
         banners,
-    };
+        // ✅ naya add karo:
+        categories,
+        categoriesLoading,
+        getCategories,
+
+    }), [
+        products,
+        search,
+        showSearch,
+        cartItems,
+        token,
+        userId,
+        wishlist,
+        banners,
+        navigate,
+        backendUrl,
+        categories,          // ✅ dependency array mein bhi add karo
+        categoriesLoading,
+    ]);
 
     return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;
 };
