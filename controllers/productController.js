@@ -2357,6 +2357,7 @@ import path from "path"
 import fs from "fs-extra"
 import mongoose from "mongoose";
 import { generateSeoSlug } from "../utils/slugify.js"
+import pLimit from "p-limit"
 
 /* ══════════════════════════════════════════════════════════════
    COLOR HANDLING — ported from D Dolly Lamb
@@ -2957,112 +2958,230 @@ const updateProduct = async (req, res) => {
    — proper color hex parsing
    — robust sizes parser
 ══════════════════════════════════════════════════════════════ */
-const bulkUploadProducts = async (req, res) => {
-  try {
-    if (!req.file)
-      return res.json({ success: false, message: "No file uploaded" })
+// const bulkUploadProducts = async (req, res) => {
+//   try {
+//     if (!req.file)
+//       return res.json({ success: false, message: "No file uploaded" })
 
-    const filePath = req.file.path
-    let jsonData = []
+//     const filePath = req.file.path
+//     let jsonData = []
+
+//     const isCsv =
+//       req.file.mimetype === "text/csv" ||
+//       req.file.mimetype === "application/vnd.ms-excel" ||
+//       req.file.originalname.toLowerCase().endsWith(".csv")
+
+//     if (isCsv) {
+//       jsonData = await csv().fromFile(filePath)
+//     } else {
+//       jsonData = JSON.parse(fs.readFileSync(filePath, "utf-8"))
+//     }
+
+//     let inserted = 0
+//     let updated = 0
+//     let skipped = []
+
+//     for (const item of jsonData) {
+
+//       // SKU REQUIRED — skip row instead of crashing the whole batch
+//       if (!item.sku || !item.sku.toString().trim()) {
+//         console.log(`Row skipped — SKU missing for "${item.name || 'unnamed'}"`)
+//         skipped.push(item.name || 'unnamed row')
+//         continue
+//       }
+
+//       const normalizedSku = item.sku.toString().trim().toUpperCase()
+
+//       // Images
+//       let uploadedImages = []
+//       if (item.image) {
+//         const images = item.image.toString().split(",").map(i => i.trim()).filter(Boolean)
+//         for (let img of images) {
+//           try {
+//             const result = await cloudinary.uploader.upload(img, { resource_type: "image" })
+//             uploadedImages.push(result.secure_url)
+//           } catch (err) {
+//             console.log("Image upload error:", img, err.message)
+//           }
+//         }
+//       }
+
+//       const parsedSizes = parseBulkSizes(item.sizes)
+//       const parsedItemDetails = parseItemDetailsField(item.itemDetails)
+
+//       // ✅ Discount: frontend sends a PERCENTAGE — convert to rupee discountPrice
+//       const { discountPrice, discountActive } = resolveDiscountFromPercent(item.price, item.discountPrice)
+
+//       const productData = {
+//         sku: normalizedSku,
+//         slug: generateSeoSlug(item.name, item.category, item.subCategory, normalizedSku),
+//         name: item.name,
+//         description: item.description,
+//         detailedDescription: item.detailedDescription || "",
+//         itemDetails: parsedItemDetails,
+//         price: Number(item.price) || 0,
+//         discountPrice,
+//         discountActive,
+//         category: item.category,
+//         subCategory: item.subCategory,
+//         bestseller: String(item.bestseller).toLowerCase() === "true",
+//         sizes: parsedSizes,
+//         color: normalizeColorInput(item.color),
+//         image: uploadedImages,
+//         date: Date.now(),
+//       }
+
+//       const existing = await productModel.findOne({ sku: normalizedSku })
+
+//       // Preserve existing images if no new images were uploaded for this row
+//       if (existing && uploadedImages.length === 0) {
+//         productData.image = existing.image
+//       }
+
+//       if (existing) {
+//         await productModel.updateOne({ sku: normalizedSku }, { $set: productData })
+//         updated++
+//       } else {
+//         await productModel.create(productData)
+//         inserted++
+//       }
+//     }
+
+//     fs.unlinkSync(filePath)
+
+//     return res.json({
+//       success: true,
+//       message: `${inserted} new products added, ${updated} products updated${skipped.length ? `, ${skipped.length} rows skipped (missing SKU)` : ''}`,
+//       inserted,
+//       updated,
+//       skipped,
+//     })
+
+//   } catch (error) {
+//     console.error("BULK UPLOAD ERROR:", error)
+//     // Best-effort cleanup of the uploaded temp file even on failure
+//     if (req.file?.path) {
+//       try { fs.unlinkSync(req.file.path) } catch (e) { }
+//     }
+//     return res.json({ success: false, message: error.message })
+//   }
+// }
+
+const ROW_CONCURRENCY = 4              // ek saath kitne products process honge
+const uploadLimit = pLimit(8)          // ek saath max Cloudinary uploads (sab rows me shared)
+const SKIP_IMAGES_IF_EXISTS = true     // true = jinki images already hain, unhe re-upload nahi karega
+
+const uploadImageUrl = (url) =>
+  uploadLimit(async () => {
+    try {
+      const r = await cloudinary.uploader.upload(url, { resource_type: "image" })
+      return r.secure_url
+    } catch (err) {
+      console.log("Image upload error:", url, err.message)
+      return null
+    }
+  })
+
+const processBulkRow = async (item) => {
+  if (!item.sku || !item.sku.toString().trim()) {
+    return { status: "skipped", name: item.name || "unnamed row" }
+  }
+  const sku = item.sku.toString().trim().toUpperCase()
+
+  const existing = await productModel.findOne({ sku }).select("image").lean()
+
+  const urls = item.image
+    ? item.image.toString().split(",").map(i => i.trim()).filter(Boolean)
+    : []
+
+  const shouldUpload = urls.length > 0 && !(SKIP_IMAGES_IF_EXISTS && existing?.image?.length)
+
+  let images = []
+  if (shouldUpload) {
+    images = (await Promise.all(urls.map((u) => uploadImageUrl(u)))).filter(Boolean)
+  }
+
+  const { discountPrice, discountActive } = resolveDiscountFromPercent(item.price, item.discountPrice)
+
+  const fields = {
+    sku,
+    slug: generateSeoSlug(item.name, item.category, item.subCategory, sku),
+    name: item.name,
+    description: item.description,
+    detailedDescription: item.detailedDescription || "",
+    itemDetails: parseItemDetailsField(item.itemDetails),
+    price: Number(item.price) || 0,
+    discountPrice,
+    discountActive,
+    category: item.category,
+    subCategory: item.subCategory,
+    bestseller: String(item.bestseller).toLowerCase() === "true",
+    sizes: parseBulkSizes(item.sizes),
+    color: normalizeColorInput(item.color),
+  }
+
+  // images tabhi touch karo jab naye mile ho ya product bilkul naya ho
+  if (images.length > 0 || !existing) fields.image = images
+
+  const result = await productModel.updateOne(
+    { sku },
+    { $set: fields, $setOnInsert: { date: Date.now() } },
+    { upsert: true }
+  )
+
+  const isInsert = result.upsertedCount > 0 || !!result.upsertedId
+  return {
+    status: isInsert ? "inserted" : "updated",
+    sku,
+    warning: shouldUpload && images.length === 0 ? "image upload failed" : undefined,
+  }
+}
+
+const bulkUploadProducts = async (req, res) => {
+  const filePath = req.file?.path
+  try {
+    if (!req.file) return res.json({ success: false, message: "No file uploaded" })
 
     const isCsv =
       req.file.mimetype === "text/csv" ||
       req.file.mimetype === "application/vnd.ms-excel" ||
       req.file.originalname.toLowerCase().endsWith(".csv")
 
-    if (isCsv) {
-      jsonData = await csv().fromFile(filePath)
-    } else {
-      jsonData = JSON.parse(fs.readFileSync(filePath, "utf-8"))
-    }
+    const jsonData = isCsv
+      ? await csv().fromFile(filePath)
+      : JSON.parse(fs.readFileSync(filePath, "utf-8"))
 
-    let inserted = 0
-    let updated = 0
-    let skipped = []
+    const rowLimit = pLimit(ROW_CONCURRENCY)
 
-    for (const item of jsonData) {
-
-      // SKU REQUIRED — skip row instead of crashing the whole batch
-      if (!item.sku || !item.sku.toString().trim()) {
-        console.log(`Row skipped — SKU missing for "${item.name || 'unnamed'}"`)
-        skipped.push(item.name || 'unnamed row')
-        continue
-      }
-
-      const normalizedSku = item.sku.toString().trim().toUpperCase()
-
-      // Images
-      let uploadedImages = []
-      if (item.image) {
-        const images = item.image.toString().split(",").map(i => i.trim()).filter(Boolean)
-        for (let img of images) {
+    const outcomes = await Promise.all(
+      jsonData.map((item) =>
+        rowLimit(async () => {
           try {
-            const result = await cloudinary.uploader.upload(img, { resource_type: "image" })
-            uploadedImages.push(result.secure_url)
+            return await processBulkRow(item)
           } catch (err) {
-            console.log("Image upload error:", img, err.message)
+            console.error("Row failed:", item.sku, err.message)
+            return { status: "failed", sku: item.sku, error: err.message }
           }
-        }
-      }
+        })
+      )
+    )
 
-      const parsedSizes = parseBulkSizes(item.sizes)
-      const parsedItemDetails = parseItemDetailsField(item.itemDetails)
-
-      // ✅ Discount: frontend sends a PERCENTAGE — convert to rupee discountPrice
-      const { discountPrice, discountActive } = resolveDiscountFromPercent(item.price, item.discountPrice)
-
-      const productData = {
-        sku: normalizedSku,
-        slug: generateSeoSlug(item.name, item.category, item.subCategory, normalizedSku),
-        name: item.name,
-        description: item.description,
-        detailedDescription: item.detailedDescription || "",
-        itemDetails: parsedItemDetails,
-        price: Number(item.price) || 0,
-        discountPrice,
-        discountActive,
-        category: item.category,
-        subCategory: item.subCategory,
-        bestseller: String(item.bestseller).toLowerCase() === "true",
-        sizes: parsedSizes,
-        color: normalizeColorInput(item.color),
-        image: uploadedImages,
-        date: Date.now(),
-      }
-
-      const existing = await productModel.findOne({ sku: normalizedSku })
-
-      // Preserve existing images if no new images were uploaded for this row
-      if (existing && uploadedImages.length === 0) {
-        productData.image = existing.image
-      }
-
-      if (existing) {
-        await productModel.updateOne({ sku: normalizedSku }, { $set: productData })
-        updated++
-      } else {
-        await productModel.create(productData)
-        inserted++
-      }
-    }
-
-    fs.unlinkSync(filePath)
+    const inserted = outcomes.filter(o => o.status === "inserted").length
+    const updated = outcomes.filter(o => o.status === "updated").length
+    const skipped = outcomes.filter(o => o.status === "skipped").map(o => o.name)
+    const failed = outcomes.filter(o => o.status === "failed").map(o => ({ sku: o.sku, error: o.error }))
+    const warnings = outcomes.filter(o => o.warning).map(o => ({ sku: o.sku, warning: o.warning }))
 
     return res.json({
       success: true,
-      message: `${inserted} new products added, ${updated} products updated${skipped.length ? `, ${skipped.length} rows skipped (missing SKU)` : ''}`,
-      inserted,
-      updated,
-      skipped,
+      message: `${inserted} added, ${updated} updated${failed.length ? `, ${failed.length} failed` : ""}${skipped.length ? `, ${skipped.length} skipped` : ""}`,
+      inserted, updated, skipped, failed, warnings,
     })
-
   } catch (error) {
     console.error("BULK UPLOAD ERROR:", error)
-    // Best-effort cleanup of the uploaded temp file even on failure
-    if (req.file?.path) {
-      try { fs.unlinkSync(req.file.path) } catch (e) { }
-    }
     return res.json({ success: false, message: error.message })
+  } finally {
+    if (filePath) { try { fs.unlinkSync(filePath) } catch (e) { } }
   }
 }
 

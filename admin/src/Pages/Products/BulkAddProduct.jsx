@@ -249,11 +249,118 @@ const BulkUpload = ({ token }) => {
    precisely what happened.
 ═══════════════════════════════════════════════════════════════ */
 
+    // const submitUrl = async () => {
+    //     if (!validRows.length) return toast.error('No valid rows to upload');
+
+    //     setUploading(true);
+    //     setProgress(10);
+
+    //     const clean = validRows.map(({ _idx, _errors, _valid, _id, ...rest }) => ({
+    //         ...rest,
+    //         sku: rest.sku?.toString().trim().toUpperCase(),
+    //         sizes: rest.sizes?.toString() || '',
+    //         color: rest.color?.toString() || '',
+    //         image: rest.image?.toString() || '',
+    //         price: rest.price?.toString() || '0',
+    //         discountPrice: rest.discountPrice?.toString() || '',
+    //         bestseller: rest.bestseller?.toString() || 'false',
+    //     }));
+
+    //     const fd = new FormData();
+    //     fd.append('file', new Blob([JSON.stringify(clean)], { type: 'application/json' }), 'bulk_upload.json');
+
+    //     // ✅ Always use the env-driven backendUrl — never hardcode localhost
+    //     const targetUrl = `${backendUrl}/api/product/bulk-upload`;
+
+    //     console.group('%c[BULK UPLOAD DEBUG]', 'color:#6366f1;font-weight:bold');
+    //     console.log('Target URL:', targetUrl);
+    //     console.log('Token present:', !!token, token ? `(${token.slice(0, 12)}...)` : '(MISSING)');
+    //     console.log('Rows being sent:', clean.length);
+    //     console.log('Sample row:', clean[0]);
+    //     console.groupEnd();
+
+    //     try {
+    //         setProgress(30);
+
+    //         const res = await axios.post(targetUrl, fd, {
+    //             headers: { token },
+    //             timeout: 300000, // ✅  timeout — without this, a hung request looks identical to "Network Error" forever
+    //         });
+
+    //         setProgress(100);
+
+    //         console.log('[BULK UPLOAD] Response received:', res.status, res.data);
+
+    //         if (res.data.success) {
+    //             toast.success(res.data.message);
+    //             setResult({ success: true, message: res.data.message });
+    //         } else {
+    //             // ✅ Backend responded but said success:false — this is a LOGIC error, not a network error
+    //             toast.error(res.data.message);
+    //             setResult({ success: false, message: res.data.message });
+    //         }
+
+    //     } catch (err) {
+    //         // ════════════════════════════════════════════════════════
+    //         // ✅ CLASSIFY THE EXACT FAILURE — this is what was missing
+    //         // ════════════════════════════════════════════════════════
+    //         let diagnosis = '';
+    //         let userMessage = '';
+
+    //         if (err.code === 'ECONNABORTED') {
+    //             // Request took longer than `timeout` — backend likely hung
+    //             // (common cause: bulk image uploads to Cloudinary taking too long,
+    //             //  or an infinite loop / unhandled await in the controller)
+    //             diagnosis = 'TIMEOUT — request sent but server never responded in time';
+    //             userMessage = 'Server is taking too long to respond. It may be processing too many images — try fewer rows or check backend logs.';
+
+    //         } else if (err.response) {
+    //             // ✅ Server DID respond, but with an error status (4xx/5xx)
+    //             // This means the request reached the backend — NOT a network issue.
+    //             diagnosis = `SERVER ERROR — backend responded with status ${err.response.status}`;
+    //             userMessage = err.response.data?.message || `Server returned status ${err.response.status}`;
+    //             console.error('[BULK UPLOAD] Response body:', err.response.data);
+    //             console.error('[BULK UPLOAD] Response headers:', err.response.headers);
+
+    //         } else if (err.request) {
+    //             // ✅ Request was made, but NO response came back at all.
+    //             // This is the real "Network Error" case — almost always one of:
+    //             //   1. Backend is down / crashed mid-request
+    //             //   2. CORS preflight blocked (check browser console for CORS errors above this one)
+    //             //   3. URL is wrong / unreachable from this network
+    //             //   4. Backend process killed by an uncaught exception while handling this request
+    //             diagnosis = 'NO RESPONSE — request left the browser but nothing came back';
+    //             userMessage = 'Could not reach the server. Check that the backend is running and the URL is correct.';
+    //             console.error('[BULK UPLOAD] Raw request object (inspect for more clues):', err.request);
+
+    //         } else {
+    //             // Something failed before the request was even sent
+    //             // (e.g. FormData construction error, JSON.stringify failure)
+    //             diagnosis = 'REQUEST SETUP ERROR — failed before sending';
+    //             userMessage = err.message;
+    //         }
+
+    //         console.group('%c[BULK UPLOAD] FAILURE DIAGNOSIS', 'color:#ef4444;font-weight:bold');
+    //         console.log('Diagnosis:', diagnosis);
+    //         console.log('Axios error code:', err.code);
+    //         console.log('Full error object:', err);
+    //         console.groupEnd();
+
+    //         toast.error(`Upload failed: ${userMessage}`);
+    //         setResult({ success: false, message: `${diagnosis} — ${userMessage}` });
+
+    //     } finally {
+    //         setUploading(false);
+    //         setTimeout(() => setProgress(0), 1500);
+    //     }
+    // };
+
+    const CHUNK_SIZE = 25;
+
     const submitUrl = async () => {
         if (!validRows.length) return toast.error('No valid rows to upload');
-
         setUploading(true);
-        setProgress(10);
+        setProgress(5);
 
         const clean = validRows.map(({ _idx, _errors, _valid, _id, ...rest }) => ({
             ...rest,
@@ -266,93 +373,44 @@ const BulkUpload = ({ token }) => {
             bestseller: rest.bestseller?.toString() || 'false',
         }));
 
-        const fd = new FormData();
-        fd.append('file', new Blob([JSON.stringify(clean)], { type: 'application/json' }), 'bulk_upload.json');
-
-        // ✅ Always use the env-driven backendUrl — never hardcode localhost
-        const targetUrl = `http://localhost:4000/api/product/bulk-upload`;
-
-        console.group('%c[BULK UPLOAD DEBUG]', 'color:#6366f1;font-weight:bold');
-        console.log('Target URL:', targetUrl);
-        console.log('Token present:', !!token, token ? `(${token.slice(0, 12)}...)` : '(MISSING)');
-        console.log('Rows being sent:', clean.length);
-        console.log('Sample row:', clean[0]);
-        console.groupEnd();
-
-        try {
-            setProgress(30);
-
-            const res = await axios.post(targetUrl, fd, {
-                headers: { token },
-                timeout: 30000, // ✅ 30s timeout — without this, a hung request looks identical to "Network Error" forever
-            });
-
-            setProgress(100);
-
-            console.log('[BULK UPLOAD] Response received:', res.status, res.data);
-
-            if (res.data.success) {
-                toast.success(res.data.message);
-                setResult({ success: true, message: res.data.message });
-            } else {
-                // ✅ Backend responded but said success:false — this is a LOGIC error, not a network error
-                toast.error(res.data.message);
-                setResult({ success: false, message: res.data.message });
-            }
-
-        } catch (err) {
-            // ════════════════════════════════════════════════════════
-            // ✅ CLASSIFY THE EXACT FAILURE — this is what was missing
-            // ════════════════════════════════════════════════════════
-            let diagnosis = '';
-            let userMessage = '';
-
-            if (err.code === 'ECONNABORTED') {
-                // Request took longer than `timeout` — backend likely hung
-                // (common cause: bulk image uploads to Cloudinary taking too long,
-                //  or an infinite loop / unhandled await in the controller)
-                diagnosis = 'TIMEOUT — request sent but server never responded in time';
-                userMessage = 'Server is taking too long to respond. It may be processing too many images — try fewer rows or check backend logs.';
-
-            } else if (err.response) {
-                // ✅ Server DID respond, but with an error status (4xx/5xx)
-                // This means the request reached the backend — NOT a network issue.
-                diagnosis = `SERVER ERROR — backend responded with status ${err.response.status}`;
-                userMessage = err.response.data?.message || `Server returned status ${err.response.status}`;
-                console.error('[BULK UPLOAD] Response body:', err.response.data);
-                console.error('[BULK UPLOAD] Response headers:', err.response.headers);
-
-            } else if (err.request) {
-                // ✅ Request was made, but NO response came back at all.
-                // This is the real "Network Error" case — almost always one of:
-                //   1. Backend is down / crashed mid-request
-                //   2. CORS preflight blocked (check browser console for CORS errors above this one)
-                //   3. URL is wrong / unreachable from this network
-                //   4. Backend process killed by an uncaught exception while handling this request
-                diagnosis = 'NO RESPONSE — request left the browser but nothing came back';
-                userMessage = 'Could not reach the server. Check that the backend is running and the URL is correct.';
-                console.error('[BULK UPLOAD] Raw request object (inspect for more clues):', err.request);
-
-            } else {
-                // Something failed before the request was even sent
-                // (e.g. FormData construction error, JSON.stringify failure)
-                diagnosis = 'REQUEST SETUP ERROR — failed before sending';
-                userMessage = err.message;
-            }
-
-            console.group('%c[BULK UPLOAD] FAILURE DIAGNOSIS', 'color:#ef4444;font-weight:bold');
-            console.log('Diagnosis:', diagnosis);
-            console.log('Axios error code:', err.code);
-            console.log('Full error object:', err);
-            console.groupEnd();
-
-            toast.error(`Upload failed: ${userMessage}`);
-            setResult({ success: false, message: `${diagnosis} — ${userMessage}` });
-
-        } finally {
-            setUploading(false);
-            setTimeout(() => setProgress(0), 1500);
+        const chunks = [];
+        for (let i = 0; i < clean.length; i += CHUNK_SIZE) {
+            chunks.push(clean.slice(i, i + CHUNK_SIZE));
         }
+
+        let uploaded = 0;
+        const failedSkus = [];
+
+        for (let i = 0; i < chunks.length; i++) {
+            try {
+                const fd = new FormData();
+                fd.append(
+                    'file',
+                    new Blob([JSON.stringify(chunks[i])], { type: 'application/json' }),
+                    'bulk_upload.json'
+                );
+                const res = await axios.post(`${backendUrl}/api/product/bulk-upload`, fd, {
+                    headers: { token },
+                    timeout: 180000,
+                });
+                if (res.data.success) uploaded += chunks[i].length;
+                else failedSkus.push(...chunks[i].map(r => r.sku));
+            } catch (err) {
+                console.error(`Chunk ${i + 1} failed:`, err.message);
+                failedSkus.push(...chunks[i].map(r => r.sku));
+            }
+            setProgress(5 + Math.round(((i + 1) / chunks.length) * 95));
+        }
+
+        const success = failedSkus.length === 0;
+        const message = success
+            ? `${uploaded} products uploaded successfully`
+            : `${uploaded} uploaded, ${failedSkus.length} failed. Failed SKUs: ${failedSkus.join(', ')}`;
+
+        success ? toast.success(message) : toast.error(`${failedSkus.length} products failed`);
+        setResult({ success, message });
+        setUploading(false);
+        setTimeout(() => setProgress(0), 1500);
     };
 
     /* ── Submit ZIP mode ── */

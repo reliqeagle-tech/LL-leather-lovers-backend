@@ -29,6 +29,7 @@ import BulkUpload from './Pages/Products/BulkAddProduct'
 import PageNotFound from './Pages/PageNotFound/PageNotFound'
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
+export const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
 export const currency = '$'
 
 const Transition = React.forwardRef(function Transition(props, ref) {

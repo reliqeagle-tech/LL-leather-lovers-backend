@@ -42,7 +42,7 @@ const Collection = () => {
   // ── Pagination state ──
   const [loadedPages, setLoadedPages] = useState([1]);
   const [loadingMore, setLoadingMore] = useState(false);
-  const productsPerPage = 12;
+  const productsPerPage = 20;
 
   // ── Categories state ──
   // const [categories, setCategories] = useState([]);

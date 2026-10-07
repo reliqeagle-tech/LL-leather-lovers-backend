@@ -2,18 +2,23 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { backendUrl, currency, MyContext } from '../../App'
+import { backendUrl, frontendUrl, currency, MyContext } from '../../App'
 import { HiOutlineSearch, HiOutlineRefresh } from 'react-icons/hi'
 import { MdOutlineGridView, MdOutlineTableRows, MdOutlineInventory2 } from 'react-icons/md'
 import { TbEdit, TbTrash, TbEye, TbChartBar, TbPackage, TbStar, TbAlertTriangle, TbPlus, TbX, TbFileExport } from 'react-icons/tb'
 import { FiChevronUp, FiChevronDown, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { BsBoxSeam } from 'react-icons/bs'
+import { getProductUrl } from '../../utils/slugify'
+import XLSX from "xlsx-js-style";
+import { saveAs } from "file-saver";
 
 /* ═══════════════════ HELPERS ═══════════════════ */
 const getStock = (sizes) => {
   if (!sizes || !Array.isArray(sizes)) return 0
   return sizes.reduce((sum, s) => sum + (Number(s?.stock) || 0), 0)
 }
+
+
 
 // const getDiscount = (price, discountPrice) => {
 //   if (!discountPrice || !price || +discountPrice >= +price) return null
@@ -249,28 +254,237 @@ const ProductsList = ({ token }) => {
   }
 
   /* ── export CSV ── */
-  const exportCSV = () => {
-    const rows = [['ID', 'Name', 'Category', 'Sub-Category', 'Price', 'Discount Price', 'Stock', 'Bestseller']]
-    filtered.forEach(p => rows.push([
-      p._id,
-      `"${(p.name || '').replace(/"/g, '""')}"`,
-      p.category || '',
-      p.subCategory || '',
-      p.price || 0,
-      p.discountPrice || '',
-      getStock(p.sizes),
-      p.bestseller ? 'Yes' : 'No',
-    ]))
-    const csv = rows.map(r => r.join(',')).join('\n')
-    const blob = new Blob([csv], { type: 'text/csv' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `products_${new Date().toISOString().slice(0, 10)}.csv`
-    a.click()
-    URL.revokeObjectURL(url)
-    toast.success('Products exported!')
-  }
+  // const exportCSV = () => {
+  //   const rows = [['ID', 'Name', 'Category', 'Sub-Category', 'Price', 'Discount Price', 'Stock', 'Bestseller']]
+  //   filtered.forEach(p => rows.push([
+  //     p._id,
+  //     `"${(p.name || '').replace(/"/g, '""')}"`,
+  //     p.category || '',
+  //     p.subCategory || '',
+  //     p.price || 0,
+  //     p.discountPrice || '',
+  //     getStock(p.sizes),
+  //     p.bestseller ? 'Yes' : 'No',
+  //   ]))
+  //   const csv = rows.map(r => r.join(',')).join('\n')
+  //   const blob = new Blob([csv], { type: 'text/csv' })
+  //   const url = URL.createObjectURL(blob)
+  //   const a = document.createElement('a')
+  //   a.href = url
+  //   a.download = `products_${new Date().toISOString().slice(0, 10)}.csv`
+  //   a.click()
+  //   URL.revokeObjectURL(url)
+  //   toast.success('Products exported!')
+  // }
+
+  /* ── export Excel ── */
+  const stripHtml = (html) => {
+    if (typeof html !== "string") return "";
+    return html.replace(/<[^>]+>/g, "");
+  };
+
+  const formatSizes = (sizes = []) =>
+    Array.isArray(sizes)
+      ? sizes
+        .map((s) => {
+          if (typeof s === "string") return s;
+
+          if (s?.customPrice) {
+            return `${s.size}:${s.customPrice}:${s.stock}:custom`;
+          }
+
+          return `${s.size}:${s.multiplier}:${s.stock}`;
+        })
+        .join(",")
+      : "";
+
+  const formatColors = (colors = []) =>
+    Array.isArray(colors)
+      ? colors
+        .map((c) => {
+          if (typeof c === "string") return c;
+
+          return c?.hex
+            ? `${c.name}:${c.hex}`
+            : c?.name || "";
+        })
+        .filter(Boolean)
+        .join(",")
+      : "";
+
+  const formatImages = (images = []) =>
+    Array.isArray(images)
+      ? images.filter(Boolean).join(",")
+      : "";
+
+  const formatItemDetails = (details = []) => {
+    if (!Array.isArray(details)) return "";
+
+    return details
+      .map((item) => `${item.title}:${item.value}`)
+      .join("::");
+  };
+
+  const exportExcel = () => {
+    if (!filtered.length) {
+      toast.warning("No products available to export.");
+      return;
+    }
+
+    const data = filtered.map((p) => ({
+      SKU: p.sku || "",
+      Product_Name: p.name || "",
+
+      Product_Summary: stripHtml(p.description),
+
+      Detailed_Description: stripHtml(
+        p.detailedDescription
+      ),
+
+      Product_Details: formatItemDetails(
+        p.itemDetails
+      ),
+
+      Price: p.price || "",
+
+      "Discount_(In_%)":
+        p.discountPrice || "",
+
+      Category: p.category || "",
+
+      Sub_Category: p.subCategory || "",
+
+      Bestseller: p.bestseller
+        ? "Yes"
+        : "No",
+
+      Size_Name: formatSizes(
+        p.sizes
+      ),
+
+      Color_Name: formatColors(
+        p.color
+      ),
+
+      Image_Link: formatImages(
+        p.image
+      ),
+    }));
+
+    /* ── Create worksheet ── */
+    const ws = XLSX.utils.json_to_sheet(data);
+
+    /* ── Create workbook ── */
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      wb,
+      ws,
+      "Products"
+    );
+
+    /* ── Header styling ── */
+    const headerStyle = {
+      font: {
+        bold: true,
+        color: {
+          rgb: "FFFFFF",
+        },
+      },
+
+      fill: {
+        fgColor: {
+          rgb: "6366F1",
+        },
+      },
+
+      alignment: {
+        horizontal: "center",
+        vertical: "center",
+      },
+
+      border: {
+        top: {
+          style: "thin",
+          color: { rgb: "D1D5DB" },
+        },
+        bottom: {
+          style: "thin",
+          color: { rgb: "D1D5DB" },
+        },
+        left: {
+          style: "thin",
+          color: { rgb: "D1D5DB" },
+        },
+        right: {
+          style: "thin",
+          color: { rgb: "D1D5DB" },
+        },
+      },
+    };
+
+    if (ws["!ref"]) {
+      const range = XLSX.utils.decode_range(
+        ws["!ref"]
+      );
+
+      for (
+        let C = range.s.c;
+        C <= range.e.c;
+        C++
+      ) {
+        const cell = XLSX.utils.encode_cell({
+          r: 0,
+          c: C,
+        });
+
+        if (ws[cell]) {
+          ws[cell].s = headerStyle;
+        }
+      }
+    }
+
+    /* ── Column widths ── */
+    ws["!cols"] = [
+      { wch: 22 }, // SKU
+      { wch: 38 }, // Product Name
+      { wch: 45 }, // Summary
+      { wch: 55 }, // Detailed Description
+      { wch: 40 }, // Product Details
+      { wch: 12 }, // Price
+      { wch: 16 }, // Discount
+      { wch: 20 }, // Category
+      { wch: 24 }, // Sub Category
+      { wch: 12 }, // Bestseller
+      { wch: 40 }, // Size
+      { wch: 35 }, // Color
+      { wch: 60 }, // Images
+    ];
+
+    /* ── Generate XLSX ── */
+    const excelBuffer = XLSX.write(
+      wb,
+      {
+        bookType: "xlsx",
+        type: "array",
+      }
+    );
+
+    /* ── Download ── */
+    saveAs(
+      new Blob([excelBuffer], {
+        type:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      }),
+      `llleatherlovers_products_${new Date()
+        .toISOString()
+        .slice(0, 10)}.xlsx`
+    );
+
+    toast.success(
+      "Products exported successfully!"
+    );
+  };
 
   useEffect(() => { fetchList() }, [])
   useEffect(() => { setPage(1) }, [search, catFilter, subCatFilter, stockFilter, sortBy])
@@ -573,8 +787,22 @@ const ProductsList = ({ token }) => {
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-1.5 opacity-70 group-hover:opacity-100 transition-opacity">
                     <button
-                      title="Preview"
-                      onClick={() => imgs.length > 0 && setImgModal({ images: imgs, name: item.name, start: 0 })}
+                      title="View on Live Website"
+                      // onClick={() => imgs.length > 0 && setImgModal({ images: imgs, name: item.name, start: 0 })}
+                      onClick={() => {
+                        const productPath = getProductUrl(
+                          item.category,
+                          item.subCategory,
+                          item.name,
+                          item.sku
+                        );
+
+                        window.open(
+                          `https://llleatherlovers.com${productPath}`,
+                          '_blank',
+                          'noopener,noreferrer'
+                        );
+                      }}
                       className="w-8 h-8 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-all"
                     >
                       <TbEye size={15} />
@@ -611,7 +839,7 @@ const ProductsList = ({ token }) => {
      GRID VIEW
   ══════════════════════════════════════ */
   const renderGrid = () => (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mx-6 mb-8">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mx-6 mb-8">
       {loading ? (
         Array(10).fill(0).map((_, i) => (
           <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
@@ -724,7 +952,26 @@ const ProductsList = ({ token }) => {
               {/* Card Footer */}
               <div className="flex gap-2 pt-2.5 border-t border-gray-100">
                 <button
-                  onClick={() => imgs.length > 0 && setImgModal({ images: imgs, name: item.name, start: 0 })}
+                  // onClick={() => imgs.length > 0 && setImgModal({ images: imgs, name: item.name, start: 0 })}
+                  onClick={() => {
+                    if (!item?.sku) {
+                      toast.error("Product SKU is missing");
+                      return;
+                    }
+
+                    const productPath = getProductUrl(
+                      item.category,
+                      item.subCategory,
+                      item.name,
+                      item.sku
+                    );
+
+                    window.open(
+                      `https://llleatherlovers.com${productPath}`,
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                  }}
                   className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-gray-500 text-[11.5px] font-semibold hover:bg-gray-100 transition-colors"
                 >
                   <TbEye size={13} /> View
@@ -782,11 +1029,11 @@ const ProductsList = ({ token }) => {
 
         <div className="flex items-center gap-2">
           <button
-            onClick={exportCSV}
+            onClick={exportExcel}
             className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-gray-200 text-[13px] font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
           >
             <TbFileExport size={15} />
-            <span className="hidden sm:inline">Export CSV</span>
+            <span className="hidden sm:inline">Export Excel</span>
           </button>
           <button
             onClick={fetchList}

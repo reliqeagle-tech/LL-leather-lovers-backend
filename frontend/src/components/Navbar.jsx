@@ -184,11 +184,27 @@ const Navbar = () => {
 
   // Helper: turn a string array into [{label, categoryName}]
   const toItems = (categoryName, subs) => subs.map(s => ({ label: s, categoryName }));
-  const menSubs = toItems("Men", getSubcats("Men"));
-  const womenSubsAll = getSubcats("Women");
+  // const menSubs = toItems("Men", getSubcats("Men"));
+  // const womenSubsAll = getSubcats("Women");
+  // const womenHalf = Math.ceil(womenSubsAll.length / 2);
+  // const womenSubsCol1 = toItems("Women", womenSubsAll.slice(0, womenHalf));
+  // const womenSubsCol2 = toItems("Women", womenSubsAll.slice(womenHalf));
+
+  const menSubs = toItems("Men's", getSubcats("Men's"));
+
+  const womenSubsAll = getSubcats("Women's");
+
   const womenHalf = Math.ceil(womenSubsAll.length / 2);
-  const womenSubsCol1 = toItems("Women", womenSubsAll.slice(0, womenHalf));
-  const womenSubsCol2 = toItems("Women", womenSubsAll.slice(womenHalf));
+
+  const womenSubsCol1 = toItems(
+    "Women's",
+    womenSubsAll.slice(0, womenHalf)
+  );
+
+  const womenSubsCol2 = toItems(
+    "Women's",
+    womenSubsAll.slice(womenHalf)
+  );
 
   useEffect(() => {
     setActiveMenu(null);

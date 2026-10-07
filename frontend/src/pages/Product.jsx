@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet-async";
 import CartDrawer from '../components/CartDrawer';
 import axios from 'axios';
 import { getOptimizedImage } from '../utils/cloudinary';
+import { createPortal } from 'react-dom';
 
 const colorMap = {
   wine: '#722F37', red: '#FF0000', black: '#000000', olive: '#808000', green: '#008000',
@@ -96,8 +97,8 @@ const ProductPageStyles = () => (
     @keyframes bPulse { 0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,.5)} 50%{box-shadow:0 0 0 8px rgba(99,102,241,0)} }
     .verified-badge { animation: bPulse 2.5s infinite; }
 
-    .main-img { transition: transform .5s cubic-bezier(.22,1,.36,1); }
-    .main-img-wrap:hover .main-img { transform: scale(1.04); }
+    // .main-img { transition: transform .5s cubic-bezier(.22,1,.36,1); }
+    // .main-img-wrap:hover .main-img { transform: scale(1.04); }
     .size-btn:hover:not([disabled]) { border-color: rgba(99,102,241,.55) !important; background: rgba(99,102,241,.08) !important; }
 
     /* color swatch hover */
@@ -110,6 +111,113 @@ const ProductPageStyles = () => (
     }
   `}</style>
 );
+
+const ZOOM = 3;     // magnification
+const PANE_W = 480;   // zoom pane width
+const PANE_H = 480;   // zoom pane height
+
+const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+
+const ImageZoom = ({ zoomSrc, className, style, padding = 16, children }) => {
+  const boxRef = useRef(null);
+  const [active, setActive] = useState(false);
+  const [m, setM] = useState(null);
+
+  const onMove = (e) => {
+    const r = boxRef.current.getBoundingClientRect();
+
+    // pane size: fixed, but never bigger than the free screen space
+    const paneW = Math.min(PANE_W, window.innerWidth - r.right - 32);
+    const paneH = Math.min(PANE_H, window.innerHeight - 32);
+
+    // lens size = the part of the image that fills the pane at ZOOM
+    const lw = Math.min(paneW / ZOOM, r.width);
+    const lh = Math.min(paneH / ZOOM, r.height);
+
+    const lx = clamp(e.clientX - r.left - lw / 2, 0, r.width - lw);
+    const ly = clamp(e.clientY - r.top - lh / 2, 0, r.height - lh);
+
+    // keep pane fully inside the viewport vertically
+    const paneTop = clamp(r.top, 16, window.innerHeight - paneH - 16);
+
+    setM({ w: r.width, h: r.height, right: r.right, lx, ly, lw, lh, paneW, paneH, paneTop });
+  };
+
+  const onEnter = () => {
+    setActive(true);
+    new Image().src = zoomSrc; // preload hi-res
+  };
+
+  return (
+    <>
+      <div
+        ref={boxRef}
+        className={className}
+        style={{ ...style, cursor: 'crosshair' }}
+        onMouseEnter={onEnter}
+        onMouseLeave={() => setActive(false)}
+        onMouseMove={onMove}
+      >
+        {children}
+
+        {/* lens */}
+        {active && m && (
+          <div
+            style={{
+              position: 'absolute',
+              left: m.lx, top: m.ly,
+              width: m.lw, height: m.lh,
+              background: 'rgba(99,102,241,0.15)',
+              border: '1px solid rgba(99,102,241,0.6)',
+              pointerEvents: 'none',
+            }}
+          />
+        )}
+      </div>
+
+      {/* zoom pane */}
+      {active && m && m.paneW > 200 && createPortal(
+        <div
+          style={{
+            position: 'fixed',
+            left: m.right + 16,
+            top: m.paneTop,
+            width: m.paneW,
+            height: m.paneH,
+            background: '#fff',
+            border: '1px solid rgba(99,102,241,0.35)',
+            borderRadius: 12,
+            overflow: 'hidden',
+            zIndex: 9999,
+            boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+            pointerEvents: 'none',
+          }}
+        >
+          <div
+            style={{
+              width: m.w * ZOOM,
+              height: m.h * ZOOM,
+              transform: `translate(${-m.lx * ZOOM}px, ${-m.ly * ZOOM}px)`,
+            }}
+          >
+            <img
+              src={zoomSrc}
+              alt=""
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'contain',
+                padding: padding * ZOOM,
+                display: 'block',
+              }}
+            />
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
+  );
+};
+
 
 /* ══════════════════════════════════════════════════════════════════
    VERTICAL THUMBNAIL RAIL (desktop)
@@ -607,7 +715,7 @@ const Product = () => {
                 />
 
                 {/* MAIN IMAGE — aspect-ratio based, not fixed px */}
-                <div className="main-img-wrap overflow-hidden relative"
+                {/* <div className="main-img-wrap overflow-hidden relative"
                   style={{
                     background: '#fff',
                     border: '1px solid rgba(255,255,255,0.06)',
@@ -636,7 +744,24 @@ const Product = () => {
                       {selectedIndex + 1} / {productData.image.length}
                     </span>
                   </div>
-                </div>
+                </div> */}
+                <ImageZoom
+                  zoomSrc={getOptimizedImage(image, 1600)}
+                  className="main-img-wrap overflow-hidden relative"
+                  style={{
+                    background: '#fff',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: 16,
+                    aspectRatio: '3/4',
+                    maxHeight: 450,
+                  }}
+                >
+                  <img src={getOptimizedImage(image, 700)} loading="eager" fetchPriority="high" decoding="async"
+                    alt={productData.name} className="main-img"
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 16, display: 'block' }} />
+
+                  {/* wishlist button + "1 / 6" badge stay exactly as they are */}
+                </ImageZoom>
               </div>
 
               {/* MOBILE: main image + horizontal strip */}
@@ -761,7 +886,7 @@ const Product = () => {
               </p>
 
               {/* COLOUR — round swatches */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
                   <p className="text-white/70 font-semibold uppercase tracking-widest"
                     style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '9px', letterSpacing: '2px' }}>Colour</p>
@@ -789,7 +914,107 @@ const Product = () => {
                     <p className="text-white/60" style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '12px' }}>No colors available</p>
                   )}
                 </div>
-              </div>
+              </div> */}
+
+              {/* COLOUR */}
+              {productData?.color?.some((c) =>
+                typeof c === "string"
+                  ? c.trim() !== ""
+                  : c?.name?.trim() !== ""
+              ) && (
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <p
+                        className="text-white/70 font-semibold uppercase tracking-widest"
+                        style={{
+                          fontFamily: "'Montserrat',sans-serif",
+                          fontSize: "9px",
+                          letterSpacing: "2px",
+                        }}
+                      >
+                        Colour
+                      </p>
+
+                      <span
+                        className="text-white/70 capitalize"
+                        style={{
+                          fontFamily: "'Montserrat',sans-serif",
+                          fontSize: "11px",
+                        }}
+                      >
+                        — {selectedColor}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-2.5 flex-wrap">
+                      {productData.color
+                        .filter((c) =>
+                          typeof c === "string"
+                            ? c.trim() !== ""
+                            : c?.name?.trim() !== ""
+                        )
+                        .map((colorObj, index) => {
+                          let colorName;
+                          let colorHex;
+
+                          if (typeof colorObj === "string") {
+                            colorName = colorObj.trim();
+
+                            // DDollyLamb logic
+                            colorHex =
+                              colorMap[colorName.toLowerCase()] || null;
+                          } else if (colorObj?.name) {
+                            colorName = colorObj.name.trim();
+
+                            // DDollyLamb logic:
+                            // invalid/default black hex ko swatch mat banao
+                            const hex = colorObj.hex;
+
+                            colorHex =
+                              hex &&
+                                hex.trim() !== "" &&
+                                hex.toUpperCase() !== "#000000"
+                                ? hex
+                                : null;
+                          } else {
+                            colorName = "";
+                            colorHex = null;
+                          }
+
+                          const selected = selectedColor === colorName;
+
+                          // No valid color hex = no circle
+                          if (!colorHex) return null;
+
+                          return (
+                            <button
+                              key={index}
+                              type="button"
+                              onClick={() => setSelectedColor(colorName)}
+                              title={colorName}
+                              className="color-swatch"
+                              style={{
+                                width: 34,
+                                height: 34,
+                                borderRadius: "50%",
+                                backgroundColor: colorHex,
+                                border: selected
+                                  ? "3px solid #6366f1"
+                                  : "2px solid rgba(255,255,255,0.15)",
+                                boxShadow: selected
+                                  ? "0 0 0 3px rgba(99,102,241,0.3)"
+                                  : "none",
+                                cursor: "pointer",
+                                outline: "none",
+                                transition:
+                                  "transform .15s, box-shadow .15s",
+                              }}
+                            />
+                          );
+                        })}
+                    </div>
+                  </div>
+                )}
 
               {/* SIZE */}
               <div className="mb-7">
